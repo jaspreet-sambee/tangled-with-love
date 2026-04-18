@@ -100,6 +100,7 @@ section{padding:5rem 4rem;position:relative;overflow:hidden}
 .about-section{background:var(--cream);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;padding:6rem 5rem}
 .about-visual{display:flex;justify-content:center;position:relative;z-index:1}
 .about-frame{width:280px;height:340px;background:var(--pale-blush);border-radius:140px 140px 60px 60px;display:flex;align-items:center;justify-content:center;font-size:7rem;box-shadow:16px 24px 60px rgba(124,80,53,0.15),-8px -8px 0 0 rgba(201,123,90,0.15);position:relative;overflow:hidden}
+.about-photo{width:100%;height:100%;object-fit:cover;border-radius:140px 140px 60px 60px;display:block}
 .about-badge{position:absolute;bottom:-12px;right:-12px;background:var(--muted-sage);color:white;width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;letter-spacing:0.05em;text-align:center;font-weight:700;text-transform:uppercase;line-height:1.4;border:3px solid var(--cream);z-index:2}
 .about-text{position:relative;z-index:1}
 .about-text .section-label,.about-text .section-title{text-align:left}
@@ -382,7 +383,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 <section class="about-section" id="about">
   <div class="about-visual">
     <div class="about-frame">
-      🧶
+      <img src="assets/mum.jpg" alt="The maker — our mum" class="about-photo">
       <div class="about-badge">Est.<br>with Love</div>
     </div>
   </div>
@@ -597,13 +598,13 @@ const CATEGORIES = [
     blurb: "Soft, slouchy medium-sized shoulder bags — room for a phone, wallet, book and a few essentials. Each one is made with love in small batches.",
     heroVariant: "cherry-blossom",
     variants: [
-      { id: "cherry-blossom",  name: "Cherry Blossom Granny",  price: 65, count: 11,
+      { id: "cherry-blossom",    name: "Cherry Blossom Granny", price: 65, heroIdx: 0,
         desc: "Ivory and cherry-red granny squares with a moss-green centre. A sweet, everyday shoulder bag that brings a pop of colour to neutrals." },
-      { id: "strawberry-stripe", name: "Strawberry Stripe",    price: 70, count: 9,
+      { id: "strawberry-stripe", name: "Strawberry Stripe",     price: 70, heroIdx: 5,
         desc: "A cream tote with dense rows of strawberry-red bobbles and sage accents — sturdy enough for a small market run, charming enough for every day." },
-      { id: "lavender-fields", name: "Lavender Fields Hex",    price: 68, count: 7,
+      { id: "lavender-fields",   name: "Lavender Fields Hex",   price: 68, heroIdx: 0,
         desc: "A soft lavender hexagon-shaped bag with sage-green floral centres. Light, pretty, and surprisingly roomy." },
-      { id: "midnight-daisy",  name: "Midnight Daisy",         price: 72, count: 3,
+      { id: "midnight-daisy",    name: "Midnight Daisy",        price: 72, heroIdx: 1,
         desc: "Deep charcoal with cream-and-gold daisy motifs. A more moody take on the granny-square shoulder bag." },
     ],
   },
@@ -614,7 +615,7 @@ const CATEGORIES = [
     blurb: "Our largest style — big enough for a thin laptop, a change of clothes, or a week's library haul. Soft straps that sit comfortably on the shoulder.",
     heroVariant: "sage-meadow",
     variants: [
-      { id: "sage-meadow", name: "Sage Meadow Granny", price: 85, count: 6,
+      { id: "sage-meadow", name: "Sage Meadow Granny", price: 85, heroIdx: 0,
         desc: "A generous tote in forest green and ivory granny squares. Strong enough for books and laptops, soft enough to feel like a hug." },
     ],
   },
@@ -625,7 +626,7 @@ const CATEGORIES = [
     blurb: "A modern crossbody sling — compact but deep. The beaded-look rope strap is our signature detail.",
     heroVariant: "rose-garden",
     variants: [
-      { id: "rose-garden", name: "Rose Garden Sling", price: 60, count: 6,
+      { id: "rose-garden", name: "Rose Garden Sling", price: 60, heroIdx: 0,
         desc: "Forest-green sling bag with a hand-crocheted pink rose on the front flap. Pairs perfectly with jeans or an oversized jumper." },
     ],
   },
@@ -636,13 +637,13 @@ const CATEGORIES = [
     blurb: "Mini top-handle bags sized for your phone, keys, a lipstick and a tiny notebook. Easy to tuck under the arm.",
     heroVariant: "berry-blossom",
     variants: [
-      { id: "seafoam",         name: "Seafoam Weave",     price: 45, count: 1,
+      { id: "seafoam",         name: "Seafoam Weave",   price: 45, heroIdx: 0,
         desc: "Cream and soft seafoam-blue stripes with a chunky weave. Coastal and calming." },
-      { id: "berry-blossom",   name: "Berry Blossom",     price: 48, count: 3,
+      { id: "berry-blossom",   name: "Berry Blossom",   price: 48, heroIdx: 2,
         desc: "Ivory handheld with a pink bobble trim — part bag, part treasure. Comes with a braided white strap." },
-      { id: "espresso-stripe", name: "Espresso Stripe",   price: 52, count: 1,
+      { id: "espresso-stripe", name: "Espresso Stripe", price: 52, heroIdx: 0,
         desc: "Warm espresso and cream stripes in a classic vertical pattern. Your new coffee-shop sidekick." },
-      { id: "garden-mandala",  name: "Garden Mandala",    price: 50, count: 1,
+      { id: "garden-mandala",  name: "Garden Mandala",  price: 50, heroIdx: 0,
         desc: "Cream body with a single granny-square mandala centre and bright moss-green straps." },
     ],
   },
@@ -653,17 +654,17 @@ const CATEGORIES = [
     blurb: "Palm-sized pouches perfect as wallets, cosmetic bags, or gift wrapping for something precious. Many make wonderful little gifts on their own.",
     heroVariant: "sunshine",
     variants: [
-      { id: "sunshine",         name: "Sunshine Pouch",       price: 32, count: 3,
+      { id: "sunshine",         name: "Sunshine Pouch",    price: 32, heroIdx: 0,
         desc: "Mustard-yellow envelope pouch with a soft lavender trim and button closure. Small ray of sunshine in a bag." },
-      { id: "morning-sky",      name: "Morning Sky",          price: 35, count: 6,
+      { id: "morning-sky",      name: "Morning Sky",       price: 35, heroIdx: 0,
         desc: "Sky-blue pouch with a single hand-stitched sunflower motif. Top-zip closure, drawstring handle." },
-      { id: "mocha-drawstring", name: "Mocha Drawstring",     price: 38, count: 6,
+      { id: "mocha-drawstring", name: "Mocha Drawstring",  price: 38, heroIdx: 0,
         desc: "Rich mocha brown and cream stripes with a drawstring top and a tiny coin pouch charm." },
-      { id: "autumn-spice",     name: "Autumn Spice",         price: 30, count: 3,
+      { id: "autumn-spice",     name: "Autumn Spice",      price: 30, heroIdx: 0,
         desc: "Terracotta bi-fold pouch perfect as a wallet. Snap closure on the front flap." },
-      { id: "confetti",         name: "Confetti Pouch",       price: 35, count: 3,
+      { id: "confetti",         name: "Confetti Pouch",    price: 35, heroIdx: 1,
         desc: "Cream base with speckled purple, mustard and blush flecks — like confetti in yarn form. Top-handle." },
-      { id: "rosewood-stripe",  name: "Rosewood Stripe",      price: 34, count: 2,
+      { id: "rosewood-stripe",  name: "Rosewood Stripe",   price: 34, heroIdx: 0,
         desc: "Rose, charcoal and cream stripes with a granny-square flap. A cozy, wintery pouch." },
     ],
   },
@@ -727,10 +728,22 @@ function variantImage(catId, vId, index=0) {
   return files[index] ? `assets/products/${key}/${files[index]}` : "";
 }
 
-function allVariantImages(catId, vId) {
+// Returns the designated hero image for a variant (uses its heroIdx, falls back to 0)
+function variantHeroImage(cat, v) {
+  const idx = Math.min(v.heroIdx || 0, (IMAGE_MAP[`${cat.id}/${v.id}`] || []).length - 1);
+  return variantImage(cat.id, v.id, Math.max(0, idx));
+}
+
+// Returns the full list of images for a variant, with the hero image moved to position 0.
+// Only returns images that actually exist in IMAGE_MAP.
+function allVariantImages(catId, vId, heroIdx=0) {
   const key = `${catId}/${vId}`;
   const files = IMAGE_MAP[key] || [];
-  return files.map(f => `assets/products/${key}/${f}`);
+  if (files.length === 0) return [];
+  const reordered = heroIdx > 0 && heroIdx < files.length
+    ? [files[heroIdx], ...files.filter((_, i) => i !== heroIdx)]
+    : files;
+  return reordered.map(f => `assets/products/${key}/${f}`);
 }
 
 /* =====================================================================
@@ -762,15 +775,16 @@ function renderHeroCards() {
   const picks = [
     { cat: "medium-shoulder", var: "cherry-blossom" },
     { cat: "sling", var: "rose-garden" },
-    { cat: "pouch", var: "sunshine" },
+    { cat: "pouch", var: "morning-sky" },
     { cat: "small-handheld", var: "berry-blossom" },
   ];
   $("heroCards").innerHTML = picks.map(p => {
+    const cat = findCategory(p.cat);
     const v = findVariant(p.cat, p.var);
-    if (!v) return "";
+    if (!v || !cat) return "";
     return `
       <div class="product-card" onclick="openDetail('${p.cat}','${p.var}')">
-        <div class="product-img-wrap"><img src="${variantImage(p.cat, p.var, 0)}" alt="${v.name}" loading="lazy"></div>
+        <div class="product-img-wrap"><img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy"></div>
         <div class="product-info">
           <div class="product-name">${v.name}</div>
           <div class="product-price">${fmt(v.price)}</div>
@@ -783,11 +797,12 @@ function renderCategoryRow() {
   $("categoryRow").innerHTML = CATEGORIES.map(cat => {
     const startPrice = Math.min(...cat.variants.map(v => v.price));
     const variantCount = cat.variants.length;
+    const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
     return `
       <div class="cat-card" onclick="openCategory('${cat.id}')">
         <div class="cat-card-top">
           ${variantCount > 1 ? '<span class="cat-tag">' + variantCount + ' styles</span>' : ''}
-          <img src="${variantImage(cat.id, cat.heroVariant, 0)}" alt="${cat.name}" loading="lazy">
+          <img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">
         </div>
         <div class="cat-card-body">
           <div class="cat-card-name">${cat.name}</div>
@@ -807,9 +822,10 @@ function renderCategoryRow() {
 function renderCategoriesPage() {
   $("bagCategoriesGrid").innerHTML = CATEGORIES.map(cat => {
     const startPrice = Math.min(...cat.variants.map(v => v.price));
+    const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
     return `
       <div class="category-tile" onclick="openCategory('${cat.id}')">
-        <img src="${variantImage(cat.id, cat.heroVariant, 0)}" alt="${cat.name}" loading="lazy">
+        <img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">
         <div class="category-label">
           <div class="category-label-title">${cat.name}</div>
           <div class="category-label-meta">${cat.variants.length} ${cat.variants.length === 1 ? 'style' : 'styles'} · from ${fmt(startPrice)}</div>
@@ -826,7 +842,7 @@ function openCategory(catId) {
   $("variantsSub").textContent = cat.blurb;
   $("variantsGrid").innerHTML = cat.variants.map(v => `
     <div class="variant-card" onclick="openDetail('${cat.id}','${v.id}')">
-      <div class="variant-img-wrap"><img src="${variantImage(cat.id, v.id, 0)}" alt="${v.name}" loading="lazy"></div>
+      <div class="variant-img-wrap"><img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy"></div>
       <div class="variant-body">
         <div class="variant-name">${v.name}</div>
         <div class="variant-price">${fmt(v.price)}</div>
@@ -853,14 +869,21 @@ function openDetail(catId, vId) {
   $("detailSizeGroup").style.display = "none"; // sizing is fixed per style
   $("detailMsg").value = "";
   $("detailQtyNum").textContent = "1";
-  // Gallery
-  const imgs = allVariantImages(catId, vId);
+  // Gallery — hero first, only existing images
+  const imgs = allVariantImages(catId, vId, v.heroIdx || 0);
   $("galleryHero").src = imgs[0] || "";
   $("galleryHero").alt = v.name;
-  $("galleryThumbs").innerHTML = imgs.map((src, i) => `
-    <div class="gallery-thumbnail ${i === 0 ? 'active' : ''}" onclick="pickThumb(${i}, event)">
-      <img src="${src}" alt="${v.name} image ${i+1}" loading="lazy">
-    </div>`).join("");
+  if (imgs.length > 1) {
+    $("galleryThumbs").style.display = "";
+    $("galleryThumbs").innerHTML = imgs.map((src, i) => `
+      <div class="gallery-thumbnail ${i === 0 ? 'active' : ''}" onclick="pickThumb(${i}, event)">
+        <img src="${src}" alt="${v.name} image ${i+1}" loading="lazy">
+      </div>`).join("");
+  } else {
+    // Only 1 image — no point showing a thumbnail strip
+    $("galleryThumbs").style.display = "none";
+    $("galleryThumbs").innerHTML = "";
+  }
   STATE.lightboxImages = imgs;
   STATE.lightboxIdx = 0;
   // Back button context
@@ -902,7 +925,7 @@ function addDetailToCart() {
       qty: STATE.detailQty,
       colour,
       message,
-      img: variantImage(d.catId, d.vId, 0),
+      img: variantHeroImage(d.category, d.variant),
     });
   }
   renderCart();
