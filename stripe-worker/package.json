@@ -1,0 +1,13 @@
+{
+  "name": "tangled-stripe-worker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker that creates Stripe Checkout sessions for tangledwithlove.com",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^3.80.0"
+  }
+}

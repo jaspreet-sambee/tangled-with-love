@@ -1,0 +1,11 @@
+name = "tangled-stripe"
+main = "src/worker.js"
+compatibility_date = "2025-10-01"
+
+# Allowed origins for CORS (comma-separated). In production this should
+# be exactly your live site — not "*" — to prevent other sites using your worker.
+[vars]
+ALLOWED_ORIGIN = "https://tangledwithlove.com,http://localhost:8080,http://127.0.0.1:5500"
+
+# STRIPE_SECRET_KEY is set as a secret:
+#   wrangler secret put STRIPE_SECRET_KEY

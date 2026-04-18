@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tangled with Love — Handcrafted Crochet Bags</title>
+<meta name="description" content="Beautifully handcrafted crochet bags made with love in Brampton, Ontario. Shoulder bags, slings, handhelds and pouches — no two alike.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='.9em' font-size='54'%3E%F0%9F%A7%B6%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sand:#F5EDD8;--deep-sand:#EBD9B4;--rust:#C45C2A;--terracotta:#D4845A;--blush:#E8B49A;
+  --sage:#6B8F6E;--teal:#3D7A72;--mustard:#C9952A;--plum:#7B4F6E;--dark:#2C1A0E;
+  --mid:#7A5230;--light:#B08860;--cream:#FBF6EC;--warm-brown:#7C5035;
+  --soft-terracotta:#C97B5A;--pale-blush:#F2E4D4;--muted-sage:#8A9E7E;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Lato',sans-serif;background-color:var(--cream);color:var(--dark);overflow-x:hidden}
+img{max-width:100%;display:block}
+
+.thread-overlay{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+
+/* ======= NAV ======= */
+nav{position:sticky;top:0;z-index:100;background:rgba(250,246,240,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(124,80,53,0.12);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--warm-brown);letter-spacing:0.02em;cursor:pointer}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.85rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--light);text-decoration:none;transition:color 0.2s;background:none;border:none;font-family:inherit;cursor:pointer;padding:0}
+.nav-links a:hover{color:var(--warm-brown)}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-ig{font-size:0.85rem;color:var(--soft-terracotta);text-decoration:none;transition:color 0.2s;letter-spacing:0.04em;font-weight:600}
+.nav-ig:hover{color:var(--warm-brown)}
+.cart-btn{background:transparent;border:1.5px solid var(--light);color:var(--warm-brown);padding:0.35rem 0.9rem;border-radius:2rem;font-size:0.8rem;font-family:'Lato',sans-serif;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;letter-spacing:0.05em;text-transform:uppercase}
+.cart-btn:hover{border-color:var(--warm-brown);background:var(--pale-blush)}
+.cart-count{background:var(--soft-terracotta);color:white;border-radius:50%;min-width:18px;height:18px;font-size:0.65rem;display:inline-flex;align-items:center;justify-content:center;font-weight:700;padding:0 4px}
+
+/* ======= BUTTONS / COMMON ======= */
+.btn-primary{background:var(--warm-brown);color:var(--cream);padding:0.75rem 2rem;border-radius:2rem;border:none;font-family:'Lato',sans-serif;font-size:0.9rem;letter-spacing:0.05em;cursor:pointer;transition:background 0.2s,transform 0.15s;text-decoration:none;display:inline-block}
+.btn-primary:hover{background:var(--soft-terracotta);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--warm-brown);padding:0.75rem 2rem;border-radius:2rem;border:1.5px solid var(--warm-brown);font-family:'Lato',sans-serif;font-size:0.9rem;letter-spacing:0.05em;cursor:pointer;transition:background 0.2s,transform 0.15s;text-decoration:none;display:inline-block}
+.btn-secondary:hover{background:var(--pale-blush);transform:translateY(-1px)}
+
+/* ======= PAGES ======= */
+.page{display:none}
+.page.active{display:block}
+
+/* ======= HERO ======= */
+.fringe{display:flex;justify-content:center;gap:5px;padding:10px 0;background:var(--rust)}
+.hero{min-height:88vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:4rem 4rem 2rem;gap:4rem;position:relative;overflow:hidden}
+.hero-content{position:relative;z-index:1}
+.hero-eyebrow{font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--soft-terracotta);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem}
+.hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--soft-terracotta)}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5vw,4.2rem);line-height:1.12;color:var(--dark);margin-bottom:1.5rem}
+.hero h1 em{font-style:italic;color:var(--soft-terracotta)}
+.hero-desc{font-size:1.05rem;line-height:1.8;color:var(--light);max-width:420px;margin-bottom:2.5rem}
+.hero-buttons{display:flex;gap:1rem;flex-wrap:wrap}
+.hero-illustration{display:flex;justify-content:center;align-items:center;position:relative;z-index:1}
+.hero-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:420px;width:100%}
+.product-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.10);transition:transform 0.25s,box-shadow 0.25s;cursor:pointer}
+.product-card:hover{transform:translateY(-4px);box-shadow:0 10px 36px rgba(124,80,53,0.16)}
+.product-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden}
+.product-img-wrap img{width:100%;height:100%;object-fit:cover}
+.product-info{padding:0.65rem 0.85rem 0.85rem}
+.product-name{font-family:'Playfair Display',serif;font-size:0.85rem;color:var(--dark);margin-bottom:0.2rem}
+.product-price{font-size:0.78rem;color:var(--soft-terracotta);font-weight:700}
+
+/* ======= SECTIONS ======= */
+section{padding:5rem 4rem;position:relative;overflow:hidden}
+.section-label{font-size:0.78rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--soft-terracotta);margin-bottom:0.75rem;text-align:center}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.6rem);text-align:center;color:var(--dark);margin-bottom:1rem}
+.section-sub{text-align:center;color:var(--light);font-size:1rem;line-height:1.7;max-width:520px;margin:0 auto 3.5rem}
+
+/* ======= SHOP FEATURED ======= */
+.products-section{background:white}
+.category-row{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:1100px;margin:0 auto 3rem;position:relative;z-index:1}
+.cat-card{border:1px solid rgba(124,80,53,0.1);border-radius:20px;overflow:hidden;transition:transform 0.25s,box-shadow 0.25s;cursor:pointer;background:white;display:flex;flex-direction:column}
+.cat-card:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(124,80,53,0.13)}
+.cat-card-top{position:relative;aspect-ratio:4/3;background:var(--pale-blush);overflow:hidden}
+.cat-card-top img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s}
+.cat-card:hover .cat-card-top img{transform:scale(1.05)}
+.cat-tag{position:absolute;top:10px;left:10px;background:var(--rust);color:var(--cream);font-size:0.64rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;padding:0.2rem 0.65rem;border-radius:2rem;z-index:2}
+.cat-card-body{padding:1.2rem 1.4rem 1.4rem;display:flex;flex-direction:column;flex:1}
+.cat-card-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--dark);margin-bottom:0.35rem}
+.cat-card-desc{font-size:0.82rem;color:var(--light);line-height:1.6;margin-bottom:1rem;flex:1}
+.cat-card-footer{display:flex;align-items:center;justify-content:space-between}
+.cat-card-price{font-size:1rem;font-weight:700;color:var(--soft-terracotta)}
+.cat-card-cta{background:var(--pale-blush);color:var(--warm-brown);border:none;padding:0.4rem 1rem;border-radius:2rem;font-size:0.82rem;font-family:'Lato',sans-serif;cursor:pointer;transition:background 0.2s;letter-spacing:0.04em}
+.cat-card-cta:hover{background:var(--soft-terracotta);color:white}
+
+/* Custom-order banner (for non-bag categories) */
+.custom-banner{max-width:1100px;margin:0 auto;background:var(--pale-blush);border-radius:16px;padding:1.6rem 2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;justify-content:space-between}
+.custom-banner p{font-size:0.95rem;color:var(--warm-brown);line-height:1.6;flex:1;min-width:280px}
+.custom-banner strong{font-family:'Playfair Display',serif;font-weight:600}
+
+/* ======= MANDALA DIVIDER ======= */
+.mandala-divider{background:var(--warm-brown);padding:2.5rem 0;display:flex;align-items:center;justify-content:center;gap:2rem;overflow:hidden}
+.mandala-divider span{color:var(--cream);font-family:'Playfair Display',serif;font-style:italic;font-size:1.35rem;font-weight:600;letter-spacing:0.12em;opacity:0.95}
+
+/* ======= ABOUT ======= */
+.about-section{background:var(--cream);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;padding:6rem 5rem}
+.about-visual{display:flex;justify-content:center;position:relative;z-index:1}
+.about-frame{width:280px;height:340px;background:var(--pale-blush);border-radius:140px 140px 60px 60px;display:flex;align-items:center;justify-content:center;font-size:7rem;box-shadow:16px 24px 60px rgba(124,80,53,0.15),-8px -8px 0 0 rgba(201,123,90,0.15);position:relative;overflow:hidden}
+.about-badge{position:absolute;bottom:-12px;right:-12px;background:var(--muted-sage);color:white;width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;letter-spacing:0.05em;text-align:center;font-weight:700;text-transform:uppercase;line-height:1.4;border:3px solid var(--cream);z-index:2}
+.about-text{position:relative;z-index:1}
+.about-text .section-label,.about-text .section-title{text-align:left}
+.about-body{color:var(--light);line-height:1.85;font-size:1rem;margin-bottom:1.1rem}
+.about-stats{display:flex;gap:2.5rem;margin:1.5rem 0}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--warm-brown)}
+.stat-label{font-size:0.78rem;color:var(--light);letter-spacing:0.06em;text-transform:uppercase}
+
+/* ======= TESTIMONIALS ======= */
+.testimonials-section{background:var(--pale-blush)}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:960px;margin:0 auto;position:relative;z-index:1}
+.testi-card{background:white;border-radius:18px;padding:2rem 1.75rem;box-shadow:0 2px 16px rgba(124,80,53,0.06);border-top:3px solid var(--mustard)}
+.testi-stars{color:var(--soft-terracotta);font-size:0.9rem;letter-spacing:2px;margin-bottom:1rem}
+.testi-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;line-height:1.75;color:var(--dark);margin-bottom:1.25rem}
+.testi-author{font-size:0.8rem;font-weight:700;color:var(--warm-brown);letter-spacing:0.05em;text-transform:uppercase}
+
+/* ======= CONTACT ======= */
+.contact-section{background:var(--warm-brown);text-align:center;padding:5rem 2rem}
+.contact-section .section-label{color:rgba(242,228,212,0.7)}
+.contact-section .section-title{color:var(--cream)}
+.contact-section .section-sub{color:rgba(242,228,212,0.75)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:900px;margin:0 auto;text-align:left}
+.contact-info{background:rgba(250,246,240,0.08);padding:2.5rem;border-radius:16px}
+.contact-info h3,.contact-form-panel h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--cream);margin-bottom:1.5rem}
+.contact-detail{display:flex;flex-direction:column;gap:1.4rem}
+.contact-item{display:flex;flex-direction:column;gap:2px}
+.contact-item .label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(242,228,212,0.6);font-weight:700}
+.contact-item .val{font-size:0.9rem;color:var(--cream);font-weight:300;line-height:1.5}
+.contact-item a{color:var(--cream);text-decoration:none;transition:opacity 0.2s}
+.contact-item a:hover{opacity:0.85}
+.cform{display:flex;flex-direction:column;gap:12px}
+.cform input,.cform textarea,.cform select{background:rgba(250,246,240,0.1);border:1px solid rgba(250,246,240,0.25);color:var(--cream);padding:0.8rem 1.1rem;border-radius:10px;font-family:'Lato',sans-serif;font-size:0.9rem;width:100%;transition:border 0.2s}
+.cform input::placeholder,.cform textarea::placeholder{color:rgba(242,228,212,0.5)}
+.cform select option{background:#2C1A0E;color:white}
+.cform input:focus,.cform textarea:focus,.cform select:focus{outline:none;border-color:var(--mustard)}
+.cform textarea{resize:vertical;min-height:110px}
+.cform .send-btn{background:var(--soft-terracotta);color:white;border:none;padding:0.85rem;border-radius:10px;font-size:0.95rem;font-family:'Lato',sans-serif;font-weight:700;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:background 0.2s}
+.cform .send-btn:hover{background:var(--terracotta)}
+.cform-msg{font-size:0.85rem;color:var(--cream);margin-top:0.5rem;opacity:0;transition:opacity 0.3s;min-height:1.2em}
+.cform-msg.show{opacity:1}
+
+/* ======= FOOTER ======= */
+footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center;padding:0;position:relative;overflow:hidden}
+.footer-content{padding:1.4rem 2rem 1.8rem;position:relative;z-index:1;color:rgba(251,246,236,0.55);font-size:0.85rem}
+.footer-content strong{color:var(--pale-blush)}
+.footer-content a{color:var(--pale-blush);text-decoration:none}
+
+/* ======= CART DRAWER ======= */
+.cart-overlay{position:fixed;inset:0;background:rgba(124,80,53,0.25);z-index:400;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.cart-overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;right:0;top:0;bottom:0;width:400px;max-width:100vw;background:white;z-index:401;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;border-left:1px solid rgba(124,80,53,0.1)}
+.cart-drawer.open{transform:translateX(0)}
+.cart-header{padding:1.4rem 1.5rem;border-bottom:1px solid rgba(124,80,53,0.08);display:flex;align-items:center;justify-content:space-between}
+.cart-header h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--warm-brown)}
+.cart-close{background:none;border:none;cursor:pointer;font-size:1.3rem;color:var(--light);transition:color 0.2s;line-height:1}
+.cart-close:hover{color:var(--warm-brown)}
+.cart-items{flex:1;overflow-y:auto;padding:0.5rem 1.5rem}
+.cart-empty{text-align:center;padding:3rem 0 2rem;color:var(--light);font-size:0.9rem}
+.cart-empty-emoji{font-size:2.4rem;margin-bottom:0.6rem;opacity:0.6}
+.cart-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid rgba(124,80,53,0.06);align-items:flex-start}
+.cart-item-img{width:64px;height:64px;border-radius:10px;flex-shrink:0;overflow:hidden;background:var(--pale-blush)}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1;font-size:0.85rem;min-width:0}
+.cart-item-name{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--dark);margin-bottom:0.2rem}
+.cart-item-opts{font-size:0.72rem;color:var(--light);margin-bottom:0.3rem;line-height:1.3}
+.cart-item-price{font-weight:700;color:var(--soft-terracotta);margin-bottom:0.4rem}
+.cart-qty{display:flex;align-items:center;gap:8px}
+.qty-btn{width:22px;height:22px;border-radius:50%;border:1px solid var(--light);background:white;cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;color:var(--light)}
+.qty-btn:hover{border-color:var(--warm-brown);color:var(--warm-brown)}
+.qty-num{font-size:0.85rem;font-weight:600;min-width:14px;text-align:center}
+.cart-item-remove{background:none;border:none;cursor:pointer;color:var(--light);font-size:0.75rem;transition:color 0.2s;padding:0;font-family:'Lato',sans-serif;margin-left:0.5rem;text-decoration:underline;align-self:flex-start}
+.cart-item-remove:hover{color:var(--rust)}
+.cart-footer{padding:1.2rem 1.5rem;border-top:1px solid rgba(124,80,53,0.08);background:var(--pale-blush)}
+.cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;font-size:0.9rem}
+.cart-subtotal span:last-child{font-weight:700;color:var(--warm-brown)}
+.cart-note{font-size:0.72rem;color:var(--light);margin-bottom:1rem;line-height:1.45}
+.checkout-btn{width:100%;background:var(--warm-brown);color:white;border:none;padding:0.9rem;border-radius:2rem;font-size:0.85rem;font-family:'Lato',sans-serif;font-weight:700;cursor:pointer;transition:background 0.2s;letter-spacing:0.04em}
+.checkout-btn:hover{background:var(--soft-terracotta)}
+.checkout-btn:disabled{opacity:0.6;cursor:wait}
+
+/* ======= CATEGORY + VARIANT PAGES ======= */
+.products-category{padding:3rem 2rem;max-width:1200px;margin:0 auto}
+.products-category h1{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--dark);margin:1rem 0 0.5rem;letter-spacing:-0.02em}
+.products-category .cat-sub{color:var(--light);font-size:0.95rem;margin-bottom:2.5rem;max-width:600px}
+.back-link{background:none;border:none;color:var(--soft-terracotta);font-size:0.9rem;cursor:pointer;margin-bottom:1rem;font-family:'Lato',sans-serif;transition:color 0.2s;font-weight:600;padding:0}
+.back-link:hover{color:var(--warm-brown)}
+.bag-categories-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.category-tile{position:relative;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:white;border-radius:14px;box-shadow:0 2px 12px rgba(124,80,53,0.06);transition:transform 0.3s,box-shadow 0.3s}
+.category-tile img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.category-tile:hover{transform:translateY(-6px);box-shadow:0 10px 28px rgba(124,80,53,0.14)}
+.category-tile:hover img{transform:scale(1.05)}
+.category-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(44,26,14,0.82));color:white;padding:2rem 1rem 1rem;text-align:left;font-family:'Playfair Display',serif}
+.category-label-title{font-size:1.1rem;font-weight:600;margin-bottom:0.25rem}
+.category-label-meta{font-size:0.78rem;opacity:0.85;font-family:'Lato',sans-serif;letter-spacing:0.02em;font-weight:300}
+
+.variants-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.variant-card{background:white;border-radius:14px;overflow:hidden;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 12px rgba(124,80,53,0.06);display:flex;flex-direction:column}
+.variant-card:hover{transform:translateY(-6px);box-shadow:0 10px 28px rgba(124,80,53,0.14)}
+.variant-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden}
+.variant-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.variant-card:hover .variant-img-wrap img{transform:scale(1.04)}
+.variant-body{padding:1rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:0.3rem}
+.variant-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--dark);line-height:1.3}
+.variant-price{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--soft-terracotta)}
+
+/* ======= GALLERY (product detail) ======= */
+.gallery-container{padding:3rem 2rem 4rem;max-width:1200px;margin:0 auto}
+.gallery-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:start}
+.gallery-section{display:flex;flex-direction:column}
+.gallery-image-display{aspect-ratio:1;background:var(--sand);border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.08);cursor:zoom-in;position:relative}
+.gallery-image-display img{width:100%;height:100%;object-fit:cover}
+.gallery-thumbnails{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px;margin-top:1rem}
+.gallery-thumbnail{aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s,opacity 0.2s;opacity:0.65;background:var(--pale-blush)}
+.gallery-thumbnail:hover{opacity:1}
+.gallery-thumbnail.active{border-color:var(--soft-terracotta);opacity:1;box-shadow:0 4px 12px rgba(201,123,90,0.25)}
+.gallery-thumbnail img{width:100%;height:100%;object-fit:cover}
+.gallery-info{display:flex;flex-direction:column;gap:1.25rem}
+.gallery-info h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--dark);letter-spacing:-0.02em}
+.gallery-price{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--soft-terracotta)}
+.gallery-info p{font-size:0.95rem;color:var(--light);line-height:1.7}
+.gallery-options{display:flex;flex-direction:column;gap:1.2rem;border-top:1px solid rgba(124,80,53,0.1);padding-top:1.5rem}
+.option-group{display:flex;flex-direction:column;gap:0.5rem}
+.option-group label{font-family:'Playfair Display',serif;font-size:0.92rem;color:var(--dark);font-weight:600}
+.option-group select,.option-group textarea,.option-group input{padding:0.75rem 1rem;border:1px solid rgba(124,80,53,0.18);border-radius:10px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--dark);background:white;transition:border 0.2s}
+.option-group select:focus,.option-group textarea:focus,.option-group input:focus{outline:none;border-color:var(--soft-terracotta)}
+.option-group textarea{resize:vertical;min-height:70px}
+.qty-control{display:flex;align-items:center;gap:1rem}
+.qty-control label{font-family:'Playfair Display',serif;font-size:0.92rem;color:var(--dark);font-weight:600}
+.qty-buttons{display:flex;align-items:center;gap:0.75rem}
+.qty-buttons button{width:34px;height:34px;border:1px solid var(--sand);border-radius:50%;background:white;cursor:pointer;font-size:1.1rem;font-family:'Playfair Display',serif;color:var(--warm-brown);font-weight:600;transition:background 0.2s}
+.qty-buttons button:hover{background:var(--sand)}
+.add-to-cart-btn{background:var(--soft-terracotta);color:white;padding:1rem 2rem;border:none;border-radius:12px;font-size:0.92rem;font-weight:700;cursor:pointer;transition:background 0.2s,transform 0.15s;font-family:'Lato',sans-serif;letter-spacing:0.06em;text-transform:uppercase;margin-top:0.5rem}
+.add-to-cart-btn:hover{background:var(--terracotta);transform:translateY(-1px)}
+.detail-meta{background:var(--pale-blush);border-radius:12px;padding:1.1rem 1.3rem;font-size:0.85rem;color:var(--warm-brown);line-height:1.6;margin-top:1rem}
+.detail-meta strong{font-family:'Playfair Display',serif;font-weight:600;display:block;margin-bottom:0.3rem}
+
+/* Lightbox */
+.image-lightbox{position:fixed;inset:0;background:rgba(42,25,16,0.98);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem;opacity:0;transition:opacity 0.3s}
+.image-lightbox.open{display:flex;opacity:1}
+.lightbox-img{max-width:90%;max-height:80vh;object-fit:contain;border-radius:10px}
+.lightbox-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:white;font-size:2.2rem;cursor:pointer;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif}
+.lightbox-close:hover{opacity:0.7}
+.lightbox-prev,.lightbox-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:white;width:54px;height:54px;border-radius:50%;font-size:2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;font-family:'Playfair Display',serif;font-weight:600}
+.lightbox-prev:hover,.lightbox-next:hover{background:rgba(255,255,255,0.25)}
+.lightbox-prev{left:1.5rem}
+.lightbox-next{right:1.5rem}
+.lightbox-counter{position:absolute;bottom:1.5rem;background:rgba(255,255,255,0.12);color:white;padding:0.5rem 1.1rem;border-radius:980px;font-size:0.85rem}
+
+/* ======= CHECKOUT RESULT PAGES ======= */
+.result-page{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;max-width:540px;margin:0 auto}
+.result-icon{font-size:4rem;margin-bottom:1.5rem}
+.result-page h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--dark);margin-bottom:0.6rem}
+.result-page p{font-size:1rem;color:var(--light);line-height:1.8;margin-bottom:2rem}
+.order-id{font-family:'Lato',sans-serif;font-size:0.82rem;color:var(--warm-brown);background:var(--pale-blush);padding:0.4rem 0.9rem;border-radius:2rem;display:inline-block;margin-bottom:1.25rem;letter-spacing:0.06em;font-weight:600}
+
+/* ======= RESPONSIVE ======= */
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;padding:3rem 1.5rem;text-align:center;gap:2.5rem}
+  .hero-desc{max-width:100%}
+  .hero-buttons{justify-content:center}
+  .hero-eyebrow{justify-content:center}
+  .hero-card-grid{max-width:420px;margin:0 auto}
+  .about-section{grid-template-columns:1fr;padding:4rem 1.5rem;text-align:center;gap:3rem}
+  .about-text .section-label,.about-text .section-title{text-align:center}
+  .about-stats{justify-content:center;flex-wrap:wrap}
+  .gallery-layout{grid-template-columns:1fr;gap:2rem}
+  .contact-grid{grid-template-columns:1fr;gap:2rem}
+  .category-row{grid-template-columns:1fr 1fr}
+  .testimonials-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  nav{padding:0 1rem}
+  .nav-links{display:none}
+  .nav-logo{font-size:1.05rem}
+  section{padding:4rem 1.5rem}
+  .category-row{grid-template-columns:1fr}
+  .bag-categories-grid{grid-template-columns:1fr 1fr;gap:1rem}
+  .variants-grid{grid-template-columns:1fr 1fr;gap:1rem}
+  .products-category h1{font-size:1.8rem}
+  .lightbox-prev,.lightbox-next{width:44px;height:44px;font-size:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================================================================== -->
+<!-- CART DRAWER (global) -->
+<!-- ===================================================================== -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer" aria-hidden="true">
+  <div class="cart-header">
+    <h3>Your cart</h3>
+    <button class="cart-close" onclick="closeCart()" aria-label="Close cart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-subtotal"><span>Subtotal</span><span id="cartTotal">CA$0.00</span></div>
+    <p class="cart-note">Shipping &amp; taxes calculated at checkout. Each piece is made to order — please allow 2–3 weeks.</p>
+    <button class="checkout-btn" id="checkoutBtn" onclick="goCheckout()">Secure checkout →</button>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<!-- LIGHTBOX (global) -->
+<!-- ===================================================================== -->
+<div id="imageLightbox" class="image-lightbox" onclick="closeImageLightbox(event)">
+  <button class="lightbox-close" onclick="closeImageLightbox()" aria-label="Close">×</button>
+  <button class="lightbox-prev" onclick="prevImageLightbox(event)" aria-label="Previous">‹</button>
+  <img id="lightboxImage" src="" alt="Product image" class="lightbox-img">
+  <button class="lightbox-next" onclick="nextImageLightbox(event)" aria-label="Next">›</button>
+  <div id="lightboxCounter" class="lightbox-counter">1 / 1</div>
+</div>
+
+<!-- ===================================================================== -->
+<!-- NAV -->
+<!-- ===================================================================== -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">Tangled with Love</div>
+  <ul class="nav-links">
+    <li><a onclick="navTo('shop')">Shop</a></li>
+    <li><a onclick="navTo('about')">About</a></li>
+    <li><a onclick="navTo('testimonials')">Reviews</a></li>
+    <li><a onclick="navTo('contact')">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="nav-ig" href="https://instagram.com/mummawarmth" target="_blank" rel="noopener">@mummawarmth</a>
+    <button class="cart-btn" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</nav>
+
+<!-- ===================================================================== -->
+<!-- PAGE: HOME -->
+<!-- ===================================================================== -->
+<div class="page active" id="page-home">
+
+<section class="hero" id="top">
+  <svg class="thread-overlay" viewBox="0 0 1200 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M-20,200 Q200,120 400,280 T900,200" fill="none" stroke="#C97B5A" stroke-width="1.5" opacity="0.12"/>
+    <path d="M-20,350 Q300,250 600,400 T1220,300" fill="none" stroke="#7C5035" stroke-width="1" opacity="0.08"/>
+    <path d="M1220,100 Q900,300 700,150 T200,320" fill="none" stroke="#C97B5A" stroke-width="2" opacity="0.07"/>
+    <path d="M100,780 Q350,600 600,700 T1100,580" fill="none" stroke="#8A9E7E" stroke-width="1.5" opacity="0.1"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Handcrafted with heart</div>
+    <h1>Beautifully made with <em>love</em>.</h1>
+    <p class="hero-desc">One-of-a-kind crochet bags, crafted slowly by hand in small batches — granny-square shoulder bags, sling bags, handhelds and pouches. No two alike.</p>
+    <div class="hero-buttons">
+      <a class="btn-primary" onclick="navTo('shop')">Browse the shop</a>
+      <a class="btn-secondary" onclick="navTo('about')">Our story</a>
+    </div>
+  </div>
+  <div class="hero-illustration">
+    <div class="hero-card-grid" id="heroCards"></div>
+  </div>
+</section>
+
+<div class="fringe"></div>
+
+<!-- Shop — category list -->
+<section class="products-section" id="shop">
+  <div class="section-label">Handmade collection</div>
+  <h2 class="section-title">Shop by style</h2>
+  <p class="section-sub">Every bag is made to order in our home studio in Brampton, Ontario. Pick a style — you'll see all the colour &amp; pattern variants next.</p>
+  <div class="category-row" id="categoryRow"></div>
+
+  <div class="custom-banner">
+    <p><strong>Looking for a blanket, scarf, or amigurumi?</strong><br>
+    Mum also takes custom orders for blankets, beanies, and cozy wearables. Use the contact form below and we'll chat about colours, sizing, and timing.</p>
+    <a class="btn-primary" onclick="navTo('contact')" style="white-space:nowrap">Request a custom piece</a>
+  </div>
+</section>
+
+<div class="mandala-divider">
+  <span style="font-size:1.8rem">🧶</span>
+  <span>Made with patience, given with love</span>
+  <span style="font-size:1.8rem">🧶</span>
+</div>
+
+<!-- About -->
+<section class="about-section" id="about">
+  <div class="about-visual">
+    <div class="about-frame">
+      🧶
+      <div class="about-badge">Est.<br>with Love</div>
+    </div>
+  </div>
+  <div class="about-text">
+    <div class="section-label">Our story</div>
+    <h2 class="section-title"><strong>The heart behind the stitches</strong></h2>
+    <p class="about-body">For our mother, every loop of yarn is a story of resilience and love. Her journey began decades ago in the vibrant streets of Amritsar, Punjab. As the eldest sibling, she stepped up with a quiet strength, using her hands to help provide for her family. What started as a necessary skill soon blossomed into a lifelong passion that has traveled with her across oceans.</p>
+    <p class="about-body">Now, in the quiet, snowy winters of Canada, those same hands haven't slowed down. While she once created out of a sense of responsibility to her parents and siblings, and later as a devoted wife and mother, she now creates for the purest reason of all: <strong>herself</strong>.</p>
+    <p class="about-body">This website is a gallery of that journey — a celebration of a woman who gave everything to her family and is now weaving her own dreams, one stitch at a time.</p>
+    <div class="about-stats">
+      <div><div class="stat-num">200+</div><div class="stat-label">Happy customers</div></div>
+      <div><div class="stat-num">100%</div><div class="stat-label">Handmade</div></div>
+      <div><div class="stat-num">∞</div><div class="stat-label">Love stitched in</div></div>
+    </div>
+    <a class="btn-primary" onclick="navTo('contact')">Request a custom piece</a>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials-section" id="testimonials">
+  <div class="section-label">Kind words</div>
+  <h2 class="section-title">What people are saying</h2>
+  <p class="section-sub">Handmade gifts leave a lasting impression. Here's what some of our customers have shared.</p>
+  <div class="testimonials-grid">
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"I ordered a granny-square shoulder bag for my sister and she literally cried. The softness and care that went into it was so obvious. Will order again."</p><div class="testi-author">— Sarah M.</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"The little pouch I got for my daughter is her absolute favourite. It's beautifully made and so charming. Thank you so much!"</p><div class="testi-author">— Priya R.</div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"Ordered a custom colour sling bag and it turned out even better than I imagined. The communication was lovely and delivery was quick."</p><div class="testi-author">— Claire T.</div></div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="contact-section" id="contact">
+  <div class="section-label">Say hello</div>
+  <h2 class="section-title">Order a custom piece</h2>
+  <p class="section-sub">Have something special in mind? We'd love to hear from you. Custom colours, sizes, and designs welcome.</p>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>Get in touch</h3>
+      <div class="contact-detail">
+        <div class="contact-item"><span class="label">Email</span><span class="val"><a href="mailto:hello@tangledwithlove.com">hello@tangledwithlove.com</a></span></div>
+        <div class="contact-item"><span class="label">Instagram</span><span class="val"><a href="https://instagram.com/mummawarmth" target="_blank" rel="noopener">@mummawarmth</a></span></div>
+        <div class="contact-item"><span class="label">Location</span><span class="val">Brampton, Ontario, Canada</span></div>
+        <div class="contact-item"><span class="label">Shipping</span><span class="val">Canada &amp; International</span></div>
+        <div class="contact-item"><span class="label">Turnaround</span><span class="val">2–3 weeks per order</span></div>
+      </div>
+    </div>
+    <div class="contact-form-panel">
+      <h3>Send a message</h3>
+      <!-- Replace FORMSPREE_ID in the action URL with your Formspree form id -->
+      <form class="cform" id="contactForm" action="https://formspree.io/f/FORMSPREE_ID" method="POST">
+        <input name="name" type="text" placeholder="Your name" required>
+        <input name="email" type="email" placeholder="Your email" required>
+        <select name="interest" required>
+          <option value="">What are you interested in?</option>
+          <option>Custom bag (colour / size)</option>
+          <option>Custom blanket</option>
+          <option>Amigurumi</option>
+          <option>Wearable (hat, scarf, etc.)</option>
+          <option>Home decor</option>
+          <option>Something else</option>
+        </select>
+        <textarea name="message" placeholder="Tell us what you have in mind…" required></textarea>
+        <button type="submit" class="send-btn">Send message</button>
+        <div class="cform-msg" id="cformMsg"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <p>&copy; 2026 <strong>Tangled with Love</strong> — Handcrafted with care, one stitch at a time 🧶 &nbsp;·&nbsp; <a href="mailto:hello@tangledwithlove.com">hello@tangledwithlove.com</a></p>
+  </div>
+</footer>
+
+</div><!-- /page-home -->
+
+<!-- ===================================================================== -->
+<!-- PAGE: BAG CATEGORIES -->
+<!-- ===================================================================== -->
+<div class="page" id="page-categories">
+  <div class="products-category">
+    <button class="back-link" onclick="showPage('home')">← Back to home</button>
+    <h1>Crochet Bags</h1>
+    <p class="cat-sub">Each style comes in multiple colour &amp; pattern variants. Pick a style to see what's available right now.</p>
+    <div class="bag-categories-grid" id="bagCategoriesGrid"></div>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<!-- PAGE: VARIANTS (one category) -->
+<!-- ===================================================================== -->
+<div class="page" id="page-variants">
+  <div class="products-category">
+    <button class="back-link" onclick="showPage('categories')">← Back to all bags</button>
+    <h1 id="variantsTitle">Bags</h1>
+    <p class="cat-sub" id="variantsSub"></p>
+    <div class="variants-grid" id="variantsGrid"></div>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<!-- PAGE: PRODUCT DETAIL (gallery) -->
+<!-- ===================================================================== -->
+<div class="page" id="page-detail">
+  <div class="gallery-container">
+    <button class="back-link" id="backFromDetail">← Back</button>
+    <div class="gallery-layout">
+      <div class="gallery-section">
+        <div class="gallery-image-display" onclick="openImageLightbox()">
+          <img id="galleryHero" alt="Product image">
+        </div>
+        <div class="gallery-thumbnails" id="galleryThumbs"></div>
+      </div>
+      <div class="gallery-info">
+        <h1 id="detailName"></h1>
+        <div class="gallery-price" id="detailPrice"></div>
+        <p id="detailDesc"></p>
+        <div class="gallery-options">
+          <div class="option-group" id="detailColourGroup">
+            <label>Colour</label>
+            <select id="detailColour"></select>
+          </div>
+          <div class="option-group" id="detailSizeGroup" style="display:none">
+            <label>Size</label>
+            <select id="detailSize">
+              <option>Standard</option>
+              <option>Slightly larger (+$10)</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label>Personal note (optional)</label>
+            <input id="detailMsg" type="text" placeholder="e.g. Gift wrap, initials, a short message…">
+          </div>
+          <div class="qty-control">
+            <label>Quantity</label>
+            <div class="qty-buttons">
+              <button type="button" onclick="detailQty(-1)">−</button>
+              <span id="detailQtyNum" style="min-width:20px;text-align:center;font-weight:700">1</span>
+              <button type="button" onclick="detailQty(1)">+</button>
+            </div>
+          </div>
+          <button class="add-to-cart-btn" onclick="addDetailToCart()">Add to cart</button>
+          <div class="detail-meta">
+            <strong>About this piece</strong>
+            Made-to-order in Brampton, Ontario. Ships in 2–3 weeks. Each bag is unique — small variations in pattern &amp; colour are part of the handmade charm. Natural fibres; gentle hand-wash only.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<!-- PAGE: SUCCESS / CANCEL -->
+<!-- ===================================================================== -->
+<div class="page" id="page-success">
+  <div class="result-page">
+    <div class="result-icon">🎉</div>
+    <h2>Order placed!</h2>
+    <div class="order-id" id="successOrderId" style="display:none"></div>
+    <p>Thank you so much — your handmade piece is now being lovingly crafted. You'll receive a confirmation email with tracking info once it ships (usually 2–3 weeks).</p>
+    <button class="btn-primary" onclick="resetAndHome()">Back to shop</button>
+  </div>
+</div>
+
+<div class="page" id="page-cancel">
+  <div class="result-page">
+    <div class="result-icon">🧶</div>
+    <h2>Checkout cancelled</h2>
+    <p>No worries — your cart is still here. Whenever you're ready, just head back and try again.</p>
+    <button class="btn-primary" onclick="resetAndHome()">Back to shop</button>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<!-- CONFIG + APP SCRIPT -->
+<!-- ===================================================================== -->
+<script>
+/* =====================================================================
+   CONFIGURATION — edit these after setting up Stripe + Formspree + Worker
+   See DEPLOYMENT.md for a step-by-step guide.
+   ===================================================================== */
+const CONFIG = {
+  // URL of your Cloudflare Worker that creates a Stripe Checkout Session.
+  // Example: "https://tangled-stripe.yourname.workers.dev"
+  // Leave blank ("") to disable Stripe — the site will email the order via Formspree instead.
+  STRIPE_CHECKOUT_ENDPOINT: "",
+
+  // Your Stripe publishable key (starts with pk_live_... or pk_test_...).
+  // Only needed if STRIPE_CHECKOUT_ENDPOINT is set.
+  STRIPE_PUBLISHABLE_KEY: "",
+
+  // Formspree form id for the contact form AND order-email fallback.
+  // Create one at https://formspree.io — it's free. Replace in the <form action> too.
+  FORMSPREE_ID: "FORMSPREE_ID",
+
+  // Currency shown in the UI and used for Stripe line items.
+  CURRENCY: "CAD",
+  CURRENCY_SYMBOL: "CA$",
+};
+
+/* =====================================================================
+   PRODUCT CATALOG — edit names, prices, descriptions, hero index here
+   Prices are in WHOLE DOLLARS (CAD). Stripe receives prices in cents.
+   ===================================================================== */
+const CATEGORIES = [
+  {
+    id: "medium-shoulder",
+    name: "Medium Shoulder Bag",
+    tagline: "Everyday shoulder bag with granny-square patterns.",
+    blurb: "Soft, slouchy medium-sized shoulder bags — room for a phone, wallet, book and a few essentials. Each one is made with love in small batches.",
+    heroVariant: "cherry-blossom",
+    variants: [
+      { id: "cherry-blossom",  name: "Cherry Blossom Granny",  price: 65, count: 11,
+        desc: "Ivory and cherry-red granny squares with a moss-green centre. A sweet, everyday shoulder bag that brings a pop of colour to neutrals." },
+      { id: "strawberry-stripe", name: "Strawberry Stripe",    price: 70, count: 9,
+        desc: "A cream tote with dense rows of strawberry-red bobbles and sage accents — sturdy enough for a small market run, charming enough for every day." },
+      { id: "lavender-fields", name: "Lavender Fields Hex",    price: 68, count: 7,
+        desc: "A soft lavender hexagon-shaped bag with sage-green floral centres. Light, pretty, and surprisingly roomy." },
+      { id: "midnight-daisy",  name: "Midnight Daisy",         price: 72, count: 3,
+        desc: "Deep charcoal with cream-and-gold daisy motifs. A more moody take on the granny-square shoulder bag." },
+    ],
+  },
+  {
+    id: "larger-shoulder",
+    name: "Larger Shoulder Bag",
+    tagline: "Roomy tote for books, laptops, and small outings.",
+    blurb: "Our largest style — big enough for a thin laptop, a change of clothes, or a week's library haul. Soft straps that sit comfortably on the shoulder.",
+    heroVariant: "sage-meadow",
+    variants: [
+      { id: "sage-meadow", name: "Sage Meadow Granny", price: 85, count: 6,
+        desc: "A generous tote in forest green and ivory granny squares. Strong enough for books and laptops, soft enough to feel like a hug." },
+    ],
+  },
+  {
+    id: "sling",
+    name: "Sling Bag",
+    tagline: "Crossbody sling bags with a chain-style strap.",
+    blurb: "A modern crossbody sling — compact but deep. The beaded-look rope strap is our signature detail.",
+    heroVariant: "rose-garden",
+    variants: [
+      { id: "rose-garden", name: "Rose Garden Sling", price: 60, count: 6,
+        desc: "Forest-green sling bag with a hand-crocheted pink rose on the front flap. Pairs perfectly with jeans or an oversized jumper." },
+    ],
+  },
+  {
+    id: "small-handheld",
+    name: "Small Handheld Bag",
+    tagline: "Compact top-handle bags — the perfect everyday clutch.",
+    blurb: "Mini top-handle bags sized for your phone, keys, a lipstick and a tiny notebook. Easy to tuck under the arm.",
+    heroVariant: "berry-blossom",
+    variants: [
+      { id: "seafoam",         name: "Seafoam Weave",     price: 45, count: 1,
+        desc: "Cream and soft seafoam-blue stripes with a chunky weave. Coastal and calming." },
+      { id: "berry-blossom",   name: "Berry Blossom",     price: 48, count: 3,
+        desc: "Ivory handheld with a pink bobble trim — part bag, part treasure. Comes with a braided white strap." },
+      { id: "espresso-stripe", name: "Espresso Stripe",   price: 52, count: 1,
+        desc: "Warm espresso and cream stripes in a classic vertical pattern. Your new coffee-shop sidekick." },
+      { id: "garden-mandala",  name: "Garden Mandala",    price: 50, count: 1,
+        desc: "Cream body with a single granny-square mandala centre and bright moss-green straps." },
+    ],
+  },
+  {
+    id: "pouch",
+    name: "Small Handheld Pouch",
+    tagline: "Little pouches — wallets, gift bags, and crochet keepsakes.",
+    blurb: "Palm-sized pouches perfect as wallets, cosmetic bags, or gift wrapping for something precious. Many make wonderful little gifts on their own.",
+    heroVariant: "sunshine",
+    variants: [
+      { id: "sunshine",         name: "Sunshine Pouch",       price: 32, count: 3,
+        desc: "Mustard-yellow envelope pouch with a soft lavender trim and button closure. Small ray of sunshine in a bag." },
+      { id: "morning-sky",      name: "Morning Sky",          price: 35, count: 6,
+        desc: "Sky-blue pouch with a single hand-stitched sunflower motif. Top-zip closure, drawstring handle." },
+      { id: "mocha-drawstring", name: "Mocha Drawstring",     price: 38, count: 6,
+        desc: "Rich mocha brown and cream stripes with a drawstring top and a tiny coin pouch charm." },
+      { id: "autumn-spice",     name: "Autumn Spice",         price: 30, count: 3,
+        desc: "Terracotta bi-fold pouch perfect as a wallet. Snap closure on the front flap." },
+      { id: "confetti",         name: "Confetti Pouch",       price: 35, count: 3,
+        desc: "Cream base with speckled purple, mustard and blush flecks — like confetti in yarn form. Top-handle." },
+      { id: "rosewood-stripe",  name: "Rosewood Stripe",      price: 34, count: 2,
+        desc: "Rose, charcoal and cream stripes with a granny-square flap. A cozy, wintery pouch." },
+    ],
+  },
+];
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const STATE = {
+  cart: [],            // [{ lineId, variantId, categoryId, name, price, qty, colour, size, message, img }]
+  detail: null,        // currently-open variant
+  detailQty: 1,
+  lightboxImages: [],
+  lightboxIdx: 0,
+  historyStack: ["home"],
+};
+
+/* =====================================================================
+   HELPERS
+   ===================================================================== */
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => CONFIG.CURRENCY_SYMBOL + n.toFixed(2);
+const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const variantImg = (catId, vId, i) => `assets/products/${catId}/${vId}/${i}.png`;
+const findVariant = (catId, vId) => {
+  const cat = CATEGORIES.find(c => c.id === catId);
+  return cat ? cat.variants.find(v => v.id === vId) : null;
+};
+const findCategory = (catId) => CATEGORIES.find(c => c.id === catId);
+
+// Images are stored as /1.png .. /N.png or .jpg/.jpeg — try them in order.
+// We precompute each variant's image list client-side by attempting .png / .jpg / .jpeg.
+function variantImageUrls(catId, vId, count) {
+  // Pre-known mapping: file extensions per variant (from disk). Built at generation time.
+  return IMAGE_MAP[`${catId}/${vId}`] || [];
+}
+
+// IMAGE_MAP is generated to match the actual files on disk.
+const IMAGE_MAP = {
+  "medium-shoulder/cherry-blossom": ["1.png","2.png","3.png","4.png","5.jpg","6.png","7.png","8.png","9.jpg","10.jpg","11.png"],
+  "medium-shoulder/strawberry-stripe": ["1.jpeg","2.png","3.png","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg"],
+  "medium-shoulder/lavender-fields": ["1.png","2.png","3.png","4.png","5.png","6.png","7.png"],
+  "medium-shoulder/midnight-daisy": ["1.png","2.png","3.png"],
+  "larger-shoulder/sage-meadow": ["1.png","2.jpg","3.jpg","4.jpg","5.jpg","6.png"],
+  "sling/rose-garden": ["1.png","2.png","3.png","4.png","5.png","6.png"],
+  "small-handheld/seafoam": ["1.png"],
+  "small-handheld/berry-blossom": ["1.png","2.jpg","3.jpg"],
+  "small-handheld/espresso-stripe": ["1.png"],
+  "small-handheld/garden-mandala": ["1.png"],
+  "pouch/sunshine": ["1.png","2.png","3.png"],
+  "pouch/morning-sky": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.jpg"],
+  "pouch/mocha-drawstring": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.png"],
+  "pouch/autumn-spice": ["1.png","2.png","3.png"],
+  "pouch/confetti": ["1.png","2.jpg","3.jpg"],
+  "pouch/rosewood-stripe": ["1.png","2.png"],
+};
+
+function variantImage(catId, vId, index=0) {
+  const key = `${catId}/${vId}`;
+  const files = IMAGE_MAP[key] || [];
+  return files[index] ? `assets/products/${key}/${files[index]}` : "";
+}
+
+function allVariantImages(catId, vId) {
+  const key = `${catId}/${vId}`;
+  const files = IMAGE_MAP[key] || [];
+  return files.map(f => `assets/products/${key}/${f}`);
+}
+
+/* =====================================================================
+   NAV / PAGE ROUTING
+   ===================================================================== */
+function showPage(id, push=true) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const el = document.getElementById("page-" + id);
+  if (el) el.classList.add("active");
+  if (push) STATE.historyStack.push(id);
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+function navTo(anchor) {
+  // If not on home, go home first
+  if (!$("page-home").classList.contains("active")) {
+    showPage("home", false);
+  }
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 30);
+}
+
+/* =====================================================================
+   HOME — render hero cards + featured categories
+   ===================================================================== */
+function renderHeroCards() {
+  // Show 4 hero picks: one per category, mixing styles
+  const picks = [
+    { cat: "medium-shoulder", var: "cherry-blossom" },
+    { cat: "sling", var: "rose-garden" },
+    { cat: "pouch", var: "sunshine" },
+    { cat: "small-handheld", var: "berry-blossom" },
+  ];
+  $("heroCards").innerHTML = picks.map(p => {
+    const v = findVariant(p.cat, p.var);
+    if (!v) return "";
+    return `
+      <div class="product-card" onclick="openDetail('${p.cat}','${p.var}')">
+        <div class="product-img-wrap"><img src="${variantImage(p.cat, p.var, 0)}" alt="${v.name}" loading="lazy"></div>
+        <div class="product-info">
+          <div class="product-name">${v.name}</div>
+          <div class="product-price">${fmt(v.price)}</div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function renderCategoryRow() {
+  $("categoryRow").innerHTML = CATEGORIES.map(cat => {
+    const startPrice = Math.min(...cat.variants.map(v => v.price));
+    const variantCount = cat.variants.length;
+    return `
+      <div class="cat-card" onclick="openCategory('${cat.id}')">
+        <div class="cat-card-top">
+          ${variantCount > 1 ? '<span class="cat-tag">' + variantCount + ' styles</span>' : ''}
+          <img src="${variantImage(cat.id, cat.heroVariant, 0)}" alt="${cat.name}" loading="lazy">
+        </div>
+        <div class="cat-card-body">
+          <div class="cat-card-name">${cat.name}</div>
+          <div class="cat-card-desc">${cat.tagline}</div>
+          <div class="cat-card-footer">
+            <span class="cat-card-price">From ${fmt(startPrice)}</span>
+            <button class="cat-card-cta">Shop →</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+/* =====================================================================
+   CATEGORY PAGE
+   ===================================================================== */
+function renderCategoriesPage() {
+  $("bagCategoriesGrid").innerHTML = CATEGORIES.map(cat => {
+    const startPrice = Math.min(...cat.variants.map(v => v.price));
+    return `
+      <div class="category-tile" onclick="openCategory('${cat.id}')">
+        <img src="${variantImage(cat.id, cat.heroVariant, 0)}" alt="${cat.name}" loading="lazy">
+        <div class="category-label">
+          <div class="category-label-title">${cat.name}</div>
+          <div class="category-label-meta">${cat.variants.length} ${cat.variants.length === 1 ? 'style' : 'styles'} · from ${fmt(startPrice)}</div>
+        </div>
+      </div>`;
+  }).join("");
+}
+function showCategories() { renderCategoriesPage(); showPage("categories"); }
+
+function openCategory(catId) {
+  const cat = findCategory(catId);
+  if (!cat) return;
+  $("variantsTitle").textContent = cat.name;
+  $("variantsSub").textContent = cat.blurb;
+  $("variantsGrid").innerHTML = cat.variants.map(v => `
+    <div class="variant-card" onclick="openDetail('${cat.id}','${v.id}')">
+      <div class="variant-img-wrap"><img src="${variantImage(cat.id, v.id, 0)}" alt="${v.name}" loading="lazy"></div>
+      <div class="variant-body">
+        <div class="variant-name">${v.name}</div>
+        <div class="variant-price">${fmt(v.price)}</div>
+      </div>
+    </div>`).join("");
+  showPage("variants");
+}
+
+/* =====================================================================
+   PRODUCT DETAIL
+   ===================================================================== */
+const COLOUR_OPTIONS = ["As shown", "Natural Cream", "Dusty Rose", "Sage Green", "Terracotta", "Midnight / Charcoal", "Warm Brown", "Custom (note below)"];
+
+function openDetail(catId, vId) {
+  const v = findVariant(catId, vId);
+  if (!v) return;
+  const cat = findCategory(catId);
+  STATE.detail = { catId, vId, variant: v, category: cat };
+  STATE.detailQty = 1;
+  $("detailName").textContent = v.name;
+  $("detailPrice").textContent = fmt(v.price);
+  $("detailDesc").textContent = v.desc;
+  $("detailColour").innerHTML = COLOUR_OPTIONS.map(o => `<option>${o}</option>`).join("");
+  $("detailSizeGroup").style.display = "none"; // sizing is fixed per style
+  $("detailMsg").value = "";
+  $("detailQtyNum").textContent = "1";
+  // Gallery
+  const imgs = allVariantImages(catId, vId);
+  $("galleryHero").src = imgs[0] || "";
+  $("galleryHero").alt = v.name;
+  $("galleryThumbs").innerHTML = imgs.map((src, i) => `
+    <div class="gallery-thumbnail ${i === 0 ? 'active' : ''}" onclick="pickThumb(${i}, event)">
+      <img src="${src}" alt="${v.name} image ${i+1}" loading="lazy">
+    </div>`).join("");
+  STATE.lightboxImages = imgs;
+  STATE.lightboxIdx = 0;
+  // Back button context
+  $("backFromDetail").textContent = `← Back to ${cat.name}`;
+  $("backFromDetail").onclick = () => openCategory(catId);
+  showPage("detail");
+}
+
+function pickThumb(idx, ev) {
+  ev && ev.stopPropagation();
+  STATE.lightboxIdx = idx;
+  $("galleryHero").src = STATE.lightboxImages[idx];
+  document.querySelectorAll("#galleryThumbs .gallery-thumbnail").forEach((el, i) =>
+    el.classList.toggle("active", i === idx)
+  );
+}
+
+function detailQty(delta) {
+  STATE.detailQty = Math.max(1, STATE.detailQty + delta);
+  $("detailQtyNum").textContent = STATE.detailQty;
+}
+
+function addDetailToCart() {
+  const d = STATE.detail;
+  if (!d) return;
+  const colour = $("detailColour").value;
+  const message = $("detailMsg").value.trim();
+  const lineId = `${d.catId}:${d.vId}:${slug(colour)}:${slug(message)}`;
+  const existing = STATE.cart.find(x => x.lineId === lineId);
+  if (existing) {
+    existing.qty += STATE.detailQty;
+  } else {
+    STATE.cart.push({
+      lineId,
+      variantId: d.vId,
+      categoryId: d.catId,
+      name: `${d.category.name} — ${d.variant.name}`,
+      price: d.variant.price,
+      qty: STATE.detailQty,
+      colour,
+      message,
+      img: variantImage(d.catId, d.vId, 0),
+    });
+  }
+  renderCart();
+  saveCart();
+  openCart();
+}
+
+/* =====================================================================
+   CART
+   ===================================================================== */
+function openCart() { $("cartOverlay").classList.add("open"); $("cartDrawer").classList.add("open"); }
+function closeCart() { $("cartOverlay").classList.remove("open"); $("cartDrawer").classList.remove("open"); }
+function cartSubtotal() { return STATE.cart.reduce((s,i)=>s + i.price * i.qty, 0); }
+function cartCount()    { return STATE.cart.reduce((s,i)=>s + i.qty, 0); }
+
+function renderCart() {
+  $("cartCount").textContent = cartCount();
+  if (STATE.cart.length === 0) {
+    $("cartItems").innerHTML = `<div class="cart-empty"><div class="cart-empty-emoji">🧶</div>Your cart is empty.<br>Find something made with love.</div>`;
+    $("cartFooter").style.display = "none";
+    return;
+  }
+  $("cartItems").innerHTML = STATE.cart.map((it, i) => `
+    <div class="cart-item">
+      <div class="cart-item-img"><img src="${it.img}" alt="${it.name}"></div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${it.name}</div>
+        <div class="cart-item-opts">Colour: ${it.colour}${it.message ? ' · Note: "' + it.message + '"' : ''}</div>
+        <div class="cart-item-price">${fmt(it.price * it.qty)}</div>
+        <div class="cart-qty">
+          <button class="qty-btn" onclick="updateQty(${i},-1)">−</button>
+          <span class="qty-num">${it.qty}</span>
+          <button class="qty-btn" onclick="updateQty(${i},1)">+</button>
+          <button class="cart-item-remove" onclick="removeCart(${i})">Remove</button>
+        </div>
+      </div>
+    </div>`).join("");
+  $("cartTotal").textContent = fmt(cartSubtotal());
+  $("cartFooter").style.display = "block";
+}
+function updateQty(i, delta) {
+  STATE.cart[i].qty += delta;
+  if (STATE.cart[i].qty <= 0) STATE.cart.splice(i, 1);
+  renderCart(); saveCart();
+}
+function removeCart(i) { STATE.cart.splice(i, 1); renderCart(); saveCart(); }
+
+function saveCart() { try { localStorage.setItem("twl_cart", JSON.stringify(STATE.cart)); } catch(e){} }
+function loadCart() {
+  try {
+    const raw = localStorage.getItem("twl_cart");
+    if (raw) STATE.cart = JSON.parse(raw);
+  } catch(e){}
+}
+
+/* =====================================================================
+   CHECKOUT — Stripe Checkout (via Worker) OR Formspree fallback
+   ===================================================================== */
+async function goCheckout() {
+  if (STATE.cart.length === 0) return;
+  const btn = $("checkoutBtn");
+  btn.disabled = true;
+  btn.textContent = "Preparing checkout…";
+
+  if (CONFIG.STRIPE_CHECKOUT_ENDPOINT) {
+    try {
+      // Build line items for Stripe (cents)
+      const items = STATE.cart.map(it => ({
+        name: it.name + (it.colour !== "As shown" ? ` (${it.colour})` : "") + (it.message ? ` — note: ${it.message}` : ""),
+        amount_cents: Math.round(it.price * 100),
+        quantity: it.qty,
+        image: location.origin + "/" + it.img,
+      }));
+      const r = await fetch(CONFIG.STRIPE_CHECKOUT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currency: CONFIG.CURRENCY.toLowerCase(),
+          items,
+          success_url: location.origin + "/?checkout=success",
+          cancel_url:  location.origin + "/?checkout=cancel",
+        }),
+      });
+      if (!r.ok) throw new Error("Checkout session failed (" + r.status + ")");
+      const data = await r.json();
+      if (data.url) {
+        window.location = data.url;
+        return;
+      }
+      throw new Error("Missing checkout URL");
+    } catch (err) {
+      console.error(err);
+      alert("Sorry, we couldn't start checkout right now. Please email hello@tangledwithlove.com and we'll sort it out.\n\n" + err.message);
+      btn.disabled = false;
+      btn.textContent = "Secure checkout →";
+    }
+  } else {
+    // Fallback: no Stripe configured — submit order to Formspree as email
+    try {
+      const orderSummary = STATE.cart.map(it =>
+        `${it.qty} × ${it.name} @ ${fmt(it.price)} — Colour: ${it.colour}${it.message ? ' — "' + it.message + '"' : ''}`
+      ).join("\n");
+      const total = fmt(cartSubtotal());
+      const email = prompt("Stripe isn't connected yet. Enter your email and we'll follow up with payment instructions:");
+      if (!email) { btn.disabled = false; btn.textContent = "Secure checkout →"; return; }
+      await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: "New order via tangledwithlove.com",
+          email,
+          total,
+          order: orderSummary,
+        }),
+      });
+      STATE.cart = [];
+      saveCart(); renderCart(); closeCart();
+      showPage("success");
+      $("successOrderId").textContent = "Order received — we'll email you at " + email;
+      $("successOrderId").style.display = "inline-block";
+    } catch (err) {
+      alert("Sorry, something went wrong. Please email hello@tangledwithlove.com.");
+      btn.disabled = false;
+      btn.textContent = "Secure checkout →";
+    }
+  }
+}
+
+function resetAndHome() {
+  STATE.cart = [];
+  saveCart(); renderCart();
+  showPage("home");
+}
+
+/* =====================================================================
+   LIGHTBOX
+   ===================================================================== */
+function openImageLightbox() {
+  if (!STATE.lightboxImages.length) return;
+  $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx];
+  $("lightboxCounter").textContent = (STATE.lightboxIdx+1) + " / " + STATE.lightboxImages.length;
+  $("imageLightbox").classList.add("open");
+}
+function closeImageLightbox(ev) {
+  if (ev && ev.target.id && ev.target.id !== "imageLightbox" && ev.target.className !== "lightbox-close") return;
+  $("imageLightbox").classList.remove("open");
+}
+function prevImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx - 1 + STATE.lightboxImages.length) % STATE.lightboxImages.length; $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx]; $("lightboxCounter").textContent = (STATE.lightboxIdx+1)+" / "+STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx, {stopPropagation:()=>{}}); }
+function nextImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx + 1) % STATE.lightboxImages.length; $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx]; $("lightboxCounter").textContent = (STATE.lightboxIdx+1)+" / "+STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx, {stopPropagation:()=>{}}); }
+document.addEventListener("keydown", (e) => {
+  if (!$("imageLightbox").classList.contains("open")) return;
+  if (e.key === "Escape") closeImageLightbox({target:{id:"imageLightbox"}});
+  if (e.key === "ArrowLeft") prevImageLightbox();
+  if (e.key === "ArrowRight") nextImageLightbox();
+});
+
+/* =====================================================================
+   CONTACT FORM (Formspree)
+   ===================================================================== */
+function wireContactForm() {
+  const form = $("contactForm");
+  if (!form) return;
+  // Wire the form action using CONFIG.FORMSPREE_ID (so it works even if user forgets to edit the HTML)
+  if (CONFIG.FORMSPREE_ID && CONFIG.FORMSPREE_ID !== "FORMSPREE_ID") {
+    form.action = `https://formspree.io/f/${CONFIG.FORMSPREE_ID}`;
+  }
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("cformMsg");
+    msg.classList.remove("show"); msg.textContent = "";
+    if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") {
+      msg.textContent = "✖ Contact form isn't connected yet. Please set CONFIG.FORMSPREE_ID.";
+      msg.classList.add("show");
+      return;
+    }
+    try {
+      const data = new FormData(form);
+      const r = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } });
+      if (r.ok) {
+        msg.textContent = "✓ Thank you! We'll reply within 1–2 days.";
+        msg.classList.add("show");
+        form.reset();
+      } else throw new Error("Form error");
+    } catch (err) {
+      msg.textContent = "Sorry, something went wrong. Please email hello@tangledwithlove.com directly.";
+      msg.classList.add("show");
+    }
+  });
+}
+
+/* =====================================================================
+   SHOP ENTRY
+   ===================================================================== */
+// Hook the featured category card buttons to go to categories page
+function attachShopListener() {
+  // "Shop" nav link scrolls to #shop on home
+  // Separate "Shop by style" cards call openCategory directly
+}
+
+// Handle return from Stripe (?checkout=success|cancel)
+function handleCheckoutReturn() {
+  const u = new URL(window.location.href);
+  const r = u.searchParams.get("checkout");
+  if (r === "success") {
+    STATE.cart = [];
+    saveCart(); renderCart();
+    showPage("success", false);
+    const sid = u.searchParams.get("session_id");
+    if (sid) { $("successOrderId").textContent = "Order #" + sid.slice(-8).toUpperCase(); $("successOrderId").style.display = "inline-block"; }
+    // Clean the URL
+    history.replaceState({}, "", u.origin + u.pathname);
+  } else if (r === "cancel") {
+    showPage("cancel", false);
+    history.replaceState({}, "", u.origin + u.pathname);
+  }
+}
+
+/* =====================================================================
+   INIT
+   ===================================================================== */
+function init() {
+  loadCart();
+  renderHeroCards();
+  renderCategoryRow();
+  renderCategoriesPage();
+  renderCart();
+  wireContactForm();
+  handleCheckoutReturn();
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
