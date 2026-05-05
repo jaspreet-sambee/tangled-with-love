@@ -555,7 +555,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
     <div class="result-icon">🧶</div>
     <h2>Checkout cancelled</h2>
     <p>No worries — your cart is still here. Whenever you're ready, just head back and try again.</p>
-    <button class="btn-primary" onclick="resetAndHome()">Back to shop</button>
+    <button class="btn-primary" onclick="showPage('home')">Back to shop</button>
   </div>
 </div>
 
@@ -571,11 +571,11 @@ const CONFIG = {
   // URL of your Cloudflare Worker that creates a Stripe Checkout Session.
   // Example: "https://tangled-stripe.yourname.workers.dev"
   // Leave blank ("") to disable Stripe — the site will email the order via Formspree instead.
-  STRIPE_CHECKOUT_ENDPOINT: "",
+  STRIPE_CHECKOUT_ENDPOINT: "https://tangled-stripe.jaspreet-sambee.workers.dev",
 
   // Your Stripe publishable key (starts with pk_live_... or pk_test_...).
   // Only needed if STRIPE_CHECKOUT_ENDPOINT is set.
-  STRIPE_PUBLISHABLE_KEY: "",
+  STRIPE_PUBLISHABLE_KEY: "pk_test_51TTpmxLWr2b1r2xFcLJ9zIO1NzBcuVAo4MUYXNZWOR42lrRHNtnSYuQpNcCxk1Bm84opUQmueavm2rhIjOMCNl0600uAOsu0Ei",
 
   // Formspree form id for the contact form AND order-email fallback.
   // Create one at https://formspree.io — it's free. Replace in the <form action> too.
