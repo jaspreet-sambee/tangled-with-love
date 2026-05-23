@@ -42,7 +42,7 @@ export default {
     let body;
     try { body = await request.json(); } catch { return json({ error: "Invalid JSON" }, 400, cors); }
 
-    const { currency = "cad", items, success_url, cancel_url } = body;
+    const { currency = "cad", items, success_url, cancel_url, skipShipping = false } = body;
     if (!Array.isArray(items) || items.length === 0) {
       return json({ error: "Cart is empty." }, 400, cors);
     }
@@ -61,30 +61,33 @@ export default {
     params.append("success_url", success_url.replace(/\?.*$/, "") + "?checkout=success&session_id={CHECKOUT_SESSION_ID}");
     params.append("cancel_url",  cancel_url);
     params.append("billing_address_collection", "required");
-    // Collect shipping — Canada + common intl destinations
-    ["CA","US","GB","AU","NZ","IE","DE","FR","NL","IN"].forEach((c, i) => {
-      params.append(`shipping_address_collection[allowed_countries][${i}]`, c);
-    });
 
-    // Shipping options — a simple flat-rate setup
-    // Canada: $8, International: $25
-    params.append("shipping_options[0][shipping_rate_data][type]", "fixed_amount");
-    params.append("shipping_options[0][shipping_rate_data][fixed_amount][amount]", "800");
-    params.append("shipping_options[0][shipping_rate_data][fixed_amount][currency]", currency);
-    params.append("shipping_options[0][shipping_rate_data][display_name]", "Canada — standard");
-    params.append("shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]", "business_day");
-    params.append("shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]", "3");
-    params.append("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]", "business_day");
-    params.append("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]", "7");
+    if (!skipShipping) {
+      // Collect shipping — Canada + common intl destinations
+      ["CA","US","GB","AU","NZ","IE","DE","FR","NL","IN"].forEach((c, i) => {
+        params.append(`shipping_address_collection[allowed_countries][${i}]`, c);
+      });
 
-    params.append("shipping_options[1][shipping_rate_data][type]", "fixed_amount");
-    params.append("shipping_options[1][shipping_rate_data][fixed_amount][amount]", "2500");
-    params.append("shipping_options[1][shipping_rate_data][fixed_amount][currency]", currency);
-    params.append("shipping_options[1][shipping_rate_data][display_name]", "International — standard");
-    params.append("shipping_options[1][shipping_rate_data][delivery_estimate][minimum][unit]", "business_day");
-    params.append("shipping_options[1][shipping_rate_data][delivery_estimate][minimum][value]", "7");
-    params.append("shipping_options[1][shipping_rate_data][delivery_estimate][maximum][unit]", "business_day");
-    params.append("shipping_options[1][shipping_rate_data][delivery_estimate][maximum][value]", "21");
+      // Shipping options — a simple flat-rate setup
+      // Canada: $8, International: $25
+      params.append("shipping_options[0][shipping_rate_data][type]", "fixed_amount");
+      params.append("shipping_options[0][shipping_rate_data][fixed_amount][amount]", "800");
+      params.append("shipping_options[0][shipping_rate_data][fixed_amount][currency]", currency);
+      params.append("shipping_options[0][shipping_rate_data][display_name]", "Canada — standard");
+      params.append("shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]", "business_day");
+      params.append("shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]", "3");
+      params.append("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]", "business_day");
+      params.append("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]", "7");
+
+      params.append("shipping_options[1][shipping_rate_data][type]", "fixed_amount");
+      params.append("shipping_options[1][shipping_rate_data][fixed_amount][amount]", "2500");
+      params.append("shipping_options[1][shipping_rate_data][fixed_amount][currency]", currency);
+      params.append("shipping_options[1][shipping_rate_data][display_name]", "International — standard");
+      params.append("shipping_options[1][shipping_rate_data][delivery_estimate][minimum][unit]", "business_day");
+      params.append("shipping_options[1][shipping_rate_data][delivery_estimate][minimum][value]", "7");
+      params.append("shipping_options[1][shipping_rate_data][delivery_estimate][maximum][unit]", "business_day");
+      params.append("shipping_options[1][shipping_rate_data][delivery_estimate][maximum][value]", "21");
+    }
 
     // Line items
     items.forEach((it, i) => {

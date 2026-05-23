@@ -999,6 +999,7 @@ async function goCheckout() {
         quantity: it.qty,
         image: location.origin + "/" + it.img,
       }));
+      const skipShipping = STATE.cart.some(it => it.__test);
       const r = await fetch(CONFIG.STRIPE_CHECKOUT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1007,6 +1008,7 @@ async function goCheckout() {
           items,
           success_url: location.origin + "/?checkout=success",
           cancel_url:  location.origin + "/?checkout=cancel",
+          skipShipping,
         }),
       });
       if (!r.ok) throw new Error("Checkout session failed (" + r.status + ")");
@@ -1158,6 +1160,7 @@ function handleTestSeed() {
     colour: "As shown",
     message: "",
     img: "assets/products/pouch/sunshine/1.png",
+    __test: true,
   }];
   saveCart();
   history.replaceState({}, "", location.origin + location.pathname);
