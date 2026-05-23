@@ -1143,17 +1143,40 @@ function handleCheckoutReturn() {
   }
 }
 
+// Dev: visit /?test=1 to seed a $1 test item for live-mode Stripe sanity checks.
+// Invisible to customers (no UI surface). Strips the param after seeding so refresh
+// doesn't re-seed. Returns true if it seeded so init can open the cart drawer.
+function handleTestSeed() {
+  if (new URLSearchParams(location.search).get("test") !== "1") return false;
+  STATE.cart = [{
+    lineId: "test-" + Date.now(),
+    variantId: "test",
+    categoryId: "test",
+    name: "Test Purchase — please ignore",
+    price: 1,
+    qty: 1,
+    colour: "As shown",
+    message: "",
+    img: "assets/products/pouch/sunshine/1.png",
+  }];
+  saveCart();
+  history.replaceState({}, "", location.origin + location.pathname);
+  return true;
+}
+
 /* =====================================================================
    INIT
    ===================================================================== */
 function init() {
   loadCart();
+  const seeded = handleTestSeed();
   renderHeroCards();
   renderCategoryRow();
   renderCategoriesPage();
   renderCart();
   wireContactForm();
   handleCheckoutReturn();
+  if (seeded) openCart();
 }
 document.addEventListener("DOMContentLoaded", init);
 </script>
