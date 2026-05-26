@@ -254,6 +254,28 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 .result-icon{font-size:4rem;margin-bottom:1.5rem}
 .result-page h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--dark);margin-bottom:0.6rem}
 .result-page p{font-size:1rem;color:var(--light);line-height:1.8;margin-bottom:2rem}
+
+/* Custom-order welcome page */
+.custom-welcome{max-width:560px;margin:3rem auto;background:linear-gradient(135deg,var(--pale-blush) 0%,var(--cream) 100%);border-radius:24px;padding:3rem 2rem 2.5rem;text-align:center;box-shadow:0 10px 40px rgba(124,80,53,0.12);position:relative;overflow:hidden}
+.custom-welcome::before{content:"";position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:var(--rust);border-radius:50%;opacity:0.07;pointer-events:none}
+.custom-welcome::after{content:"";position:absolute;bottom:-40px;left:-40px;width:120px;height:120px;background:var(--sage);border-radius:50%;opacity:0.07;pointer-events:none}
+.custom-welcome-bow{font-size:3.5rem;margin-bottom:1rem;display:inline-block;animation:cw-wiggle 2.8s ease-in-out infinite;transform-origin:50% 30%}
+@keyframes cw-wiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.custom-welcome h2{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--warm-brown);margin:0 0 0.5rem;line-height:1.15}
+.custom-welcome-sub{font-size:1rem;color:var(--warm-brown);opacity:0.85;margin:0 0 2rem;font-style:italic}
+.custom-welcome-card{background:white;border-radius:16px;padding:1.2rem;margin:1.5rem 0;display:flex;gap:1.2rem;align-items:center;text-align:left;box-shadow:0 4px 16px rgba(124,80,53,0.08);border:1px solid rgba(124,80,53,0.1);position:relative;z-index:1}
+.custom-welcome-img-wrap{width:90px;height:90px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--pale-blush)}
+.custom-welcome-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.custom-welcome-item-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--dark);margin-bottom:0.4rem;line-height:1.3}
+.custom-welcome-item-meta{font-size:0.92rem;color:var(--warm-brown);opacity:0.85}
+.custom-welcome-note{background:white;border-radius:12px;padding:1rem 1.3rem;margin:1rem 0 1.5rem;font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);font-size:1rem;line-height:1.55;display:none;border-left:3px solid var(--rust);text-align:left;position:relative;z-index:1}
+.custom-welcome-note.shown{display:block}
+.custom-welcome-total{display:flex;justify-content:space-between;align-items:baseline;padding:1.2rem 0;margin:1rem 0 1.5rem;border-top:1px dashed rgba(124,80,53,0.25);border-bottom:1px dashed rgba(124,80,53,0.25);position:relative;z-index:1}
+.custom-welcome-total-label{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--warm-brown)}
+.custom-welcome-total-amount{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:600;color:var(--dark)}
+.custom-welcome-checkout{font-size:1rem;padding:0.9rem 2.5rem;margin-top:0.5rem;position:relative;z-index:1}
+.custom-welcome-footer{margin-top:1.5rem;font-size:0.85rem;color:var(--warm-brown);opacity:0.7;letter-spacing:0.04em}
+@media (max-width:600px){.custom-welcome{padding:2rem 1.5rem;margin:1.5rem 1rem}.custom-welcome h2{font-size:1.9rem}.custom-welcome-card{flex-direction:column;text-align:center}.custom-welcome-img-wrap{width:120px;height:120px}.custom-welcome-note{text-align:center}}
 .order-id{font-family:'Lato',sans-serif;font-size:0.82rem;color:var(--warm-brown);background:var(--pale-blush);padding:0.4rem 0.9rem;border-radius:2rem;display:inline-block;margin-bottom:1.25rem;letter-spacing:0.06em;font-weight:600}
 
 /* ======= RESPONSIVE ======= */
@@ -555,6 +577,34 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
     <h2>Checkout cancelled</h2>
     <p>No worries — your cart is still here. Whenever you're ready, just head back and try again.</p>
     <button class="btn-primary" onclick="showPage('home')">Back to shop</button>
+  </div>
+</div>
+
+<!-- Custom-order welcome page (shown when /?custom=1&… seeds the cart) -->
+<div class="page" id="page-custom-welcome">
+  <div class="custom-welcome">
+    <div class="custom-welcome-bow">🧶</div>
+    <h2 id="customWelcomeGreeting">Hi there!</h2>
+    <p class="custom-welcome-sub">Your custom order is ready — made just for you ✨</p>
+
+    <div class="custom-welcome-card">
+      <div class="custom-welcome-img-wrap"><img id="customWelcomeImg" src="" alt=""></div>
+      <div class="custom-welcome-details">
+        <div class="custom-welcome-item-name" id="customWelcomeName"></div>
+        <div class="custom-welcome-item-meta" id="customWelcomeMeta"></div>
+      </div>
+    </div>
+
+    <div class="custom-welcome-note" id="customWelcomeNote"></div>
+
+    <div class="custom-welcome-total">
+      <span class="custom-welcome-total-label">Total</span>
+      <span class="custom-welcome-total-amount" id="customWelcomeTotal"></span>
+    </div>
+
+    <button class="btn-primary custom-welcome-checkout" onclick="goCheckout()">Continue to secure checkout →</button>
+
+    <p class="custom-welcome-footer">Handmade with love 🧶</p>
   </div>
 </div>
 
@@ -1166,24 +1216,34 @@ function handleTestSeed() {
   return true;
 }
 
-// Custom order: visit /?custom=1&name=...&price=...&qty=... to seed a one-off
-// custom item into the cart. Used when mum has agreed a custom piece (e.g.
-// "Custom Sweater for Sarah") with a customer over email/DM — she hands them
-// a URL with the agreed item + price, they land on the site, pay through the
-// normal Stripe Checkout. Shipping is skipped (assume in-person handover or
-// shipping baked into the agreed price). Returns true if it seeded.
+// Custom order: visit /?custom=1&name=...&price=...&qty=...&for=...&note=... to
+// seed a one-off custom item into the cart and show a personalized welcome page.
+// Used when mum has agreed a custom piece with a customer over email/DM —
+// she hands them a URL with the agreed item + price, they land on a styled
+// welcome page, then pay through normal Stripe Checkout. Shipping is skipped
+// (assume in-person handover or shipping baked into the agreed price).
 //
-// Example: /?custom=1&name=Custom%20Sweater%20for%20Sarah&price=85&qty=2
+// Params:
+//   name=Custom%20Sweater%20for%20Sarah   line-item name (shows in cart + Stripe)
+//   price=85                              dollars per unit
+//   qty=2                                 quantity, default 1
+//   for=Sarah                             optional: name in the greeting
+//   note=Thanks%20for%20being...          optional: handwritten-style personal note
+//
+// Returns true if seeded (init will then showPage("custom-welcome")).
 function handleCustomSeed() {
   const p = new URLSearchParams(location.search);
   if (p.get("custom") !== "1") return false;
   const name = (p.get("name") || "").trim() || "Custom Order";
   const price = parseFloat(p.get("price") || "0");
   const qty = parseInt(p.get("qty") || "1", 10);
+  const forName = (p.get("for") || "").trim();
+  const note = (p.get("note") || "").trim();
   if (!Number.isFinite(price) || price <= 0 || !Number.isInteger(qty) || qty <= 0) {
     alert("This custom-order link is missing a valid price or quantity. Please ask the sender for an updated link.");
     return false;
   }
+  const img = "assets/mum.jpg";
   STATE.cart = [{
     lineId: "custom-" + Date.now(),
     variantId: "custom",
@@ -1193,10 +1253,27 @@ function handleCustomSeed() {
     qty,
     colour: "As shown",
     message: "",
-    img: "assets/mum.jpg",
+    img,
     __skipShipping: true,
   }];
   saveCart();
+
+  // Populate the welcome page DOM (elements exist in static HTML).
+  $("customWelcomeGreeting").textContent = forName ? `Hi ${forName}!` : "Hi there!";
+  $("customWelcomeImg").src = img;
+  $("customWelcomeImg").alt = name;
+  $("customWelcomeName").textContent = name;
+  $("customWelcomeMeta").textContent =
+    qty > 1 ? `Quantity: ${qty}  ·  ${fmt(price)} each` : fmt(price);
+  $("customWelcomeTotal").textContent = fmt(price * qty);
+  const noteEl = $("customWelcomeNote");
+  if (note) {
+    noteEl.textContent = `"${note}"`;
+    noteEl.classList.add("shown");
+  } else {
+    noteEl.classList.remove("shown");
+  }
+
   history.replaceState({}, "", location.origin + location.pathname);
   return true;
 }
@@ -1206,14 +1283,16 @@ function handleCustomSeed() {
    ===================================================================== */
 function init() {
   loadCart();
-  const seeded = handleTestSeed() || handleCustomSeed();
+  const testSeeded = handleTestSeed();
+  const customSeeded = handleCustomSeed();
   renderHeroCards();
   renderCategoryRow();
   renderCategoriesPage();
   renderCart();
   wireContactForm();
   handleCheckoutReturn();
-  if (seeded) openCart();
+  if (testSeeded) openCart();
+  if (customSeeded) showPage("custom-welcome", false);
 }
 document.addEventListener("DOMContentLoaded", init);
 </script>
