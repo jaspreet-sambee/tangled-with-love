@@ -255,56 +255,95 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 .result-page h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--dark);margin-bottom:0.6rem}
 .result-page p{font-size:1rem;color:var(--light);line-height:1.8;margin-bottom:2rem}
 
-/* Custom-order welcome page */
-#page-custom-welcome{position:relative;min-height:80vh}
-.custom-welcome{max-width:560px;margin:3rem auto;background:linear-gradient(135deg,var(--pale-blush) 0%,var(--cream) 100%);border-radius:24px;padding:3rem 2rem 2.5rem;text-align:center;box-shadow:0 10px 40px rgba(124,80,53,0.12);position:relative;overflow:hidden;z-index:2;animation:cw-card-in 0.8s cubic-bezier(0.2,0.8,0.2,1) both}
-.custom-welcome::before{content:"";position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:var(--rust);border-radius:50%;opacity:0.07;pointer-events:none;animation:cw-blob 8s ease-in-out infinite}
-.custom-welcome::after{content:"";position:absolute;bottom:-40px;left:-40px;width:120px;height:120px;background:var(--sage);border-radius:50%;opacity:0.07;pointer-events:none;animation:cw-blob 10s ease-in-out -3s infinite}
-@keyframes cw-card-in{0%{opacity:0;transform:translateY(40px) scale(0.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes cw-blob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(10px,-15px) scale(1.05)}66%{transform:translate(-12px,8px) scale(0.95)}}
+/* ============= Custom-order welcome page ============= */
+#page-custom-welcome{position:relative;min-height:100vh;overflow:hidden;background:radial-gradient(ellipse at top,#FBF6EC 0%,var(--pale-blush) 70%,#EBD9B4 100%);background-size:200% 200%}
+#page-custom-welcome.cw-on{animation:cw-bg-pan 18s ease-in-out infinite}
+@keyframes cw-bg-pan{0%,100%{background-position:0% 0%}50%{background-position:100% 100%}}
 
-/* Staggered child entrance */
-.custom-welcome > *{animation:cw-child-in 0.55s ease-out both}
-.custom-welcome-bow{font-size:3.8rem;margin-bottom:1rem;display:inline-block;transform-origin:50% 30%;animation:cw-bow-pop 0.95s cubic-bezier(0.25,1.6,0.4,1) 0.1s both,cw-wiggle 2.8s ease-in-out 1.5s infinite}
-.custom-welcome h2{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--warm-brown);margin:0 0 0.5rem;line-height:1.15;animation-delay:0.35s}
-.custom-welcome-sub{font-size:1rem;color:var(--warm-brown);opacity:0.85;margin:0 0 2rem;font-style:italic;animation-delay:0.5s}
-.custom-welcome-card{background:white;border-radius:16px;padding:1.2rem;margin:1.5rem 0;display:flex;gap:1.2rem;align-items:center;text-align:left;box-shadow:0 4px 16px rgba(124,80,53,0.08);border:1px solid rgba(124,80,53,0.1);position:relative;z-index:1;animation-delay:0.65s}
-.custom-welcome-note{background:white;border-radius:12px;padding:1rem 1.3rem;margin:1rem 0 1.5rem;font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);font-size:1rem;line-height:1.55;display:none;border-left:3px solid var(--rust);text-align:left;position:relative;z-index:1}
-.custom-welcome-note.shown{display:block;animation:cw-child-in 0.55s ease-out 0.8s both}
-.custom-welcome-total{display:flex;justify-content:space-between;align-items:baseline;padding:1.2rem 0;margin:1rem 0 1.5rem;border-top:1px dashed rgba(124,80,53,0.25);border-bottom:1px dashed rgba(124,80,53,0.25);position:relative;z-index:1;animation-delay:0.95s}
-.custom-welcome-checkout{font-size:1rem;padding:0.9rem 2.5rem;margin-top:0.5rem;position:relative;z-index:1;animation-delay:1.1s;background:linear-gradient(105deg,var(--warm-brown) 0%,var(--warm-brown) 40%,#a06a40 50%,var(--warm-brown) 60%,var(--warm-brown) 100%);background-size:300% 100%;transition:transform 0.2s,box-shadow 0.2s}
-.custom-welcome-checkout:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(124,80,53,0.3)}
-.custom-welcome-footer{margin-top:1.5rem;font-size:0.85rem;color:var(--warm-brown);opacity:0.7;letter-spacing:0.04em;animation-delay:1.25s}
+#cwConfetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10}
 
-@keyframes cw-child-in{0%{opacity:0;transform:translateY(15px)}100%{opacity:1;transform:translateY(0)}}
-@keyframes cw-bow-pop{0%{opacity:0;transform:scale(0.3) rotate(-180deg)}55%{transform:scale(1.25) rotate(15deg);opacity:1}80%{transform:scale(0.95) rotate(-5deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
-@keyframes cw-wiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.custom-welcome{max-width:560px;margin:3rem auto;background:linear-gradient(135deg,#FFFAF0 0%,var(--pale-blush) 100%);border-radius:28px;padding:3rem 2rem 2.5rem;text-align:center;box-shadow:0 20px 60px rgba(124,80,53,0.18),0 0 0 1px rgba(255,255,255,0.6) inset;position:relative;overflow:hidden;z-index:3;opacity:0}
+.cw-on .custom-welcome{animation:cw-card-in 0.85s cubic-bezier(0.2,0.8,0.2,1) forwards,cw-card-breathe 5s ease-in-out 1.5s infinite}
+.custom-welcome::before{content:"";position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,var(--rust) 0%,transparent 70%);border-radius:50%;opacity:0;pointer-events:none}
+.custom-welcome::after{content:"";position:absolute;bottom:-50px;left:-50px;width:160px;height:160px;background:radial-gradient(circle,var(--sage) 0%,transparent 70%);border-radius:50%;opacity:0;pointer-events:none}
+.cw-on .custom-welcome::before{animation:cw-blob 7s ease-in-out 0.3s infinite}
+.cw-on .custom-welcome::after{animation:cw-blob 9s ease-in-out -2s infinite}
+@keyframes cw-card-in{0%{opacity:0;transform:translateY(50px) scale(0.92) rotate(-1deg)}60%{transform:translateY(-4px) scale(1.01) rotate(0.3deg)}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+@keyframes cw-card-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
+@keyframes cw-blob{0%{opacity:0;transform:translate(0,0) scale(0.6)}30%{opacity:0.18}50%{transform:translate(15px,-20px) scale(1.1)}80%{opacity:0.13}100%{opacity:0.15;transform:translate(-10px,10px) scale(0.9)}}
 
-.custom-welcome-img-wrap{width:90px;height:90px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--pale-blush)}
-.custom-welcome-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s}
-.custom-welcome-card:hover .custom-welcome-img-wrap img{transform:scale(1.08)}
-.custom-welcome-item-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--dark);margin-bottom:0.4rem;line-height:1.3}
+/* Sparkles framing the greeting */
+.cw-greeting-wrap{position:relative;display:inline-block}
+.cw-sparkle{position:absolute;font-size:0.9rem;opacity:0;pointer-events:none;display:inline-block}
+.cw-sparkle.s1{top:-10px;left:-22px}
+.cw-sparkle.s2{top:-4px;right:-26px;font-size:1.1rem}
+.cw-sparkle.s3{bottom:-2px;left:-14px;font-size:0.7rem}
+.cw-sparkle.s4{bottom:-8px;right:-12px;font-size:0.85rem}
+.cw-on .cw-sparkle{animation:cw-sparkle 2.2s ease-in-out infinite}
+.cw-on .cw-sparkle.s1{animation-delay:1.4s}
+.cw-on .cw-sparkle.s2{animation-delay:1.7s}
+.cw-on .cw-sparkle.s3{animation-delay:2.1s}
+.cw-on .cw-sparkle.s4{animation-delay:2.5s}
+@keyframes cw-sparkle{0%,100%{opacity:0;transform:scale(0.3) rotate(0)}40%{opacity:1;transform:scale(1.1) rotate(180deg)}60%{opacity:1;transform:scale(1) rotate(220deg)}}
+
+/* Stagger entrance — gated by .cw-on so animations fire when page becomes visible */
+.custom-welcome > *{opacity:0}
+.cw-on .custom-welcome > *{animation:cw-child-in 0.6s ease-out forwards}
+.custom-welcome-bow{font-size:4rem;margin-bottom:1rem;display:inline-block;transform-origin:50% 30%}
+.cw-on .custom-welcome-bow{animation:cw-bow-pop 1s cubic-bezier(0.25,1.7,0.4,1) 0.15s forwards,cw-wiggle 2.6s ease-in-out 1.5s infinite}
+.custom-welcome h2{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--warm-brown);margin:0 0 0.5rem;line-height:1.15}
+.cw-on .custom-welcome h2{animation-delay:0.5s}
+.custom-welcome-sub{font-size:1rem;color:var(--warm-brown);opacity:0.85;margin:0 0 2rem;font-style:italic}
+.cw-on .custom-welcome-sub{animation-delay:0.7s}
+.custom-welcome-card{background:white;border-radius:18px;padding:1.3rem;margin:1.5rem 0;display:flex;gap:1.2rem;align-items:center;text-align:left;box-shadow:0 6px 24px rgba(124,80,53,0.1);border:1px solid rgba(124,80,53,0.1);position:relative;z-index:1;transition:transform 0.3s,box-shadow 0.3s}
+.custom-welcome-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(124,80,53,0.18)}
+.cw-on .custom-welcome-card{animation-delay:0.9s}
+.custom-welcome-note{background:white;border-radius:14px;padding:1.1rem 1.3rem;margin:1rem 0 1.5rem;font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);font-size:1rem;line-height:1.55;display:none;border-left:3px solid var(--rust);text-align:left;position:relative;z-index:1;box-shadow:0 4px 14px rgba(124,80,53,0.06)}
+.cw-on .custom-welcome-note.shown{display:block;animation:cw-child-in 0.6s ease-out 1.1s forwards}
+.custom-welcome-total{display:flex;justify-content:space-between;align-items:baseline;padding:1.3rem 0;margin:1rem 0 1.5rem;border-top:1px dashed rgba(124,80,53,0.3);border-bottom:1px dashed rgba(124,80,53,0.3);position:relative;z-index:1}
+.cw-on .custom-welcome-total{animation-delay:1.3s}
+.custom-welcome-checkout{font-size:1.05rem;padding:1rem 2.6rem;margin-top:0.5rem;position:relative;z-index:1;background:linear-gradient(105deg,var(--warm-brown) 0%,var(--warm-brown) 30%,#A86A3E 50%,var(--warm-brown) 70%,var(--warm-brown) 100%);background-size:300% 100%;transition:transform 0.25s,box-shadow 0.25s,background-position 0.5s;cursor:pointer}
+.cw-on .custom-welcome-checkout{animation-delay:1.5s,3.5s;animation:cw-child-in 0.6s ease-out 1.5s forwards,cw-shimmer 4s ease-in-out 2.5s infinite}
+.custom-welcome-checkout:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 28px rgba(124,80,53,0.35);background-position:100% 0}
+.custom-welcome-checkout:active{transform:translateY(-1px) scale(0.99)}
+@keyframes cw-shimmer{0%,100%{background-position:0% 0}50%{background-position:100% 0}}
+.custom-welcome-footer{margin-top:1.5rem;font-size:0.85rem;color:var(--warm-brown);opacity:0.7;letter-spacing:0.04em}
+.cw-on .custom-welcome-footer{animation-delay:1.7s}
+
+@keyframes cw-child-in{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes cw-bow-pop{0%{opacity:0;transform:scale(0.2) rotate(-220deg)}50%{transform:scale(1.35) rotate(20deg);opacity:1}75%{transform:scale(0.92) rotate(-8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes cw-wiggle{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+
+.custom-welcome-img-wrap{width:95px;height:95px;border-radius:14px;overflow:hidden;flex-shrink:0;background:var(--pale-blush);position:relative}
+.custom-welcome-img-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,0.3) 50%,transparent 70%);background-size:200% 200%;background-position:-100% -100%;animation:cw-shine 4s ease-in-out 2s infinite}
+@keyframes cw-shine{0%,100%{background-position:-100% -100%}50%{background-position:200% 200%}}
+.custom-welcome-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s}
+.custom-welcome-card:hover .custom-welcome-img-wrap img{transform:scale(1.12) rotate(2deg)}
+.custom-welcome-item-name{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--dark);margin-bottom:0.4rem;line-height:1.3}
 .custom-welcome-item-meta{font-size:0.92rem;color:var(--warm-brown);opacity:0.85}
-.custom-welcome-total-label{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--warm-brown)}
-.custom-welcome-total-amount{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:600;color:var(--dark);display:inline-block;transform-origin:center}
-.custom-welcome-total-amount.pulse{animation:cw-pulse 2.5s ease-in-out infinite}
-@keyframes cw-pulse{0%,100%{transform:scale(1);color:var(--dark)}50%{transform:scale(1.06);color:var(--rust)}}
+.custom-welcome-total-label{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--warm-brown)}
+.custom-welcome-total-amount{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:700;color:var(--dark);display:inline-block;transform-origin:center;letter-spacing:-0.01em}
+.custom-welcome-total-amount.pulse{animation:cw-pulse 2.6s ease-in-out infinite}
+@keyframes cw-pulse{0%,100%{transform:scale(1);color:var(--dark);text-shadow:none}50%{transform:scale(1.08);color:var(--rust);text-shadow:0 0 18px rgba(196,92,42,0.35)}}
 
-/* Floating background decorations */
-.cw-floaters{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
-.cw-floater{position:absolute;bottom:-60px;font-size:1.5rem;opacity:0;animation:cw-float-rise 16s linear infinite;will-change:transform,opacity}
-.cw-floater:nth-child(1){left:5%;animation-delay:0s;font-size:1.4rem}
-.cw-floater:nth-child(2){left:18%;animation-delay:-2.3s;font-size:1.2rem}
-.cw-floater:nth-child(3){left:32%;animation-delay:-5.5s;font-size:1.6rem}
-.cw-floater:nth-child(4){left:46%;animation-delay:-8.1s;font-size:1.3rem}
-.cw-floater:nth-child(5){left:60%;animation-delay:-3.4s;font-size:1.5rem}
-.cw-floater:nth-child(6){left:74%;animation-delay:-11s;font-size:1.25rem}
-.cw-floater:nth-child(7){left:86%;animation-delay:-6.7s;font-size:1.4rem}
-.cw-floater:nth-child(8){left:95%;animation-delay:-13s;font-size:1.1rem}
-@keyframes cw-float-rise{0%{transform:translateY(0) translateX(0) rotate(0)}10%{opacity:0.45}50%{transform:translateY(-50vh) translateX(15px) rotate(180deg)}90%{opacity:0.45;transform:translateY(-90vh) translateX(-10px) rotate(330deg)}100%{transform:translateY(-110vh) translateX(0) rotate(360deg);opacity:0}}
+/* Floating background decorations — large, slow, visible */
+.cw-floaters{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.cw-floater{position:absolute;bottom:-80px;font-size:1.8rem;opacity:0;will-change:transform,opacity;filter:drop-shadow(0 2px 4px rgba(124,80,53,0.15))}
+.cw-on .cw-floater{animation:cw-float-rise 14s linear infinite}
+.cw-floater:nth-child(1){left:4%;animation-delay:0s;font-size:1.7rem}
+.cw-floater:nth-child(2){left:14%;animation-delay:-1.8s;font-size:1.3rem}
+.cw-floater:nth-child(3){left:24%;animation-delay:-4.2s;font-size:1.9rem}
+.cw-floater:nth-child(4){left:34%;animation-delay:-6.5s;font-size:1.4rem}
+.cw-floater:nth-child(5){left:44%;animation-delay:-9s;font-size:1.6rem}
+.cw-floater:nth-child(6){left:54%;animation-delay:-2.4s;font-size:1.35rem}
+.cw-floater:nth-child(7){left:66%;animation-delay:-7.7s;font-size:1.7rem}
+.cw-floater:nth-child(8){left:76%;animation-delay:-3.1s;font-size:1.5rem}
+.cw-floater:nth-child(9){left:86%;animation-delay:-10.3s;font-size:1.4rem}
+.cw-floater:nth-child(10){left:94%;animation-delay:-12s;font-size:1.6rem}
+@keyframes cw-float-rise{0%{transform:translateY(0) translateX(0) rotate(0)}5%{opacity:0.55}25%{transform:translateY(-25vh) translateX(20px) rotate(90deg)}50%{transform:translateY(-55vh) translateX(-15px) rotate(180deg)}75%{transform:translateY(-80vh) translateX(20px) rotate(270deg);opacity:0.55}95%{opacity:0}100%{transform:translateY(-115vh) translateX(0) rotate(360deg);opacity:0}}
 
-@media (max-width:600px){.custom-welcome{padding:2rem 1.5rem;margin:1.5rem 1rem}.custom-welcome h2{font-size:1.9rem}.custom-welcome-card{flex-direction:column;text-align:center}.custom-welcome-img-wrap{width:120px;height:120px}.custom-welcome-note{text-align:center}}
-@media (prefers-reduced-motion:reduce){.custom-welcome,.custom-welcome > *,.custom-welcome-bow,.custom-welcome-total-amount,.cw-floater,.custom-welcome::before,.custom-welcome::after,.custom-welcome-note.shown{animation:none !important}.cw-floater{opacity:0.3}}
+@media (max-width:600px){.custom-welcome{padding:2rem 1.5rem;margin:1.5rem 1rem}.custom-welcome h2{font-size:1.95rem}.custom-welcome-card{flex-direction:column;text-align:center}.custom-welcome-img-wrap{width:130px;height:130px}.custom-welcome-note{text-align:center}.cw-sparkle{display:none}}
+@media (prefers-reduced-motion:reduce){.cw-on *,.cw-on .custom-welcome,.cw-on .custom-welcome > *,.cw-on .custom-welcome-bow,.cw-on .custom-welcome-total-amount,.cw-on .cw-floater,.cw-on .custom-welcome::before,.cw-on .custom-welcome::after,.cw-on .custom-welcome-note.shown,.cw-on .cw-sparkle{animation:none !important}.cw-on .custom-welcome,.cw-on .custom-welcome > *{opacity:1}}
 .order-id{font-family:'Lato',sans-serif;font-size:0.82rem;color:var(--warm-brown);background:var(--pale-blush);padding:0.4rem 0.9rem;border-radius:2rem;display:inline-block;margin-bottom:1.25rem;letter-spacing:0.06em;font-weight:600}
 
 /* ======= RESPONSIVE ======= */
@@ -611,19 +650,22 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 
 <!-- Custom-order welcome page (shown when /?custom=1&… seeds the cart) -->
 <div class="page" id="page-custom-welcome">
+  <canvas id="cwConfetti" aria-hidden="true"></canvas>
   <div class="cw-floaters" aria-hidden="true">
     <span class="cw-floater">🧶</span>
     <span class="cw-floater">✨</span>
     <span class="cw-floater">💕</span>
     <span class="cw-floater">🧶</span>
-    <span class="cw-floater">✨</span>
+    <span class="cw-floater">🌸</span>
     <span class="cw-floater">🧵</span>
     <span class="cw-floater">💕</span>
     <span class="cw-floater">✨</span>
+    <span class="cw-floater">🧶</span>
+    <span class="cw-floater">🌟</span>
   </div>
   <div class="custom-welcome">
     <div class="custom-welcome-bow">🧶</div>
-    <h2 id="customWelcomeGreeting">Hi there!</h2>
+    <h2><span class="cw-greeting-wrap"><span class="cw-sparkle s1" aria-hidden="true">✨</span><span class="cw-sparkle s2" aria-hidden="true">✨</span><span class="cw-sparkle s3" aria-hidden="true">✨</span><span class="cw-sparkle s4" aria-hidden="true">✨</span><span id="customWelcomeGreeting">Hi there!</span></span></h2>
     <p class="custom-welcome-sub">Your custom order is ready — made just for you ✨</p>
 
     <div class="custom-welcome-card">
@@ -1347,6 +1389,74 @@ function handleCustomSeed() {
 /* =====================================================================
    INIT
    ===================================================================== */
+// Canvas confetti burst — no external dep. Fires brand-colored paper rectangles
+// from the top of the welcome page, spreading outward + falling under gravity.
+function fireConfetti(canvas) {
+  const ctx = canvas.getContext("2d");
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const w = canvas.offsetWidth, h = canvas.offsetHeight;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  ctx.scale(dpr, dpr);
+  const colors = ["#C45C2A","#6B8F6E","#E8B49A","#C9952A","#7C5035","#D4845A","#7B4F6E","#3D7A72"];
+  const count = 120;
+  const pieces = [];
+  for (let i = 0; i < count; i++) {
+    pieces.push({
+      x: w / 2 + (Math.random() - 0.5) * 80,
+      y: h * 0.25,
+      vx: (Math.random() - 0.5) * 14,
+      vy: -Math.random() * 16 - 6,
+      sw: Math.random() * 7 + 5,
+      sh: Math.random() * 4 + 3,
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.35,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 0,
+    });
+  }
+  const gravity = 0.32, maxLife = 200;
+  let raf;
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+    let alive = false;
+    for (const p of pieces) {
+      p.life++;
+      if (p.life > maxLife) continue;
+      alive = true;
+      p.vy += gravity;
+      p.vx *= 0.995;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      const fade = p.life > maxLife - 40 ? (maxLife - p.life) / 40 : 1;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, fade);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.sw / 2, -p.sh / 2, p.sw, p.sh);
+      ctx.restore();
+    }
+    if (alive) raf = requestAnimationFrame(frame); else cancelAnimationFrame(raf);
+  }
+  frame();
+}
+
+function activateCustomWelcome() {
+  const page = $("page-custom-welcome");
+  if (!page) return;
+  // Force a reflow before adding the class — guarantees the browser sees
+  // the "before" state, so animations actually trigger when class lands.
+  page.classList.remove("cw-on");
+  void page.offsetWidth;
+  page.classList.add("cw-on");
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion) {
+    setTimeout(() => fireConfetti($("cwConfetti")), 250);
+  }
+}
+
 function init() {
   loadCart();
   const testSeeded = handleTestSeed();
@@ -1358,7 +1468,10 @@ function init() {
   wireContactForm();
   handleCheckoutReturn();
   if (testSeeded) openCart();
-  if (customSeeded) showPage("custom-welcome", false);
+  if (customSeeded) {
+    showPage("custom-welcome", false);
+    activateCustomWelcome();
+  }
 }
 document.addEventListener("DOMContentLoaded", init);
 </script>
