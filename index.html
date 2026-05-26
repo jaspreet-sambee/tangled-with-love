@@ -998,7 +998,7 @@ async function goCheckout() {
         quantity: it.qty,
         image: location.origin + "/" + it.img,
       }));
-      const skipShipping = STATE.cart.some(it => it.__test);
+      const skipShipping = STATE.cart.some(it => it.__skipShipping);
       const r = await fetch(CONFIG.STRIPE_CHECKOUT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1159,7 +1159,42 @@ function handleTestSeed() {
     colour: "As shown",
     message: "",
     img: "assets/products/pouch/sunshine/1.png",
-    __test: true,
+    __skipShipping: true,
+  }];
+  saveCart();
+  history.replaceState({}, "", location.origin + location.pathname);
+  return true;
+}
+
+// Custom order: visit /?custom=1&name=...&price=...&qty=... to seed a one-off
+// custom item into the cart. Used when mum has agreed a custom piece (e.g.
+// "Custom Sweater for Sarah") with a customer over email/DM — she hands them
+// a URL with the agreed item + price, they land on the site, pay through the
+// normal Stripe Checkout. Shipping is skipped (assume in-person handover or
+// shipping baked into the agreed price). Returns true if it seeded.
+//
+// Example: /?custom=1&name=Custom%20Sweater%20for%20Sarah&price=85&qty=2
+function handleCustomSeed() {
+  const p = new URLSearchParams(location.search);
+  if (p.get("custom") !== "1") return false;
+  const name = (p.get("name") || "").trim() || "Custom Order";
+  const price = parseFloat(p.get("price") || "0");
+  const qty = parseInt(p.get("qty") || "1", 10);
+  if (!Number.isFinite(price) || price <= 0 || !Number.isInteger(qty) || qty <= 0) {
+    alert("This custom-order link is missing a valid price or quantity. Please ask the sender for an updated link.");
+    return false;
+  }
+  STATE.cart = [{
+    lineId: "custom-" + Date.now(),
+    variantId: "custom",
+    categoryId: "custom",
+    name,
+    price,
+    qty,
+    colour: "As shown",
+    message: "",
+    img: "assets/mum.jpg",
+    __skipShipping: true,
   }];
   saveCart();
   history.replaceState({}, "", location.origin + location.pathname);
@@ -1171,7 +1206,7 @@ function handleTestSeed() {
    ===================================================================== */
 function init() {
   loadCart();
-  const seeded = handleTestSeed();
+  const seeded = handleTestSeed() || handleCustomSeed();
   renderHeroCards();
   renderCategoryRow();
   renderCategoriesPage();
