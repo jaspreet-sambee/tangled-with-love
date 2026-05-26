@@ -256,26 +256,55 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 .result-page p{font-size:1rem;color:var(--light);line-height:1.8;margin-bottom:2rem}
 
 /* Custom-order welcome page */
-.custom-welcome{max-width:560px;margin:3rem auto;background:linear-gradient(135deg,var(--pale-blush) 0%,var(--cream) 100%);border-radius:24px;padding:3rem 2rem 2.5rem;text-align:center;box-shadow:0 10px 40px rgba(124,80,53,0.12);position:relative;overflow:hidden}
-.custom-welcome::before{content:"";position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:var(--rust);border-radius:50%;opacity:0.07;pointer-events:none}
-.custom-welcome::after{content:"";position:absolute;bottom:-40px;left:-40px;width:120px;height:120px;background:var(--sage);border-radius:50%;opacity:0.07;pointer-events:none}
-.custom-welcome-bow{font-size:3.5rem;margin-bottom:1rem;display:inline-block;animation:cw-wiggle 2.8s ease-in-out infinite;transform-origin:50% 30%}
+#page-custom-welcome{position:relative;min-height:80vh}
+.custom-welcome{max-width:560px;margin:3rem auto;background:linear-gradient(135deg,var(--pale-blush) 0%,var(--cream) 100%);border-radius:24px;padding:3rem 2rem 2.5rem;text-align:center;box-shadow:0 10px 40px rgba(124,80,53,0.12);position:relative;overflow:hidden;z-index:2;animation:cw-card-in 0.8s cubic-bezier(0.2,0.8,0.2,1) both}
+.custom-welcome::before{content:"";position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:var(--rust);border-radius:50%;opacity:0.07;pointer-events:none;animation:cw-blob 8s ease-in-out infinite}
+.custom-welcome::after{content:"";position:absolute;bottom:-40px;left:-40px;width:120px;height:120px;background:var(--sage);border-radius:50%;opacity:0.07;pointer-events:none;animation:cw-blob 10s ease-in-out -3s infinite}
+@keyframes cw-card-in{0%{opacity:0;transform:translateY(40px) scale(0.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes cw-blob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(10px,-15px) scale(1.05)}66%{transform:translate(-12px,8px) scale(0.95)}}
+
+/* Staggered child entrance */
+.custom-welcome > *{animation:cw-child-in 0.55s ease-out both}
+.custom-welcome-bow{font-size:3.8rem;margin-bottom:1rem;display:inline-block;transform-origin:50% 30%;animation:cw-bow-pop 0.95s cubic-bezier(0.25,1.6,0.4,1) 0.1s both,cw-wiggle 2.8s ease-in-out 1.5s infinite}
+.custom-welcome h2{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--warm-brown);margin:0 0 0.5rem;line-height:1.15;animation-delay:0.35s}
+.custom-welcome-sub{font-size:1rem;color:var(--warm-brown);opacity:0.85;margin:0 0 2rem;font-style:italic;animation-delay:0.5s}
+.custom-welcome-card{background:white;border-radius:16px;padding:1.2rem;margin:1.5rem 0;display:flex;gap:1.2rem;align-items:center;text-align:left;box-shadow:0 4px 16px rgba(124,80,53,0.08);border:1px solid rgba(124,80,53,0.1);position:relative;z-index:1;animation-delay:0.65s}
+.custom-welcome-note{background:white;border-radius:12px;padding:1rem 1.3rem;margin:1rem 0 1.5rem;font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);font-size:1rem;line-height:1.55;display:none;border-left:3px solid var(--rust);text-align:left;position:relative;z-index:1}
+.custom-welcome-note.shown{display:block;animation:cw-child-in 0.55s ease-out 0.8s both}
+.custom-welcome-total{display:flex;justify-content:space-between;align-items:baseline;padding:1.2rem 0;margin:1rem 0 1.5rem;border-top:1px dashed rgba(124,80,53,0.25);border-bottom:1px dashed rgba(124,80,53,0.25);position:relative;z-index:1;animation-delay:0.95s}
+.custom-welcome-checkout{font-size:1rem;padding:0.9rem 2.5rem;margin-top:0.5rem;position:relative;z-index:1;animation-delay:1.1s;background:linear-gradient(105deg,var(--warm-brown) 0%,var(--warm-brown) 40%,#a06a40 50%,var(--warm-brown) 60%,var(--warm-brown) 100%);background-size:300% 100%;transition:transform 0.2s,box-shadow 0.2s}
+.custom-welcome-checkout:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(124,80,53,0.3)}
+.custom-welcome-footer{margin-top:1.5rem;font-size:0.85rem;color:var(--warm-brown);opacity:0.7;letter-spacing:0.04em;animation-delay:1.25s}
+
+@keyframes cw-child-in{0%{opacity:0;transform:translateY(15px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes cw-bow-pop{0%{opacity:0;transform:scale(0.3) rotate(-180deg)}55%{transform:scale(1.25) rotate(15deg);opacity:1}80%{transform:scale(0.95) rotate(-5deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
 @keyframes cw-wiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
-.custom-welcome h2{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--warm-brown);margin:0 0 0.5rem;line-height:1.15}
-.custom-welcome-sub{font-size:1rem;color:var(--warm-brown);opacity:0.85;margin:0 0 2rem;font-style:italic}
-.custom-welcome-card{background:white;border-radius:16px;padding:1.2rem;margin:1.5rem 0;display:flex;gap:1.2rem;align-items:center;text-align:left;box-shadow:0 4px 16px rgba(124,80,53,0.08);border:1px solid rgba(124,80,53,0.1);position:relative;z-index:1}
+
 .custom-welcome-img-wrap{width:90px;height:90px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--pale-blush)}
-.custom-welcome-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.custom-welcome-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s}
+.custom-welcome-card:hover .custom-welcome-img-wrap img{transform:scale(1.08)}
 .custom-welcome-item-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--dark);margin-bottom:0.4rem;line-height:1.3}
 .custom-welcome-item-meta{font-size:0.92rem;color:var(--warm-brown);opacity:0.85}
-.custom-welcome-note{background:white;border-radius:12px;padding:1rem 1.3rem;margin:1rem 0 1.5rem;font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);font-size:1rem;line-height:1.55;display:none;border-left:3px solid var(--rust);text-align:left;position:relative;z-index:1}
-.custom-welcome-note.shown{display:block}
-.custom-welcome-total{display:flex;justify-content:space-between;align-items:baseline;padding:1.2rem 0;margin:1rem 0 1.5rem;border-top:1px dashed rgba(124,80,53,0.25);border-bottom:1px dashed rgba(124,80,53,0.25);position:relative;z-index:1}
 .custom-welcome-total-label{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--warm-brown)}
-.custom-welcome-total-amount{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:600;color:var(--dark)}
-.custom-welcome-checkout{font-size:1rem;padding:0.9rem 2.5rem;margin-top:0.5rem;position:relative;z-index:1}
-.custom-welcome-footer{margin-top:1.5rem;font-size:0.85rem;color:var(--warm-brown);opacity:0.7;letter-spacing:0.04em}
+.custom-welcome-total-amount{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:600;color:var(--dark);display:inline-block;transform-origin:center}
+.custom-welcome-total-amount.pulse{animation:cw-pulse 2.5s ease-in-out infinite}
+@keyframes cw-pulse{0%,100%{transform:scale(1);color:var(--dark)}50%{transform:scale(1.06);color:var(--rust)}}
+
+/* Floating background decorations */
+.cw-floaters{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.cw-floater{position:absolute;bottom:-60px;font-size:1.5rem;opacity:0;animation:cw-float-rise 16s linear infinite;will-change:transform,opacity}
+.cw-floater:nth-child(1){left:5%;animation-delay:0s;font-size:1.4rem}
+.cw-floater:nth-child(2){left:18%;animation-delay:-2.3s;font-size:1.2rem}
+.cw-floater:nth-child(3){left:32%;animation-delay:-5.5s;font-size:1.6rem}
+.cw-floater:nth-child(4){left:46%;animation-delay:-8.1s;font-size:1.3rem}
+.cw-floater:nth-child(5){left:60%;animation-delay:-3.4s;font-size:1.5rem}
+.cw-floater:nth-child(6){left:74%;animation-delay:-11s;font-size:1.25rem}
+.cw-floater:nth-child(7){left:86%;animation-delay:-6.7s;font-size:1.4rem}
+.cw-floater:nth-child(8){left:95%;animation-delay:-13s;font-size:1.1rem}
+@keyframes cw-float-rise{0%{transform:translateY(0) translateX(0) rotate(0)}10%{opacity:0.45}50%{transform:translateY(-50vh) translateX(15px) rotate(180deg)}90%{opacity:0.45;transform:translateY(-90vh) translateX(-10px) rotate(330deg)}100%{transform:translateY(-110vh) translateX(0) rotate(360deg);opacity:0}}
+
 @media (max-width:600px){.custom-welcome{padding:2rem 1.5rem;margin:1.5rem 1rem}.custom-welcome h2{font-size:1.9rem}.custom-welcome-card{flex-direction:column;text-align:center}.custom-welcome-img-wrap{width:120px;height:120px}.custom-welcome-note{text-align:center}}
+@media (prefers-reduced-motion:reduce){.custom-welcome,.custom-welcome > *,.custom-welcome-bow,.custom-welcome-total-amount,.cw-floater,.custom-welcome::before,.custom-welcome::after,.custom-welcome-note.shown{animation:none !important}.cw-floater{opacity:0.3}}
 .order-id{font-family:'Lato',sans-serif;font-size:0.82rem;color:var(--warm-brown);background:var(--pale-blush);padding:0.4rem 0.9rem;border-radius:2rem;display:inline-block;margin-bottom:1.25rem;letter-spacing:0.06em;font-weight:600}
 
 /* ======= RESPONSIVE ======= */
@@ -582,6 +611,16 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 
 <!-- Custom-order welcome page (shown when /?custom=1&… seeds the cart) -->
 <div class="page" id="page-custom-welcome">
+  <div class="cw-floaters" aria-hidden="true">
+    <span class="cw-floater">🧶</span>
+    <span class="cw-floater">✨</span>
+    <span class="cw-floater">💕</span>
+    <span class="cw-floater">🧶</span>
+    <span class="cw-floater">✨</span>
+    <span class="cw-floater">🧵</span>
+    <span class="cw-floater">💕</span>
+    <span class="cw-floater">✨</span>
+  </div>
   <div class="custom-welcome">
     <div class="custom-welcome-bow">🧶</div>
     <h2 id="customWelcomeGreeting">Hi there!</h2>
@@ -1265,13 +1304,40 @@ function handleCustomSeed() {
   $("customWelcomeName").textContent = name;
   $("customWelcomeMeta").textContent =
     qty > 1 ? `Quantity: ${qty}  ·  ${fmt(price)} each` : fmt(price);
-  $("customWelcomeTotal").textContent = fmt(price * qty);
   const noteEl = $("customWelcomeNote");
   if (note) {
     noteEl.textContent = `"${note}"`;
     noteEl.classList.add("shown");
   } else {
     noteEl.classList.remove("shown");
+  }
+
+  // Count-up animation on the total (starts after the stagger reaches it ~1s).
+  const totalEl = $("customWelcomeTotal");
+  const totalAmount = price * qty;
+  totalEl.textContent = fmt(0);
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) {
+    totalEl.textContent = fmt(totalAmount);
+  } else {
+    setTimeout(() => {
+      let start = null;
+      const dur = 1100;
+      const step = (ts) => {
+        if (!start) start = ts;
+        const t = Math.min((ts - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        totalEl.textContent = fmt(totalAmount * eased);
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          totalEl.textContent = fmt(totalAmount);
+          totalEl.classList.add("pulse"); // gentle ongoing pulse after count-up
+        }
+      };
+      requestAnimationFrame(step);
+    }, 1000);
   }
 
   history.replaceState({}, "", location.origin + location.pathname);
