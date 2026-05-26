@@ -827,7 +827,6 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
           <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L13.5 9.5 L21 11 L13.5 12.5 L12 20 L10.5 12.5 L3 11 L10.5 9.5 Z" fill="var(--cw-accent)"/></svg>
           <span>You'll get a little photo update when mum starts stitching.</span>
         </div>
-        <div class="cw-first-customer" id="cwFirstCustomerLine">first-customer discount applied — thank you, friends 🌷</div>
       </aside>
     </div>
 
@@ -907,8 +906,8 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="cw-footer">
+    <!-- Footer (div, not <footer>, to avoid inheriting the global dark footer background) -->
+    <div class="cw-footer">
       <div class="cw-heart-row">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent)"/></svg>
         <svg width="14" height="14" viewBox="0 0 24 24" style="margin:0 6px" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent-3)"/></svg>
@@ -917,7 +916,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
       <p class="cw-footer-name">Tangled with Love</p>
       <p class="cw-footer-small">every stitch made by mum · tangledwithlove.com</p>
       <p class="cw-footer-tiny">Please be patient — we're a one-mum operation 🫖</p>
-    </footer>
+    </div>
   </div>
 </div>
 
@@ -1591,10 +1590,6 @@ function handleCustomSeed() {
   // Summary
   if ($("cwSumItemLabel")) $("cwSumItemLabel").textContent = `${name} × ${qty}`;
   if ($("cwSumItemAmount")) $("cwSumItemAmount").textContent = fmt(price * qty);
-  // First-customer line (only when &first=1)
-  if ($("cwFirstCustomerLine")) {
-    $("cwFirstCustomerLine").classList.toggle("shown", isFirstCustomer);
-  }
   // Note from mum — render as paragraphs in the handwritten card. Falls back
   // to a generic warm message if no &note= was provided in the URL.
   const noteBodyEl = $("cwNoteBody");
