@@ -6,7 +6,7 @@
 <title>Tangled with Love — Handcrafted Crochet Bags</title>
 <meta name="description" content="Beautifully handcrafted crochet bags made with love in Brampton, Ontario. Shoulder bags, slings, handhelds and pouches — no two alike.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='.9em' font-size='54'%3E%F0%9F%A7%B6%3C/text%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Yeseva+One&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -255,116 +255,189 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 .result-page h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--dark);margin-bottom:0.6rem}
 .result-page p{font-size:1rem;color:var(--light);line-height:1.8;margin-bottom:2rem}
 
-/* ============= Custom-order welcome page ============= */
-#page-custom-welcome{position:relative;min-height:100vh;overflow:hidden;background:radial-gradient(ellipse at top,#FBF6EC 0%,var(--pale-blush) 70%,#EBD9B4 100%);background-size:200% 200%}
-#page-custom-welcome.cw-on{animation:cw-bg-pan 18s ease-in-out infinite}
-@keyframes cw-bg-pan{0%,100%{background-position:0% 0%}50%{background-position:100% 100%}}
+/* ============= Custom-order welcome page (cosy redesign) ============= */
+#page-custom-welcome{
+  --cw-bg: oklch(0.965 0.018 80);
+  --cw-bg-2: oklch(0.93 0.028 72);
+  --cw-paper: oklch(0.985 0.012 85);
+  --cw-ink: oklch(0.32 0.035 55);
+  --cw-ink-soft: oklch(0.48 0.04 50);
+  --cw-accent: oklch(0.66 0.13 38);
+  --cw-accent-2: oklch(0.74 0.08 145);
+  --cw-accent-3: oklch(0.84 0.07 20);
+  --cw-gold: oklch(0.78 0.12 85);
+  --cw-stitch: oklch(0.55 0.06 50);
+  --cw-shadow: 0 4px 12px oklch(0.32 0.035 55 / 0.08), 0 1px 3px oklch(0.32 0.035 55 / 0.06);
+  --cw-shadow-lg: 0 22px 50px oklch(0.32 0.035 55 / 0.14), 0 6px 16px oklch(0.32 0.035 55 / 0.08);
+  --cw-display: "Yeseva One", serif;
+  position:relative;min-height:100vh;overflow:hidden;
+  background: var(--cw-bg);
+  background-image:
+    radial-gradient(circle at 12% 18%, oklch(0.82 0.07 38 / 0.18), transparent 35%),
+    radial-gradient(circle at 88% 8%,  oklch(0.84 0.07 145 / 0.16), transparent 38%),
+    radial-gradient(circle at 78% 92%, oklch(0.84 0.07 20 / 0.16), transparent 40%);
+  background-size:200% 200%;
+  color: var(--cw-ink);
+  font-family: "Quicksand", system-ui, sans-serif;
+  line-height: 1.55;
+}
+#cwConfetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
 
-#cwConfetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10}
+/* Headings inside the welcome page */
+#page-custom-welcome h1, #page-custom-welcome h2, #page-custom-welcome h3, #page-custom-welcome h4 {
+  font-family: var(--cw-display); font-weight:400; letter-spacing:-0.01em; color: var(--cw-ink); margin:0;
+}
+#page-custom-welcome .cw-hand { font-family:"Caveat", cursive; font-weight:600; }
 
-.custom-welcome{max-width:560px;margin:3rem auto;background:linear-gradient(135deg,#FFFAF0 0%,var(--pale-blush) 100%);border-radius:28px;padding:3rem 2rem 2.5rem;text-align:center;box-shadow:0 20px 60px rgba(124,80,53,0.18),0 0 0 1px rgba(255,255,255,0.6) inset;position:relative;overflow:hidden;z-index:3;opacity:0}
-.cw-on .custom-welcome{animation:cw-card-in 0.85s cubic-bezier(0.2,0.8,0.2,1) forwards,cw-card-breathe 5s ease-in-out 1.5s infinite}
-.custom-welcome::before{content:"";position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,var(--rust) 0%,transparent 70%);border-radius:50%;opacity:0;pointer-events:none}
-.custom-welcome::after{content:"";position:absolute;bottom:-50px;left:-50px;width:160px;height:160px;background:radial-gradient(circle,var(--sage) 0%,transparent 70%);border-radius:50%;opacity:0;pointer-events:none}
-.cw-on .custom-welcome::before{animation:cw-blob 7s ease-in-out 0.3s infinite}
-.cw-on .custom-welcome::after{animation:cw-blob 9s ease-in-out -2s infinite}
-@keyframes cw-card-in{0%{opacity:0;transform:translateY(50px) scale(0.92) rotate(-1deg)}60%{transform:translateY(-4px) scale(1.01) rotate(0.3deg)}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
-@keyframes cw-card-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
-@keyframes cw-blob{0%{opacity:0;transform:translate(0,0) scale(0.6)}30%{opacity:0.18}50%{transform:translate(15px,-20px) scale(1.1)}80%{opacity:0.13}100%{opacity:0.15;transform:translate(-10px,10px) scale(0.9)}}
+.cw-page{ max-width:1180px; margin:0 auto; padding:28px 32px 60px; position:relative; z-index:5; }
 
-/* Sparkles + hand-drawn underline framing the greeting */
-.cw-greeting-wrap{position:relative;display:inline-block;padding-bottom:0.4rem}
-.cw-greeting-underline{position:absolute;left:-2%;right:-2%;bottom:-2px;width:104%;height:14px;overflow:visible;pointer-events:none}
-.cw-greeting-underline path{stroke-dasharray:280;stroke-dashoffset:280}
-.cw-greeting-underline.drawn path{animation:cw-underline-draw 0.9s cubic-bezier(0.4,0,0.2,1) forwards}
-@keyframes cw-underline-draw{to{stroke-dashoffset:0}}
-#customWelcomeGreeting.typing::after{content:"|";color:var(--rust);margin-left:3px;font-weight:400;animation:cw-blink 0.55s steps(2,jump-none) infinite}
-@keyframes cw-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
-.cw-sparkle{position:absolute;font-size:0.9rem;opacity:0;pointer-events:none;display:inline-block}
-.cw-sparkle.s1{top:-10px;left:-22px}
-.cw-sparkle.s2{top:-4px;right:-26px;font-size:1.1rem}
-.cw-sparkle.s3{bottom:-2px;left:-14px;font-size:0.7rem}
-.cw-sparkle.s4{bottom:-8px;right:-12px;font-size:0.85rem}
-.cw-on .cw-sparkle{animation:cw-sparkle 2.2s ease-in-out infinite}
-.cw-on .cw-sparkle.s1{animation-delay:1.4s}
-.cw-on .cw-sparkle.s2{animation-delay:1.7s}
-.cw-on .cw-sparkle.s3{animation-delay:2.1s}
-.cw-on .cw-sparkle.s4{animation-delay:2.5s}
-@keyframes cw-sparkle{0%,100%{opacity:0;transform:scale(0.3) rotate(0)}40%{opacity:1;transform:scale(1.1) rotate(180deg)}60%{opacity:1;transform:scale(1) rotate(220deg)}}
+/* ============= Floating decorations ============= */
+.cw-particles{ position:absolute; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+.cw-deco{ position:absolute; opacity:0; }
+.cw-on .cw-deco{ opacity:0.85; }
+.cw-sparkle{ width:var(--size); height:var(--size); background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2 L13.5 9.5 L21 11 L13.5 12.5 L12 20 L10.5 12.5 L3 11 L10.5 9.5 Z' fill='%23dcb04a'/></svg>"); background-size:contain; background-repeat:no-repeat; }
+.cw-on .cw-sparkle{ animation: cw-twinkle 3s ease-in-out infinite; animation-delay: var(--delay); }
+@keyframes cw-twinkle{ 0%,100%{ transform: scale(1) rotate(0deg); opacity:0.85; } 50%{ transform: scale(1.25) rotate(20deg); opacity:1; } }
+.cw-yarn{ width:var(--size); height:var(--size); background-color: var(--color, var(--cw-accent)); border-radius:50%; box-shadow: inset 0 -6px 14px rgba(0,0,0,0.12); position:relative; }
+.cw-yarn::before{ content:""; position:absolute; inset:8%; border-radius:50%; background:
+  repeating-linear-gradient(35deg, transparent 0 5px, rgba(0,0,0,0.10) 5px 6px),
+  repeating-linear-gradient(-30deg, transparent 0 5px, rgba(0,0,0,0.10) 5px 6px); }
+.cw-on .cw-yarn{ animation: cw-floaty 6s ease-in-out infinite; animation-delay: var(--delay); transform: rotate(var(--r,0)); }
+@keyframes cw-floaty{ 0%,100%{ transform: translateY(0) rotate(var(--r,0)); } 50%{ transform: translateY(-12px) rotate(var(--r,0)); } }
 
-/* Stagger entrance — gated by .cw-on so animations fire when page becomes visible */
-.custom-welcome > *{opacity:0}
-.cw-on .custom-welcome > *{animation:cw-child-in 0.6s ease-out forwards}
-.custom-welcome-bow{font-size:4rem;margin-bottom:1rem;display:inline-block;transform-origin:50% 30%}
-.cw-on .custom-welcome-bow{animation:cw-bow-pop 1s cubic-bezier(0.25,1.7,0.4,1) 0.15s forwards,cw-wiggle 2.6s ease-in-out 1.5s infinite}
-.custom-welcome h2{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--warm-brown);margin:0 0 0.5rem;line-height:1.15}
-.cw-on .custom-welcome h2{animation-delay:0.5s}
-.custom-welcome-sub{font-size:1rem;color:var(--warm-brown);opacity:0.85;margin:0 0 2rem;font-style:italic}
-.cw-on .custom-welcome-sub{animation-delay:0.7s}
-.custom-welcome-card{background:white;border-radius:18px;padding:1.3rem;margin:1.5rem 0;display:flex;gap:1.2rem;align-items:center;text-align:left;box-shadow:0 6px 24px rgba(124,80,53,0.1);border:1px solid rgba(124,80,53,0.1);position:relative;z-index:1;transition:transform 0.3s,box-shadow 0.3s}
-.custom-welcome-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(124,80,53,0.18)}
-.cw-on .custom-welcome-card{animation-delay:0.9s}
+/* ============= Nav ============= */
+.cw-nav{ display:flex; align-items:center; justify-content:space-between; padding:14px 22px; background: oklch(0.99 0.01 80 / 0.7); backdrop-filter: blur(8px); border-radius:999px; box-shadow: var(--cw-shadow); border:1px dashed oklch(0.55 0.06 50 / 0.25); }
+.cw-brand{ display:flex; align-items:center; gap:12px; font-family: var(--cw-display); font-size:22px; color: var(--cw-ink); }
+.cw-brand-mark{ width:42px; height:42px; border-radius:50%; background: var(--cw-accent); position:relative; box-shadow: inset 0 -3px 6px oklch(0 0 0 / 0.1); }
+.cw-brand-mark::after{ content:""; position:absolute; inset:4px; border-radius:50%;
+  background: repeating-conic-gradient(from 20deg, transparent 0deg 8deg, oklch(1 0 0 / 0.18) 8deg 10deg),
+              repeating-linear-gradient(35deg, transparent 0 6px, oklch(0 0 0 / 0.08) 6px 7px); }
+.cw-amp{ color: var(--cw-accent); font-style:italic; }
+.cw-brand-sub{ font-family:"Caveat", cursive; font-size:16px; color: var(--cw-ink-soft); margin-left:2px; }
+.cw-cart-pill{ background: var(--cw-ink); color: var(--cw-paper); padding:8px 16px; border-radius:999px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.cw-cart-dot{ background: var(--cw-accent); color:white; width:18px; height:18px; border-radius:50%; display:grid; place-items:center; font-size:11px; }
 
-/* "Order #1" badge — only shown when URL has &first=1 */
-.cw-badge{position:absolute;top:-14px;right:-14px;background:var(--rust);color:var(--cream);font-family:'Playfair Display',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;border-radius:50%;width:62px;height:62px;display:none;align-items:center;justify-content:center;text-align:center;line-height:1.1;box-shadow:0 6px 18px rgba(196,92,42,0.4),0 0 0 4px white inset;transform:rotate(-12deg) scale(0);opacity:0;z-index:3}
-.cw-badge.shown{display:flex}
-.cw-on .cw-badge.shown{animation:cw-badge-pop 0.85s cubic-bezier(0.25,1.8,0.4,1) 1.3s forwards,cw-badge-wobble 3.5s ease-in-out 2.4s infinite}
-@keyframes cw-badge-pop{0%{opacity:0;transform:rotate(45deg) scale(0)}55%{transform:rotate(-18deg) scale(1.25);opacity:1}80%{transform:rotate(-8deg) scale(0.96)}100%{opacity:1;transform:rotate(-12deg) scale(1)}}
-@keyframes cw-badge-wobble{0%,100%{transform:rotate(-12deg) scale(1)}50%{transform:rotate(-4deg) scale(1.04)}}
+/* ============= Hero ============= */
+.cw-hero{ text-align:center; padding:60px 20px 40px; position:relative; }
+.cw-eyebrow{ display:inline-flex; align-items:center; gap:10px; padding:8px 18px; background: var(--cw-paper); border-radius:999px; font-size:13px; color: var(--cw-ink-soft); letter-spacing:0.08em; text-transform:uppercase; font-weight:600; border:1px dashed var(--cw-stitch); }
+.cw-eyebrow-dot{ width:8px; height:8px; border-radius:50%; background: var(--cw-accent); }
+.cw-h1{ font-family: var(--cw-display); font-size: clamp(40px, 6vw, 78px); margin:18px 0 6px; line-height:1.05; color: var(--cw-ink); font-weight:400; }
+.cw-names{ color: var(--cw-accent); position:relative; display:inline-block; }
+.cw-names::after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:12px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2 8 Q 50 -2, 100 6 T 198 4' stroke='%23d68a64' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>") center/100% 100% no-repeat; }
+.cw-heart-inline{ vertical-align:middle; margin-left:8px; }
+.cw-hero-sub{ font-family:"Caveat", cursive; font-size: clamp(22px, 2.5vw, 30px); color: var(--cw-ink-soft); margin:18px auto 0; max-width:620px; }
+.cw-stamp{ position:absolute; top:30px; right:6%; transform: rotate(8deg); background: var(--cw-accent); color:white; font-family:"Caveat", cursive; font-size:22px; padding:18px 22px; border-radius:50%; width:130px; height:130px; display:grid; place-items:center; text-align:center; line-height:1.1; box-shadow: var(--cw-shadow); border:2px dashed oklch(1 0 0 / 0.5); }
+.cw-stamp::before{ content:""; position:absolute; inset:6px; border-radius:50%; border:1px solid oklch(1 0 0 / 0.4); }
+.cw-stamp-big{ font-size:36px; display:block; line-height:1; margin:4px 0; }
 
-/* "From mum's hands to yours" tagline */
-.custom-welcome-tagline{text-align:center;font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);font-size:0.95rem;opacity:0.78;margin:-0.5rem 0 1.5rem;letter-spacing:0.01em}
-.cw-on .custom-welcome-tagline{animation-delay:1.0s}
+/* ============= Product + Summary grid ============= */
+.cw-grid{ display:grid; grid-template-columns: 1.4fr 1fr; gap:32px; margin-top:30px; align-items:start; }
+@media (max-width:880px){ .cw-grid{ grid-template-columns: 1fr; } .cw-stamp{ width:100px; height:100px; font-size:18px; top:10px; right:4%; } .cw-stamp-big{ font-size:28px; } }
 
-.custom-welcome-note{background:white;border-radius:14px;padding:1.1rem 1.3rem;margin:1rem 0 1.5rem;font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);font-size:1rem;line-height:1.55;display:none;border-left:3px solid var(--rust);text-align:left;position:relative;z-index:1;box-shadow:0 4px 14px rgba(124,80,53,0.06)}
-.cw-on .custom-welcome-note.shown{display:block;animation:cw-child-in 0.6s ease-out 1.2s forwards}
-.custom-welcome-total{display:flex;justify-content:space-between;align-items:baseline;padding:1.3rem 0;margin:1rem 0 1.5rem;border-top:1px dashed rgba(124,80,53,0.3);border-bottom:1px dashed rgba(124,80,53,0.3);position:relative;z-index:1}
-.cw-on .custom-welcome-total{animation-delay:1.4s}
-.custom-welcome-checkout{font-size:1.05rem;padding:1rem 2.6rem;margin-top:0.5rem;position:relative;z-index:1;background:linear-gradient(105deg,var(--warm-brown) 0%,var(--warm-brown) 30%,#A86A3E 50%,var(--warm-brown) 70%,var(--warm-brown) 100%);background-size:300% 100%;transition:transform 0.25s,box-shadow 0.25s,background-position 0.5s;cursor:pointer}
-.cw-on .custom-welcome-checkout{animation:cw-child-in 0.6s ease-out 1.6s forwards,cw-shimmer 4s ease-in-out 2.8s infinite}
-.custom-welcome-checkout:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 28px rgba(124,80,53,0.35);background-position:100% 0}
-.custom-welcome-checkout:active{transform:translateY(-1px) scale(0.99)}
-@keyframes cw-shimmer{0%,100%{background-position:0% 0}50%{background-position:100% 0}}
-.custom-welcome-footer{margin-top:1.5rem;font-size:0.85rem;color:var(--warm-brown);opacity:0.7;letter-spacing:0.04em}
-.cw-on .custom-welcome-footer{animation-delay:1.8s}
+.cw-product-card{ background: var(--cw-paper); border-radius:28px; padding:28px; box-shadow: var(--cw-shadow); position:relative; border:1px solid oklch(0.55 0.06 50 / 0.08); }
+.cw-product-card::before{ content:""; position:absolute; inset:8px; border-radius:22px; border:1.5px dashed var(--cw-stitch); opacity:0.35; pointer-events:none; }
+.cw-product-header{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; gap:16px; }
+.cw-product-name{ font-size:32px; margin:0 0 4px; }
+.cw-product-meta{ color: var(--cw-ink-soft); font-size:14px; }
+.cw-product-price{ font-family:"Caveat", cursive; font-weight:600; font-size:22px; color: var(--cw-accent); transform: rotate(4deg); white-space:nowrap; }
+.cw-product-price .cw-each{ font-size:14px; color: var(--cw-ink-soft); }
 
-@keyframes cw-child-in{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
-@keyframes cw-bow-pop{0%{opacity:0;transform:scale(0.2) rotate(-220deg)}50%{transform:scale(1.35) rotate(20deg);opacity:1}75%{transform:scale(0.92) rotate(-8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
-@keyframes cw-wiggle{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+.cw-product-images{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-bottom:10px; }
+.cw-img-frame{ aspect-ratio:1; position:relative; transform: rotate(var(--rot, 0deg)); transition: transform 0.3s; }
+.cw-img-frame:hover{ transform: rotate(0deg) scale(1.02); z-index:2; }
+.cw-img-frame img{ width:100%; height:100%; object-fit:cover; border-radius:14px; box-shadow: var(--cw-shadow); display:block; }
+.cw-tape{ position:absolute; background: oklch(0.92 0.05 80 / 0.7); width:70px; height:22px; top:-8px; left:50%; transform: translateX(-50%) rotate(-3deg); border-radius:2px; box-shadow: 0 2px 4px oklch(0 0 0 / 0.05); z-index:1; border-left:1px dashed oklch(0.7 0.06 80 / 0.4); border-right:1px dashed oklch(0.7 0.06 80 / 0.4); }
+.cw-photos-note{ text-align:center; font-family:"Caveat", cursive; font-size:16px; color: var(--cw-ink-soft); margin:8px 0 22px; }
 
-/* Polaroid frame around the item image */
-.custom-welcome-img-wrap{width:100px;height:100px;flex-shrink:0;background:white;position:relative;border:7px solid white;border-bottom-width:22px;border-radius:3px;box-shadow:0 5px 16px rgba(124,80,53,0.22),0 1px 2px rgba(0,0,0,0.06);transform:rotate(-3.5deg);transition:transform 0.5s}
-.custom-welcome-img-wrap::before{content:"";position:absolute;top:-12px;left:50%;width:46px;height:16px;background:rgba(196,156,108,0.45);border:1px solid rgba(124,80,53,0.12);border-radius:1px;transform:translateX(-50%) rotate(-2.5deg);z-index:4;box-shadow:0 1px 2px rgba(0,0,0,0.04)}
-.custom-welcome-img-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,0.35) 50%,transparent 70%);background-size:200% 200%;background-position:-100% -100%;animation:cw-shine 4s ease-in-out 2.5s infinite;pointer-events:none;z-index:2}
-@keyframes cw-shine{0%,100%{background-position:-100% -100%}50%{background-position:200% 200%}}
-.custom-welcome-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s}
-.custom-welcome-card:hover .custom-welcome-img-wrap{transform:rotate(0deg) scale(1.04)}
-.custom-welcome-card:hover .custom-welcome-img-wrap img{transform:scale(1.06)}
-.custom-welcome-item-name{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--dark);margin-bottom:0.4rem;line-height:1.3}
-.custom-welcome-item-meta{font-size:0.92rem;color:var(--warm-brown);opacity:0.85}
-.custom-welcome-total-label{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--warm-brown)}
-.custom-welcome-total-amount{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:700;color:var(--dark);display:inline-block;transform-origin:center;letter-spacing:-0.01em}
-.custom-welcome-total-amount.pulse{animation:cw-pulse 2.6s ease-in-out infinite}
-@keyframes cw-pulse{0%,100%{transform:scale(1);color:var(--dark);text-shadow:none}50%{transform:scale(1.08);color:var(--rust);text-shadow:0 0 18px rgba(196,92,42,0.35)}}
+.cw-specs{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:14px; }
+.cw-spec{ padding:12px 14px; background: var(--cw-bg); border-radius:14px; border:1px dashed var(--cw-stitch); }
+.cw-spec-label{ font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color: var(--cw-ink-soft); margin-bottom:4px; }
+.cw-spec-value{ font-family: var(--cw-display); font-size:18px; color: var(--cw-ink); }
+.cw-spec-wide{ margin-bottom:14px; }
+.cw-swatch-row{ display:flex; gap:8px; align-items:center; margin-top:8px; }
+.cw-swatch{ width:22px; height:22px; border-radius:50%; border:2px solid var(--cw-paper); box-shadow: 0 0 0 1px var(--cw-stitch); display:inline-block; }
+.cw-swatch-active{ box-shadow: 0 0 0 2px var(--cw-accent); transform: scale(1.1); }
+.cw-swatch-name{ margin-left:10px; font-family:"Caveat", cursive; font-size:20px; color: var(--cw-ink-soft); }
 
-/* Floating background decorations — large, slow, visible */
-.cw-floaters{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
-.cw-floater{position:absolute;bottom:-80px;font-size:1.8rem;opacity:0;will-change:transform,opacity;filter:drop-shadow(0 2px 4px rgba(124,80,53,0.15))}
-.cw-on .cw-floater{animation:cw-float-rise 14s linear infinite}
-.cw-floater:nth-child(1){left:4%;animation-delay:0s;font-size:1.7rem}
-.cw-floater:nth-child(2){left:14%;animation-delay:-1.8s;font-size:1.3rem}
-.cw-floater:nth-child(3){left:24%;animation-delay:-4.2s;font-size:1.9rem}
-.cw-floater:nth-child(4){left:34%;animation-delay:-6.5s;font-size:1.4rem}
-.cw-floater:nth-child(5){left:44%;animation-delay:-9s;font-size:1.6rem}
-.cw-floater:nth-child(6){left:54%;animation-delay:-2.4s;font-size:1.35rem}
-.cw-floater:nth-child(7){left:66%;animation-delay:-7.7s;font-size:1.7rem}
-.cw-floater:nth-child(8){left:76%;animation-delay:-3.1s;font-size:1.5rem}
-.cw-floater:nth-child(9){left:86%;animation-delay:-10.3s;font-size:1.4rem}
-.cw-floater:nth-child(10){left:94%;animation-delay:-12s;font-size:1.6rem}
-@keyframes cw-float-rise{0%{transform:translateY(0) translateX(0) rotate(0)}5%{opacity:0.55}25%{transform:translateY(-25vh) translateX(20px) rotate(90deg)}50%{transform:translateY(-55vh) translateX(-15px) rotate(180deg)}75%{transform:translateY(-80vh) translateX(20px) rotate(270deg);opacity:0.55}95%{opacity:0}100%{transform:translateY(-115vh) translateX(0) rotate(360deg);opacity:0}}
+.cw-qty-row{ display:flex; align-items:center; justify-content:space-between; padding:16px 18px; background: var(--cw-bg); border-radius:16px; }
+.cw-qty-sub{ font-size:13px; color: var(--cw-ink-soft); }
+.cw-qty-num{ font-family: var(--cw-display); font-size:32px; min-width:28px; text-align:center; color: var(--cw-ink); }
 
-@media (max-width:600px){.custom-welcome{padding:2rem 1.5rem;margin:1.5rem 1rem}.custom-welcome h2{font-size:1.95rem}.custom-welcome-card{flex-direction:column;text-align:center}.custom-welcome-img-wrap{width:130px;height:130px}.custom-welcome-note{text-align:center}.cw-sparkle{display:none}}
-@media (prefers-reduced-motion:reduce){.cw-on *,.cw-on .custom-welcome,.cw-on .custom-welcome > *,.cw-on .custom-welcome-bow,.cw-on .custom-welcome-total-amount,.cw-on .cw-floater,.cw-on .custom-welcome::before,.cw-on .custom-welcome::after,.cw-on .custom-welcome-note.shown,.cw-on .cw-sparkle{animation:none !important}.cw-on .custom-welcome,.cw-on .custom-welcome > *{opacity:1}}
+/* ============= Summary ============= */
+.cw-summary{ background: var(--cw-paper); border-radius:28px; padding:28px; box-shadow: var(--cw-shadow); position:sticky; top:24px; border:1px solid oklch(0.55 0.06 50 / 0.08); }
+.cw-summary-title{ font-size:24px; margin:0 0 18px; display:flex; align-items:center; gap:10px; }
+.cw-sum-row{ display:flex; justify-content:space-between; padding:12px 0; font-size:15px; color: var(--cw-ink-soft); border-bottom:1px dashed oklch(0.55 0.06 50 / 0.2); }
+.cw-sum-gift{ color: var(--cw-accent-2); font-family:"Caveat", cursive; font-size:18px; }
+.cw-sum-total{ font-family: var(--cw-display); font-size:28px; color: var(--cw-ink); border-bottom:none; padding-top:18px; }
+.cw-checkout{ width:100%; margin-top:18px; padding:18px; background: var(--cw-ink); color: var(--cw-paper); border:none; border-radius:18px; font-family: var(--cw-display); font-size:20px; cursor:pointer; transition:0.2s; position:relative; overflow:hidden; }
+.cw-checkout:hover{ background: var(--cw-accent); transform: translateY(-2px); box-shadow: var(--cw-shadow-lg); }
+.cw-checkout:active{ transform: translateY(0); }
+.cw-reassure{ display:flex; gap:10px; margin-top:14px; padding:12px; background: var(--cw-bg); border-radius:12px; font-size:12px; color: var(--cw-ink-soft); align-items:center; }
+.cw-first-customer{ margin-top:14px; padding:14px; background: var(--cw-bg); border-radius:12px; font-family:"Caveat", cursive; font-size:18px; color: var(--cw-ink-soft); text-align:center; display:none; }
+.cw-first-customer.shown{ display:block; }
+
+/* ============= Note from mum ============= */
+.cw-note-section{ margin-top:60px; position:relative; }
+.cw-section-title{ text-align:center; margin-bottom:18px; }
+.cw-section-title h2{ font-size: clamp(28px, 4vw, 48px); margin:0; }
+.cw-section-title p{ font-family:"Caveat", cursive; font-size:22px; color: var(--cw-ink-soft); margin:4px 0 0; }
+.cw-divider{ display:block; margin: 0 auto; width:120px; height:14px; opacity:0.5; }
+.cw-note{ max-width:620px; margin:30px auto 0; background: oklch(0.97 0.03 70); padding:50px 44px 60px; box-shadow: var(--cw-shadow-lg); transform: rotate(-1.5deg); position:relative; font-family:"Caveat", cursive; font-size:28px; color: oklch(0.35 0.04 50); line-height:1.45; border-radius:6px; }
+.cw-note-tape{ position:absolute; top:-16px; background: oklch(0.85 0.1 85 / 0.7); height:28px; width:100px; box-shadow: 0 2px 4px oklch(0 0 0 / 0.08); border-left:1px dashed oklch(0.7 0.07 80 / 0.6); border-right:1px dashed oklch(0.7 0.07 80 / 0.6); }
+.cw-note-tape-l{ left:12%; transform: rotate(-8deg); }
+.cw-note-tape-r{ right:12%; transform: rotate(7deg); }
+.cw-note-body{ white-space:pre-wrap; }
+.cw-note-body .cw-heart-mini{ color: var(--cw-accent); }
+.cw-note-sig{ margin-top:24px; font-size:36px; color: var(--cw-accent); text-align:right; }
+.cw-note-meta{ margin-top:6px; font-family:"Quicksand", sans-serif; font-size:13px; color: var(--cw-ink-soft); text-align:right; letter-spacing:0.06em; text-transform:uppercase; }
+
+/* ============= Timeline ============= */
+.cw-timeline-section{ margin-top:80px; }
+.cw-center{ text-align:center; }
+.cw-timeline{ display:grid; grid-template-columns: repeat(4, 1fr); gap:18px; margin-top:30px; }
+@media (max-width:720px){ .cw-timeline{ grid-template-columns: 1fr 1fr; } }
+.cw-step{ background: var(--cw-paper); padding:22px; border-radius:20px; text-align:center; position:relative; border:1px solid oklch(0.55 0.06 50 / 0.1); transition:0.3s; }
+.cw-step:hover{ transform: translateY(-4px); box-shadow: var(--cw-shadow-lg); }
+.cw-step-icon{ width:56px; height:56px; border-radius:50%; background: var(--cw-bg-2); display:grid; place-items:center; margin:0 auto 12px; font-size:24px; border:1.5px dashed var(--cw-stitch); }
+.cw-step-active .cw-step-icon{ background: var(--cw-accent); border-style:solid; border-color: var(--cw-accent); color:white; }
+.cw-step-num{ font-family:"Caveat", cursive; font-size:14px; color: var(--cw-ink-soft); letter-spacing:0.1em; }
+.cw-step-title{ font-family: var(--cw-display); font-size:18px; margin:4px 0; color: var(--cw-ink); }
+.cw-step-desc{ font-size:13px; color: var(--cw-ink-soft); }
+
+/* ============= Care cards ============= */
+.cw-care-section{ margin-top:80px; }
+.cw-care-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:30px; }
+@media (max-width:720px){ .cw-care-grid{ grid-template-columns: 1fr; } }
+.cw-care-card{ background: var(--cw-paper); padding:24px; border-radius:20px; border:1px solid oklch(0.55 0.06 50 / 0.08); }
+.cw-care-emoji{ font-size:28px; }
+.cw-care-card h4{ font-family: var(--cw-display); font-size:22px; margin:8px 0 6px; color: var(--cw-ink); }
+.cw-care-card p{ font-size:14px; color: var(--cw-ink-soft); margin:0; }
+
+/* ============= Footer ============= */
+.cw-footer{ margin-top:100px; padding:40px 20px 0; text-align:center; border-top:1px dashed var(--cw-stitch); position:relative; }
+.cw-heart-row{ display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:8px; }
+.cw-footer-name{ font-family:"Caveat", cursive; font-weight:600; font-size:28px; margin:6px 0 4px; color: var(--cw-ink); }
+.cw-footer-small{ font-size:13px; color: var(--cw-ink-soft); }
+.cw-footer-tiny{ margin-top:16px; font-size:11px; opacity:0.6; color: var(--cw-ink-soft); }
+
+/* Mobile tweaks */
+@media (max-width:600px){
+  .cw-page{ padding:18px 16px 40px; }
+  .cw-nav{ padding:10px 14px; }
+  .cw-brand{ font-size:18px; gap:8px; }
+  .cw-brand-mark{ width:34px; height:34px; }
+  .cw-brand-sub{ font-size:13px; }
+  .cw-hero{ padding:40px 8px 30px; }
+  .cw-stamp{ display:none; }
+  .cw-product-card{ padding:20px; }
+  .cw-summary{ position:static; }
+  .cw-product-name{ font-size:26px; }
+  .cw-note{ padding:36px 28px 44px; font-size:22px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .cw-on .cw-deco,.cw-on .cw-sparkle,.cw-on .cw-yarn{ animation:none !important; }
+}
 .order-id{font-family:'Lato',sans-serif;font-size:0.82rem;color:var(--warm-brown);background:var(--pale-blush);padding:0.4rem 0.9rem;border-radius:2rem;display:inline-block;margin-bottom:1.25rem;letter-spacing:0.06em;font-weight:600}
 
 /* ======= RESPONSIVE ======= */
@@ -672,44 +745,205 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 <!-- Custom-order welcome page (shown when /?custom=1&… seeds the cart) -->
 <div class="page" id="page-custom-welcome">
   <canvas id="cwConfetti" aria-hidden="true"></canvas>
-  <div class="cw-floaters" aria-hidden="true">
-    <span class="cw-floater">🧶</span>
-    <span class="cw-floater">✨</span>
-    <span class="cw-floater">💕</span>
-    <span class="cw-floater">🧶</span>
-    <span class="cw-floater">🌸</span>
-    <span class="cw-floater">🧵</span>
-    <span class="cw-floater">💕</span>
-    <span class="cw-floater">✨</span>
-    <span class="cw-floater">🧶</span>
-    <span class="cw-floater">🌟</span>
+
+  <!-- Floating decorations (sparkles + yarn balls) -->
+  <div class="cw-particles" aria-hidden="true">
+    <span class="cw-deco cw-sparkle" style="top:12%;left:6%;--size:22px;--delay:0s"></span>
+    <span class="cw-deco cw-sparkle" style="top:22%;right:8%;--size:16px;--delay:0.7s"></span>
+    <span class="cw-deco cw-sparkle" style="top:48%;left:3%;--size:14px;--delay:1.4s"></span>
+    <span class="cw-deco cw-sparkle" style="top:62%;right:4%;--size:20px;--delay:0.3s"></span>
+    <span class="cw-deco cw-sparkle" style="top:80%;left:7%;--size:18px;--delay:1.1s"></span>
+    <span class="cw-deco cw-sparkle" style="top:88%;right:10%;--size:14px;--delay:0.5s"></span>
+    <span class="cw-deco cw-sparkle" style="top:35%;right:2%;--size:12px;--delay:1.8s"></span>
+    <span class="cw-deco cw-yarn" style="top:14%;left:2%;--size:64px;--r:-12deg;--delay:0s;--color:var(--cw-accent-3)"></span>
+    <span class="cw-deco cw-yarn" style="top:46%;right:1%;--size:54px;--r:8deg;--delay:1s;--color:var(--cw-accent-2)"></span>
+    <span class="cw-deco cw-yarn" style="top:76%;left:1%;--size:48px;--r:15deg;--delay:2s;--color:var(--cw-accent)"></span>
   </div>
-  <div class="custom-welcome">
-    <div class="custom-welcome-bow">🧶</div>
-    <h2><span class="cw-greeting-wrap"><span class="cw-sparkle s1" aria-hidden="true">✨</span><span class="cw-sparkle s2" aria-hidden="true">✨</span><span class="cw-sparkle s3" aria-hidden="true">✨</span><span class="cw-sparkle s4" aria-hidden="true">✨</span><span id="customWelcomeGreeting">Hi there!</span><svg class="cw-greeting-underline" viewBox="0 0 220 14" preserveAspectRatio="none" aria-hidden="true"><path d="M 4 9 Q 40 2, 80 7 T 160 6 T 216 7" stroke="#C45C2A" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></span></h2>
-    <p class="custom-welcome-sub">Your custom order is ready — made just for you ✨</p>
 
-    <div class="custom-welcome-card">
-      <div class="cw-badge" id="cwOrderBadge" aria-hidden="true">Order<br>#1</div>
-      <div class="custom-welcome-img-wrap"><img id="customWelcomeImg" src="" alt=""></div>
-      <div class="custom-welcome-details">
-        <div class="custom-welcome-item-name" id="customWelcomeName"></div>
-        <div class="custom-welcome-item-meta" id="customWelcomeMeta"></div>
+  <div class="cw-page">
+    <!-- Nav -->
+    <nav class="cw-nav">
+      <div class="cw-brand">
+        <div class="cw-brand-mark" aria-hidden="true"></div>
+        <div>
+          <div>Tangled<span class="cw-amp"> with </span>Love</div>
+          <div class="cw-brand-sub">made by mum, with hands &amp; heart</div>
+        </div>
       </div>
+      <div class="cw-cart-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        Cart<span class="cw-cart-dot" id="cwCartDot">0</span>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="cw-hero">
+      <div class="cw-eyebrow"><span class="cw-eyebrow-dot"></span>Custom order &nbsp;·&nbsp; reserved with love</div>
+      <h1 class="cw-h1">A little something<br>for <span class="cw-names" id="cwHeroNames">Sam &amp; Tushar</span> <svg class="cw-heart-inline" width="48" height="48" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent)"/></svg></h1>
+      <p class="cw-hero-sub">Hand-crocheted, stitch by stitch, just for you two.<br>No two pieces in the world are exactly alike — and yours is now in mum's hands.</p>
+      <div class="cw-stamp" aria-hidden="true">one of<br><span class="cw-stamp-big">a</span>kind</div>
+    </section>
+
+    <!-- Product + Summary grid -->
+    <div class="cw-grid">
+      <!-- Product card -->
+      <div class="cw-product-card">
+        <div class="cw-product-header">
+          <div>
+            <h2 class="cw-product-name" id="cwProductName">Custom Sweater</h2>
+            <div class="cw-product-meta">Hand-knit pullover &nbsp;·&nbsp; size to fit &nbsp;·&nbsp; lovingly slow-made</div>
+          </div>
+          <div class="cw-product-price" id="cwProductPrice"></div>
+        </div>
+
+        <div class="cw-product-images">
+          <div class="cw-img-frame" style="--rot:-2deg">
+            <span class="cw-tape"></span>
+            <img src="assets/mum.jpg" alt="A glimpse of mum's work">
+          </div>
+          <div class="cw-img-frame" style="--rot:2deg">
+            <span class="cw-tape"></span>
+            <img src="assets/mum.jpg" alt="A glimpse of mum's work">
+          </div>
+        </div>
+        <p class="cw-photos-note">your real photos will arrive when mum finishes ✿</p>
+
+        <div class="cw-specs">
+          <div class="cw-spec"><div class="cw-spec-label">Yarn</div><div class="cw-spec-value">Soft merino · cotton blend</div></div>
+          <div class="cw-spec"><div class="cw-spec-label">Made in</div><div class="cw-spec-value">Mum's living room ✿</div></div>
+          <div class="cw-spec"><div class="cw-spec-label">Stitch count</div><div class="cw-spec-value">~14,200 (give or take)</div></div>
+          <div class="cw-spec"><div class="cw-spec-label">Ready in</div><div class="cw-spec-value">3 weeks, ish</div></div>
+        </div>
+
+        <div class="cw-spec cw-spec-wide">
+          <div class="cw-spec-label">Yarn palette</div>
+          <div class="cw-swatch-row">
+            <span class="cw-swatch" style="background:oklch(0.92 0.02 80)" title="Oat Milk"></span>
+            <span class="cw-swatch cw-swatch-active" style="background:oklch(0.66 0.13 38)" title="Terracotta"></span>
+            <span class="cw-swatch" style="background:oklch(0.72 0.07 145)" title="Sage"></span>
+            <span class="cw-swatch" style="background:oklch(0.78 0.07 20)" title="Dusty Rose"></span>
+            <span class="cw-swatch" style="background:oklch(0.42 0.05 50)" title="Cocoa"></span>
+            <span class="cw-swatch-name">Terracotta</span>
+          </div>
+        </div>
+
+        <div class="cw-qty-row">
+          <div>
+            <div class="cw-spec-label">Quantity</div>
+            <div class="cw-qty-sub">one for each of you</div>
+          </div>
+          <div class="cw-qty-num" id="cwQtyDisplay">2</div>
+        </div>
+      </div>
+
+      <!-- Sticky summary -->
+      <aside class="cw-summary">
+        <h3 class="cw-summary-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent)"/></svg>
+          Your cosy basket
+        </h3>
+        <div class="cw-sum-row"><span id="cwSumItemLabel">Custom Sweater × 2</span><span id="cwSumItemAmount"></span></div>
+        <div class="cw-sum-row"><span>Hand delivery</span><span class="cw-sum-gift">on us ✿</span></div>
+        <div class="cw-sum-row"><span>Gift wrap</span><span class="cw-sum-gift">included</span></div>
+        <div class="cw-sum-row cw-sum-total"><span>Total</span><span id="cwSumTotal"></span></div>
+        <button class="cw-checkout" onclick="goCheckout()">Place this order
+          <svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:middle;margin-left:6px" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="white"/></svg>
+        </button>
+        <div class="cw-reassure">
+          <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L13.5 9.5 L21 11 L13.5 12.5 L12 20 L10.5 12.5 L3 11 L10.5 9.5 Z" fill="var(--cw-accent)"/></svg>
+          <span>You'll get a little photo update when mum starts stitching.</span>
+        </div>
+        <div class="cw-first-customer" id="cwFirstCustomerLine">first-customer discount applied — thank you, friends 🌷</div>
+      </aside>
     </div>
 
-    <div class="custom-welcome-tagline">From mum's hands to yours 🧶</div>
+    <!-- Note from mum -->
+    <section class="cw-note-section" id="cwNoteSection">
+      <div class="cw-section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L13.5 9.5 L21 11 L13.5 12.5 L12 20 L10.5 12.5 L3 11 L10.5 9.5 Z" fill="var(--cw-accent)"/></svg>
+        <h2>A note tucked in the box</h2>
+        <p>from mum, in her own hand</p>
+      </div>
+      <svg class="cw-divider" viewBox="0 0 120 14" aria-hidden="true"><path d="M2 7 Q 12 1, 22 7 T 42 7 T 62 7 T 82 7 T 102 7 T 118 7" stroke="var(--cw-stitch)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <div class="cw-note">
+        <span class="cw-note-tape cw-note-tape-l" aria-hidden="true"></span>
+        <span class="cw-note-tape cw-note-tape-r" aria-hidden="true"></span>
+        <div class="cw-note-body" id="cwNoteBody"></div>
+        <div class="cw-note-sig">— mum xx</div>
+        <div class="cw-note-meta" id="cwNoteMeta"></div>
+      </div>
+    </section>
 
-    <div class="custom-welcome-note" id="customWelcomeNote"></div>
+    <!-- Timeline -->
+    <section class="cw-timeline-section">
+      <div class="cw-section-title cw-center">
+        <h2>The slow, lovely making</h2>
+        <p>your sweater's journey, mostly on the sofa</p>
+      </div>
+      <div class="cw-timeline">
+        <div class="cw-step cw-step-active">
+          <div class="cw-step-icon">🧶</div>
+          <div class="cw-step-num">step one</div>
+          <div class="cw-step-title">Yarn shopping</div>
+          <div class="cw-step-desc">Mum picks the softest skeins in your colour.</div>
+        </div>
+        <div class="cw-step cw-step-active">
+          <div class="cw-step-icon">✿</div>
+          <div class="cw-step-num">step two</div>
+          <div class="cw-step-title">Casting on</div>
+          <div class="cw-step-desc">First loop. The slow, happy part begins.</div>
+        </div>
+        <div class="cw-step">
+          <div class="cw-step-icon">◌</div>
+          <div class="cw-step-num">step three</div>
+          <div class="cw-step-title">Stitch by stitch</div>
+          <div class="cw-step-desc">~14,200 little knots, one cup of chai at a time.</div>
+        </div>
+        <div class="cw-step">
+          <div class="cw-step-icon">♡</div>
+          <div class="cw-step-num">step four</div>
+          <div class="cw-step-title">In your hands</div>
+          <div class="cw-step-desc">Hand-delivered, gift-wrapped, ready to be loved.</div>
+        </div>
+      </div>
+    </section>
 
-    <div class="custom-welcome-total">
-      <span class="custom-welcome-total-label">Total</span>
-      <span class="custom-welcome-total-amount" id="customWelcomeTotal"></span>
-    </div>
+    <!-- Care -->
+    <section class="cw-care-section">
+      <div class="cw-section-title cw-center">
+        <h2>How to love it back</h2>
+        <p>treat it kindly, it'll last forever</p>
+      </div>
+      <div class="cw-care-grid">
+        <div class="cw-care-card">
+          <div class="cw-care-emoji">🛁</div>
+          <h4>Cool hand wash</h4>
+          <p>A gentle dip in cool water with a drop of wool-soak. No twisting — just a sleepy soak.</p>
+        </div>
+        <div class="cw-care-card">
+          <div class="cw-care-emoji">☁️</div>
+          <h4>Lay flat to dry</h4>
+          <p>Pat in a towel, then let it nap flat on a sweater rack. Sunshine is fine, just not direct.</p>
+        </div>
+        <div class="cw-care-card">
+          <div class="cw-care-emoji">🧺</div>
+          <h4>Fold, don't hang</h4>
+          <p>Hangers stretch shoulders sad. Fold loosely and tuck it into the drawer with a lavender sprig.</p>
+        </div>
+      </div>
+    </section>
 
-    <button class="btn-primary custom-welcome-checkout" onclick="goCheckout()">Continue to secure checkout →</button>
-
-    <p class="custom-welcome-footer">Handmade with love 🧶</p>
+    <!-- Footer -->
+    <footer class="cw-footer">
+      <div class="cw-heart-row">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent)"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" style="margin:0 6px" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent-3)"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent)"/></svg>
+      </div>
+      <p class="cw-footer-name">Tangled with Love</p>
+      <p class="cw-footer-small">every stitch made by mum · tangledwithlove.com</p>
+      <p class="cw-footer-tiny">Please be patient — we're a one-mum operation 🫖</p>
+    </footer>
   </div>
 </div>
 
@@ -1364,50 +1598,68 @@ function handleCustomSeed() {
   }];
   saveCart();
 
-  // Populate the welcome page DOM (elements exist in static HTML).
-  $("customWelcomeGreeting").textContent = forName ? `Hi ${forName}!` : "Hi there!";
-  $("customWelcomeImg").src = img;
-  $("customWelcomeImg").alt = name;
-  $("customWelcomeName").textContent = name;
-  $("customWelcomeMeta").textContent =
-    qty > 1 ? `Quantity: ${qty}  ·  ${fmt(price)} each` : fmt(price);
-  const noteEl = $("customWelcomeNote");
-  if (note) {
-    noteEl.textContent = `"${note}"`;
-    noteEl.classList.add("shown");
-  } else {
-    noteEl.classList.remove("shown");
+  // Populate the welcome page DOM (cosy design).
+  // Hero greeting — try to split "Sam and Tushar" into two display names.
+  const heroNamesEl = $("cwHeroNames");
+  if (heroNamesEl) {
+    const formattedNames = forName
+      ? forName.replace(/\s+and\s+/i, " & ").replace(/\s*&\s*/g, " & ")
+      : "you";
+    heroNamesEl.textContent = formattedNames;
   }
-  const badgeEl = $("cwOrderBadge");
-  if (isFirstCustomer) badgeEl.classList.add("shown");
-  else badgeEl.classList.remove("shown");
+  // Product card
+  if ($("cwProductName")) $("cwProductName").textContent = name;
+  if ($("cwProductPrice")) {
+    $("cwProductPrice").innerHTML = `$${price.toFixed(0)}<span class="cw-each"> ea</span>`;
+  }
+  if ($("cwQtyDisplay")) $("cwQtyDisplay").textContent = qty;
+  if ($("cwCartDot")) $("cwCartDot").textContent = qty;
+  // Summary
+  if ($("cwSumItemLabel")) $("cwSumItemLabel").textContent = `${name} × ${qty}`;
+  if ($("cwSumItemAmount")) $("cwSumItemAmount").textContent = fmt(price * qty);
+  // First-customer line (only when &first=1)
+  if ($("cwFirstCustomerLine")) {
+    $("cwFirstCustomerLine").classList.toggle("shown", isFirstCustomer);
+  }
+  // Note from mum — render as paragraphs in the handwritten card. Falls back
+  // to a generic warm message if no &note= was provided in the URL.
+  const noteBodyEl = $("cwNoteBody");
+  if (noteBodyEl) {
+    const noteText = note || `To ${forName || "you"} — thank you for trusting mum with these. Made with love.`;
+    // Replace standalone "&" or "and" between names if present, and add a tiny
+    // heart after the salutation line for a soft, hand-written touch.
+    noteBodyEl.textContent = noteText;
+  }
+  const noteMetaEl = $("cwNoteMeta");
+  if (noteMetaEl) {
+    const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+    noteMetaEl.textContent = `stitched · ${today}`;
+  }
 
-  // Count-up animation on the total (starts after the stagger reaches it ~1s).
-  const totalEl = $("customWelcomeTotal");
+  // Count-up animation on the summary total.
+  const totalEl = $("cwSumTotal");
   const totalAmount = price * qty;
-  totalEl.textContent = fmt(0);
   const reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion) {
-    totalEl.textContent = fmt(totalAmount);
-  } else {
-    setTimeout(() => {
-      let start = null;
-      const dur = 1100;
-      const step = (ts) => {
-        if (!start) start = ts;
-        const t = Math.min((ts - start) / dur, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        totalEl.textContent = fmt(totalAmount * eased);
-        if (t < 1) {
-          requestAnimationFrame(step);
-        } else {
-          totalEl.textContent = fmt(totalAmount);
-          totalEl.classList.add("pulse"); // gentle ongoing pulse after count-up
-        }
-      };
-      requestAnimationFrame(step);
-    }, 1000);
+  if (totalEl) {
+    if (reduceMotion) {
+      totalEl.textContent = fmt(totalAmount);
+    } else {
+      totalEl.textContent = fmt(0);
+      setTimeout(() => {
+        let start = null;
+        const dur = 1100;
+        const step = (ts) => {
+          if (!start) start = ts;
+          const t = Math.min((ts - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          totalEl.textContent = fmt(totalAmount * eased);
+          if (t < 1) requestAnimationFrame(step);
+          else totalEl.textContent = fmt(totalAmount);
+        };
+        requestAnimationFrame(step);
+      }, 700);
+    }
   }
 
   history.replaceState({}, "", location.origin + location.pathname);
@@ -1480,35 +1732,9 @@ function activateCustomWelcome() {
   page.classList.add("cw-on");
   const reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion) {
-    // Show greeting + underline at final state immediately.
-    const ul = document.querySelector(".cw-greeting-underline");
-    if (ul) ul.classList.add("drawn");
-    return;
+  if (!reduceMotion) {
+    setTimeout(() => fireConfetti($("cwConfetti")), 250);
   }
-  setTimeout(() => fireConfetti($("cwConfetti")), 250);
-
-  // Letter-by-letter typing for the greeting. Starts after the h2 has
-  // faded in (0.5s stagger + 0.6s duration ≈ 1.1s). Each char ~55ms.
-  // Underline draws in once typing completes.
-  const greetEl = $("customWelcomeGreeting");
-  const fullText = greetEl.textContent;
-  greetEl.textContent = "";
-  setTimeout(() => {
-    greetEl.classList.add("typing");
-    let i = 0;
-    const tick = () => {
-      if (i < fullText.length) {
-        greetEl.textContent += fullText.charAt(i++);
-        setTimeout(tick, 55);
-      } else {
-        greetEl.classList.remove("typing");
-        const ul = document.querySelector(".cw-greeting-underline");
-        if (ul) ul.classList.add("drawn");
-      }
-    };
-    tick();
-  }, 1100);
 }
 
 function init() {
