@@ -47,4 +47,6 @@ python3 -m http.server 8080
 # visit http://localhost:8080
 ```
 
+Local copy lives at `C:\Users\balji\OneDrive\Desktop\Tangled with Love`.
+
 Made with love for Mum. 🧶
