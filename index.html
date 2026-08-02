@@ -58,8 +58,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(250,246,240,0.95);backdrop
 .hero-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:420px;width:100%}
 .product-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.10);transition:transform 0.25s,box-shadow 0.25s;cursor:pointer}
 .product-card:hover{transform:translateY(-4px);box-shadow:0 10px 36px rgba(124,80,53,0.16)}
-.product-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden}
+.product-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden;position:relative}
 .product-img-wrap img{width:100%;height:100%;object-fit:cover}
+.photo-count-badge{position:absolute;right:0.6rem;bottom:0.6rem;z-index:2;display:inline-flex;align-items:center;gap:0.3rem;background:rgba(44,26,14,0.78);color:white;padding:0.3rem 0.55rem;border-radius:2rem;font-size:0.68rem;font-weight:700;line-height:1;box-shadow:0 2px 8px rgba(44,26,14,0.18);backdrop-filter:blur(5px)}
+.photo-count-badge svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8}
 .product-info{padding:0.65rem 0.85rem 0.85rem}
 .product-name{font-family:'Playfair Display',serif;font-size:0.85rem;color:var(--dark);margin-bottom:0.2rem}
 .product-price{font-size:0.78rem;color:var(--soft-terracotta);font-weight:700}
@@ -199,7 +201,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 .variants-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
 .variant-card{background:white;border-radius:14px;overflow:hidden;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 12px rgba(124,80,53,0.06);display:flex;flex-direction:column}
 .variant-card:hover{transform:translateY(-6px);box-shadow:0 10px 28px rgba(124,80,53,0.14)}
-.variant-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden}
+.variant-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden;position:relative}
 .variant-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
 .variant-card:hover .variant-img-wrap img{transform:scale(1.04)}
 .variant-body{padding:1rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:0.3rem}
@@ -209,15 +211,24 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 /* ======= GALLERY (product detail) ======= */
 .gallery-container{padding:3rem 2rem 4rem;max-width:1200px;margin:0 auto}
 .gallery-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:start}
-.gallery-section{display:flex;flex-direction:column}
-.gallery-image-display{aspect-ratio:1;background:var(--sand);border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.08);cursor:zoom-in;position:relative}
-.gallery-image-display img{width:100%;height:100%;object-fit:cover}
-.gallery-thumbnails{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px;margin-top:1rem}
-.gallery-thumbnail{aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s,opacity 0.2s;opacity:0.65;background:var(--pale-blush)}
+.gallery-section{display:flex;flex-direction:column;min-width:0}
+.gallery-image-display{aspect-ratio:1;background:var(--sand);border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.08);position:relative;isolation:isolate}
+.gallery-hero-open{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:none;cursor:zoom-in}
+.gallery-hero-open img{width:100%;height:100%;object-fit:cover;transition:transform 0.35s ease}
+.gallery-hero-open:hover img{transform:scale(1.012)}
+.gallery-control{position:absolute;top:50%;z-index:3;width:44px;height:44px;border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(44,26,14,0.62);color:white;font-family:'Playfair Display',serif;font-size:1.7rem;line-height:1;cursor:pointer;opacity:0;transform:translateY(-50%);transition:opacity 0.2s,background 0.2s,transform 0.2s;box-shadow:0 3px 12px rgba(44,26,14,0.2);backdrop-filter:blur(5px)}
+.gallery-image-display:hover .gallery-control,.gallery-image-display:focus-within .gallery-control{opacity:1}
+.gallery-control:hover{background:var(--warm-brown);transform:translateY(-50%) scale(1.05)}
+.gallery-control.prev{left:0.8rem}
+.gallery-control.next{right:0.8rem}
+.gallery-control[hidden],.lightbox-prev[hidden],.lightbox-next[hidden]{display:none!important}
+.gallery-photo-count{position:absolute;right:0.8rem;bottom:0.8rem;z-index:3;background:rgba(44,26,14,0.72);color:white;padding:0.4rem 0.7rem;border-radius:2rem;font-size:0.75rem;font-weight:700;line-height:1;pointer-events:none;backdrop-filter:blur(5px)}
+.gallery-thumbnails{display:flex;gap:10px;margin-top:1rem;padding:0.1rem 0.1rem 0.65rem;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--deep-sand) transparent}
+.gallery-thumbnail{appearance:none;flex:0 0 78px;width:78px;padding:0;aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s,opacity 0.2s,transform 0.2s;opacity:0.65;background:var(--pale-blush);scroll-snap-align:start}
 .gallery-thumbnail:hover{opacity:1}
-.gallery-thumbnail.active{border-color:var(--soft-terracotta);opacity:1;box-shadow:0 4px 12px rgba(201,123,90,0.25)}
+.gallery-thumbnail.active{border-color:var(--soft-terracotta);opacity:1;box-shadow:0 4px 12px rgba(201,123,90,0.25);transform:translateY(-1px)}
 .gallery-thumbnail img{width:100%;height:100%;object-fit:cover}
-.gallery-info{display:flex;flex-direction:column;gap:1.25rem}
+.gallery-info{display:flex;flex-direction:column;gap:1.25rem;position:sticky;top:88px;min-width:0}
 .gallery-info h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--dark);letter-spacing:-0.02em}
 .gallery-price{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--soft-terracotta)}
 .gallery-info p{font-size:0.95rem;color:var(--light);line-height:1.7}
@@ -451,6 +462,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
   .about-text .section-label,.about-text .section-title{text-align:center}
   .about-stats{justify-content:center;flex-wrap:wrap}
   .gallery-layout{grid-template-columns:1fr;gap:2rem}
+  .gallery-info{position:static}
   .contact-grid{grid-template-columns:1fr;gap:2rem}
   .category-row{grid-template-columns:1fr 1fr}
   .testimonials-grid{grid-template-columns:1fr}
@@ -464,6 +476,11 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
   .bag-categories-grid{grid-template-columns:1fr 1fr;gap:1rem}
   .variants-grid{grid-template-columns:1fr 1fr;gap:1rem}
   .products-category h1{font-size:1.8rem}
+  .gallery-container{padding:2rem 1rem 3rem}
+  .gallery-control{width:40px;height:40px;font-size:1.5rem;opacity:1}
+  .gallery-control.prev{left:0.6rem}
+  .gallery-control.next{right:0.6rem}
+  .gallery-thumbnail{flex-basis:68px;width:68px}
   .lightbox-prev,.lightbox-next{width:44px;height:44px;font-size:1.5rem}
 }
 </style>
@@ -490,7 +507,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 <!-- ===================================================================== -->
 <!-- LIGHTBOX (global) -->
 <!-- ===================================================================== -->
-<div id="imageLightbox" class="image-lightbox" onclick="closeImageLightbox(event)">
+<div id="imageLightbox" class="image-lightbox" onclick="closeImageLightbox(event)" role="dialog" aria-modal="true" aria-label="Product photos" aria-hidden="true">
   <button class="lightbox-close" onclick="closeImageLightbox()" aria-label="Close">×</button>
   <button class="lightbox-prev" onclick="prevImageLightbox(event)" aria-label="Previous">‹</button>
   <img id="lightboxImage" src="" alt="Product image" class="lightbox-img">
@@ -676,8 +693,13 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
     <button class="back-link" id="backFromDetail">← Back</button>
     <div class="gallery-layout">
       <div class="gallery-section">
-        <div class="gallery-image-display" onclick="openImageLightbox()">
-          <img id="galleryHero" alt="Product image">
+        <div class="gallery-image-display">
+          <button type="button" class="gallery-hero-open" id="galleryHeroOpen" onclick="openImageLightbox()" aria-label="Enlarge product photo">
+            <img id="galleryHero" alt="Product image">
+          </button>
+          <button type="button" class="gallery-control prev" id="galleryPrev" onclick="stepGallery(-1,event)" aria-label="Previous product photo">‹</button>
+          <button type="button" class="gallery-control next" id="galleryNext" onclick="stepGallery(1,event)" aria-label="Next product photo">›</button>
+          <span class="gallery-photo-count" id="galleryPhotoCount" aria-live="polite">1 / 1</span>
         </div>
         <div class="gallery-thumbnails" id="galleryThumbs"></div>
       </div>
@@ -967,6 +989,10 @@ const CATEGORIES = [
         desc: "A soft lavender hexagon-shaped bag with sage-green floral centres. Light, pretty, and surprisingly roomy." },
       { id: "midnight-daisy",    name: "Midnight Daisy",        price: 72, heroIdx: 1,
         desc: "Deep charcoal with cream-and-gold daisy motifs. A more moody take on the granny-square shoulder bag." },
+      { id: "terracotta-daisy",  name: "Terracotta Daisy",      price: 70, heroIdx: 0,
+        desc: "A warm terracotta shoulder tote built from four cream-centred daisy squares. Structured, earthy, and easy to carry." },
+      { id: "strawberry-tassel", name: "Strawberry Tassel",     price: 72, heroIdx: 0,
+        desc: "Blush, berry-red and sage granny squares finished with playful hand-tied tassels and a long cream shoulder strap." },
     ],
   },
   {
@@ -978,6 +1004,14 @@ const CATEGORIES = [
     variants: [
       { id: "sage-meadow", name: "Sage Meadow Granny", price: 85, heroIdx: 0,
         desc: "A generous tote in forest green and ivory granny squares. Strong enough for books and laptops, soft enough to feel like a hug." },
+      { id: "ruby-garden-granny", name: "Ruby Garden Granny", price: 88, heroIdx: 0,
+        desc: "A roomy rounded granny-square tote in ruby red, moss green, charcoal and cream, finished with braided monochrome handles." },
+      { id: "blush-flower-patchwork", name: "Blush Flower Patchwork", price: 90, heroIdx: 0,
+        desc: "A structured blush-pink tote covered in dimensional crochet flowers with golden seams and sturdy top handles." },
+      { id: "golden-daisy-granny", name: "Golden Daisy Granny", price: 85, heroIdx: 0,
+        desc: "A sunny golden and cream shoulder tote made from softly patterned granny squares with a neat button closure." },
+      { id: "mocha-blossom-stripe", name: "Mocha Blossom Stripe", price: 88, heroIdx: 0,
+        desc: "A spacious mocha-and-cream striped tote with a crocheted flower detail, long shoulder straps and a reinforced base." },
     ],
   },
   {
@@ -1006,6 +1040,14 @@ const CATEGORIES = [
         desc: "Warm espresso and cream stripes in a classic vertical pattern. Your new coffee-shop sidekick." },
       { id: "garden-mandala",  name: "Garden Mandala",  price: 50, heroIdx: 0,
         desc: "Cream body with a single granny-square mandala centre and bright moss-green straps." },
+      { id: "rosy-drawstring", name: "Rosy Drawstring", price: 48, heroIdx: 0,
+        desc: "A soft blush drawstring bag with a ring of ruby-red roses, deep green cords and matching flower ties." },
+      { id: "ruby-bloom-drawstring", name: "Ruby Bloom Drawstring", price: 48, heroIdx: 0,
+        desc: "An ivory drawstring mini with a bold ruby flower centre, rosebud edging and simple wooden bead details." },
+      { id: "sky-mandala-bucket", name: "Sky Mandala Bucket", price: 50, heroIdx: 0,
+        desc: "A cream bucket bag with a sky-blue, moss and warm-brown mandala, gathered top and comfortable shoulder strap." },
+      { id: "terracotta-daisy-mini", name: "Terracotta Daisy Mini", price: 48, heroIdx: 0,
+        desc: "A compact terracotta top-handle bag centred with one oversized cream-and-taupe daisy granny square." },
     ],
   },
   {
@@ -1027,6 +1069,10 @@ const CATEGORIES = [
         desc: "Cream base with speckled purple, mustard and blush flecks — like confetti in yarn form. Top-handle." },
       { id: "rosewood-stripe",  name: "Rosewood Stripe",   price: 34, heroIdx: 0,
         desc: "Rose, charcoal and cream stripes with a granny-square flap. A cozy, wintery pouch." },
+      { id: "lavender-bloom",   name: "Lavender Bloom",    price: 35, heroIdx: 0,
+        desc: "An ivory drawstring pouch edged in lavender, with a small sage-and-navy flower centre and floral cord ends." },
+      { id: "golden-sky",       name: "Golden Sky",        price: 35, heroIdx: 0,
+        desc: "A cream pouch framed in golden mustard with a bright sky-blue flower and soft white drawstring ties." },
     ],
   },
 ];
@@ -1064,23 +1110,36 @@ function variantImageUrls(catId, vId, count) {
 }
 
 // IMAGE_MAP is generated to match the actual files on disk.
+const pngSeries = (count, start=1) => Array.from({length: count}, (_, i) => `${i + start}.png`);
 const IMAGE_MAP = {
   "medium-shoulder/cherry-blossom": ["1.png","2.png","3.png","4.png","5.jpg","6.png","7.png","8.png","9.jpg","10.jpg","11.png"],
   "medium-shoulder/strawberry-stripe": ["1.jpeg","2.png","3.png","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg"],
   "medium-shoulder/lavender-fields": ["1.png","2.png","3.png","4.png","5.png","6.png","7.png"],
   "medium-shoulder/midnight-daisy": ["1.png","2.png","3.png"],
+  "medium-shoulder/terracotta-daisy": pngSeries(11),
+  "medium-shoulder/strawberry-tassel": pngSeries(12),
   "larger-shoulder/sage-meadow": ["1.png","2.jpg","3.jpg","4.jpg","5.jpg","6.png"],
+  "larger-shoulder/ruby-garden-granny": pngSeries(10),
+  "larger-shoulder/blush-flower-patchwork": pngSeries(5),
+  "larger-shoulder/golden-daisy-granny": pngSeries(7),
+  "larger-shoulder/mocha-blossom-stripe": pngSeries(11),
   "sling/rose-garden": ["1.png","2.png","3.png","4.png","5.png","6.png"],
   "small-handheld/seafoam": ["1.png"],
   "small-handheld/berry-blossom": ["1.png","2.jpg","3.jpg"],
   "small-handheld/espresso-stripe": ["1.png"],
-  "small-handheld/garden-mandala": ["1.png"],
+  "small-handheld/garden-mandala": ["1.png", ...pngSeries(11, 2)],
+  "small-handheld/rosy-drawstring": pngSeries(15),
+  "small-handheld/ruby-bloom-drawstring": pngSeries(10),
+  "small-handheld/sky-mandala-bucket": pngSeries(10),
+  "small-handheld/terracotta-daisy-mini": pngSeries(10),
   "pouch/sunshine": ["1.png","2.png","3.png"],
   "pouch/morning-sky": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.jpg"],
   "pouch/mocha-drawstring": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.png"],
   "pouch/autumn-spice": ["1.png","2.png","3.png"],
   "pouch/confetti": ["1.png","2.jpg","3.jpg"],
   "pouch/rosewood-stripe": ["1.png","2.png"],
+  "pouch/lavender-bloom": pngSeries(10),
+  "pouch/golden-sky": pngSeries(11),
 };
 
 function variantImage(catId, vId, index=0) {
@@ -1105,6 +1164,15 @@ function allVariantImages(catId, vId, heroIdx=0) {
     ? [files[heroIdx], ...files.filter((_, i) => i !== heroIdx)]
     : files;
   return reordered.map(f => `assets/products/${key}/${f}`);
+}
+
+function photoCountBadge(catId, vId) {
+  const count = (IMAGE_MAP[`${catId}/${vId}`] || []).length;
+  if (count < 2) return "";
+  return `<span class="photo-count-badge" aria-label="${count} product photos">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h3l1.4-2h7.2l1.4 2h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>
+    ${count}
+  </span>`;
 }
 
 /* =====================================================================
@@ -1145,7 +1213,10 @@ function renderHeroCards() {
     if (!v || !cat) return "";
     return `
       <div class="product-card" onclick="openDetail('${p.cat}','${p.var}')">
-        <div class="product-img-wrap"><img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy"></div>
+        <div class="product-img-wrap">
+          <img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy">
+          ${photoCountBadge(p.cat, p.var)}
+        </div>
         <div class="product-info">
           <div class="product-name">${v.name}</div>
           <div class="product-price">${fmt(v.price)}</div>
@@ -1203,7 +1274,10 @@ function openCategory(catId) {
   $("variantsSub").textContent = cat.blurb;
   $("variantsGrid").innerHTML = cat.variants.map(v => `
     <div class="variant-card" onclick="openDetail('${cat.id}','${v.id}')">
-      <div class="variant-img-wrap"><img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy"></div>
+      <div class="variant-img-wrap">
+        <img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy">
+        ${photoCountBadge(cat.id, v.id)}
+      </div>
       <div class="variant-body">
         <div class="variant-name">${v.name}</div>
         <div class="variant-price">${fmt(v.price)}</div>
@@ -1230,23 +1304,30 @@ function openDetail(catId, vId) {
   $("detailSizeGroup").style.display = "none"; // sizing is fixed per style
   $("detailMsg").value = "";
   $("detailQtyNum").textContent = "1";
-  // Gallery — hero first, only existing images
+  // Gallery — hero first, with every real product image available to browse.
   const imgs = allVariantImages(catId, vId, v.heroIdx || 0);
+  STATE.lightboxImages = imgs;
+  STATE.lightboxIdx = 0;
   $("galleryHero").src = imgs[0] || "";
   $("galleryHero").alt = v.name;
+  $("galleryHeroOpen").setAttribute("aria-label", `Enlarge ${v.name} photo 1 of ${Math.max(1, imgs.length)}`);
+  $("galleryPhotoCount").hidden = imgs.length === 0;
+  $("galleryPhotoCount").textContent = `1 / ${Math.max(1, imgs.length)}`;
+  $("galleryPrev").hidden = imgs.length < 2;
+  $("galleryNext").hidden = imgs.length < 2;
+
   if (imgs.length > 1) {
-    $("galleryThumbs").style.display = "";
+    $("galleryThumbs").style.display = "flex";
     $("galleryThumbs").innerHTML = imgs.map((src, i) => `
-      <div class="gallery-thumbnail ${i === 0 ? 'active' : ''}" onclick="pickThumb(${i}, event)">
-        <img src="${src}" alt="${v.name} image ${i+1}" loading="lazy">
-      </div>`).join("");
+      <button type="button" class="gallery-thumbnail ${i === 0 ? 'active' : ''}" onclick="pickThumb(${i}, event)" aria-label="Show ${v.name} photo ${i+1} of ${imgs.length}" aria-pressed="${i === 0}">
+        <img src="${src}" alt="${v.name} photo ${i+1}" loading="lazy">
+      </button>`).join("");
   } else {
     // Only 1 image — no point showing a thumbnail strip
     $("galleryThumbs").style.display = "none";
     $("galleryThumbs").innerHTML = "";
   }
-  STATE.lightboxImages = imgs;
-  STATE.lightboxIdx = 0;
+
   // Back button context
   $("backFromDetail").textContent = `← Back to ${cat.name}`;
   $("backFromDetail").onclick = () => openCategory(catId);
@@ -1255,11 +1336,24 @@ function openDetail(catId, vId) {
 
 function pickThumb(idx, ev) {
   ev && ev.stopPropagation();
+  if (idx < 0 || idx >= STATE.lightboxImages.length) return;
   STATE.lightboxIdx = idx;
   $("galleryHero").src = STATE.lightboxImages[idx];
-  document.querySelectorAll("#galleryThumbs .gallery-thumbnail").forEach((el, i) =>
-    el.classList.toggle("active", i === idx)
-  );
+  $("galleryPhotoCount").textContent = `${idx + 1} / ${STATE.lightboxImages.length}`;
+  const productName = STATE.detail ? STATE.detail.variant.name : "product";
+  $("galleryHeroOpen").setAttribute("aria-label", `Enlarge ${productName} photo ${idx + 1} of ${STATE.lightboxImages.length}`);
+  document.querySelectorAll("#galleryThumbs .gallery-thumbnail").forEach((el, i) => {
+    const isActive = i === idx;
+    el.classList.toggle("active", isActive);
+    el.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function stepGallery(delta, ev) {
+  ev && ev.stopPropagation();
+  if (STATE.lightboxImages.length < 2) return;
+  const nextIdx = (STATE.lightboxIdx + delta + STATE.lightboxImages.length) % STATE.lightboxImages.length;
+  pickThumb(nextIdx);
 }
 
 function detailQty(delta) {
@@ -1426,18 +1520,29 @@ function resetAndHome() {
 /* =====================================================================
    LIGHTBOX
    ===================================================================== */
-function openImageLightbox() {
-  if (!STATE.lightboxImages.length) return;
+function updateLightboxImage() {
+  const productName = STATE.detail ? STATE.detail.variant.name : "Product";
   $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx];
+  $("lightboxImage").alt = `${productName} photo ${STATE.lightboxIdx + 1}`;
   $("lightboxCounter").textContent = (STATE.lightboxIdx+1) + " / " + STATE.lightboxImages.length;
+}
+function openImageLightbox(idx, ev) {
+  ev && ev.stopPropagation();
+  if (!STATE.lightboxImages.length) return;
+  if (Number.isInteger(idx)) pickThumb(idx);
+  updateLightboxImage();
+  $("imageLightbox").setAttribute("aria-hidden", "false");
+  $("imageLightbox").querySelector(".lightbox-prev").hidden = STATE.lightboxImages.length < 2;
+  $("imageLightbox").querySelector(".lightbox-next").hidden = STATE.lightboxImages.length < 2;
   $("imageLightbox").classList.add("open");
 }
 function closeImageLightbox(ev) {
   if (ev && ev.target.id && ev.target.id !== "imageLightbox" && ev.target.className !== "lightbox-close") return;
   $("imageLightbox").classList.remove("open");
+  $("imageLightbox").setAttribute("aria-hidden", "true");
 }
-function prevImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx - 1 + STATE.lightboxImages.length) % STATE.lightboxImages.length; $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx]; $("lightboxCounter").textContent = (STATE.lightboxIdx+1)+" / "+STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx, {stopPropagation:()=>{}}); }
-function nextImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx + 1) % STATE.lightboxImages.length; $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx]; $("lightboxCounter").textContent = (STATE.lightboxIdx+1)+" / "+STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx, {stopPropagation:()=>{}}); }
+function prevImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx - 1 + STATE.lightboxImages.length) % STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx); updateLightboxImage(); }
+function nextImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx + 1) % STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx); updateLightboxImage(); }
 document.addEventListener("keydown", (e) => {
   if (!$("imageLightbox").classList.contains("open")) return;
   if (e.key === "Escape") closeImageLightbox({target:{id:"imageLightbox"}});
