@@ -7,6 +7,7 @@
 <meta name="description" content="Beautifully handcrafted crochet bags made with love in Brampton, Ontario. Shoulder bags, slings, handhelds and pouches — no two alike.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='.9em' font-size='54'%3E%F0%9F%A7%B6%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&family=Caveat:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Yeseva+One&display=swap" rel="stylesheet">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -143,6 +144,12 @@ section{padding:5rem 4rem;position:relative;overflow:hidden}
 .cform .send-btn:hover{background:var(--terracotta)}
 .cform-msg{font-size:0.85rem;color:var(--cream);margin-top:0.5rem;opacity:0;transition:opacity 0.3s;min-height:1.2em}
 .cform-msg.show{opacity:1}
+.cform-file{display:flex;flex-direction:column;gap:6px}
+.cform-file label{font-size:0.85rem;color:var(--cream)}
+.cform-file-hint{font-size:0.75rem;color:rgba(242,228,212,0.55);font-weight:400}
+.cform-file input[type="file"]{background:rgba(250,246,240,0.1);border:1px solid rgba(250,246,240,0.25);color:var(--cream);padding:0.6rem 0.8rem;border-radius:10px;font-family:'Lato',sans-serif;font-size:0.85rem;width:100%}
+.cform-file-list{font-size:0.8rem;color:rgba(242,228,212,0.75);min-height:1.1em}
+.cform-file-list.error{color:#ff8a8a}
 
 /* ======= FOOTER ======= */
 footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center;padding:0;position:relative;overflow:hidden}
@@ -241,6 +248,9 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 .option-group select,.option-group textarea,.option-group input{padding:0.75rem 1rem;border:1px solid rgba(124,80,53,0.18);border-radius:10px;font-family:'Lato',sans-serif;font-size:0.9rem;color:var(--dark);background:white;transition:border 0.2s}
 .option-group select:focus,.option-group textarea:focus,.option-group input:focus{outline:none;border-color:var(--soft-terracotta)}
 .option-group textarea{resize:vertical;min-height:70px}
+.option-group .file-hint{font-size:0.72rem;font-weight:400;color:var(--light);letter-spacing:0}
+.option-group .file-list{font-size:0.8rem;color:var(--light);min-height:1.1em}
+.option-group .file-list.error{color:#c0392b}
 .qty-control{display:flex;align-items:center;gap:1rem}
 .qty-control label{font-family:'Playfair Display',serif;font-size:0.92rem;color:var(--dark);font-weight:600}
 .qty-buttons{display:flex;align-items:center;gap:0.75rem}
@@ -639,6 +649,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
       <form class="cform" id="contactForm" action="https://formspree.io/f/mojbpvdp" method="POST">
         <input name="name" type="text" placeholder="Your name" required>
         <input name="email" type="email" placeholder="Your email" required>
+        <input name="phone" type="tel" placeholder="Phone number (optional) — for faster response">
         <select name="interest" required>
           <option value="">What are you interested in?</option>
           <option>Custom bag (colour / size)</option>
@@ -649,6 +660,11 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
           <option>Something else</option>
         </select>
         <textarea name="message" placeholder="Tell us what you have in mind…" required></textarea>
+        <div class="cform-file">
+          <label for="cformFiles">Attach files (optional) <span class="cform-file-hint">Up to 5 files, 15MB total</span></label>
+          <input type="file" id="cformFiles" name="attachments" multiple>
+          <div class="cform-file-list" id="cformFileList"></div>
+        </div>
         <button type="submit" class="send-btn">Send message</button>
         <div class="cform-msg" id="cformMsg"></div>
       </form>
@@ -725,6 +741,11 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
           <div class="option-group">
             <label>Personal note (optional)</label>
             <input id="detailMsg" type="text" placeholder="e.g. Gift wrap, initials, a short message…">
+          </div>
+          <div class="option-group">
+            <label>Attach reference photos (optional) <span class="file-hint">Up to 5 files, 15MB total per order</span></label>
+            <input type="file" id="detailFiles" multiple>
+            <div class="file-list" id="detailFileList"></div>
           </div>
           <div class="qty-control">
             <label>Quantity</label>
@@ -963,9 +984,16 @@ const CONFIG = {
   // Only needed if STRIPE_CHECKOUT_ENDPOINT is set.
   STRIPE_PUBLISHABLE_KEY: "pk_live_51TToRWLlmU3TgjkK3laPQ1D01ZnhzV5lGPEUrJHEIj93pfX4QNtolApPpkZYnCrnPelMItkgMfhDprKYkdudJHdD00up4cjGRR",
 
-  // Formspree form id for the contact form AND order-email fallback.
-  // Create one at https://formspree.io — it's free. Replace in the <form action> too.
+  // Formspree form id — used only for messages/orders that include file attachments
+  // (EmailJS below handles everything else with nicer branded templates).
   FORMSPREE_ID: "mojbpvdp",
+
+  // EmailJS (https://emailjs.com) — sends the branded owner-notification and
+  // customer-confirmation emails for contact messages (no attachments) and orders.
+  EMAILJS_PUBLIC_KEY: "l4pYtw2PcpbFiID-z",
+  EMAILJS_SERVICE_ID: "service_zisyegk",
+  EMAILJS_TEMPLATE_OWNER: "template_3ngi1t7",    // "Contact Us" template
+  EMAILJS_TEMPLATE_CUSTOMER: "template_d4zmn9t", // "Auto-Reply" template
 
   // Currency shown in the UI and used for Stripe line items.
   CURRENCY: "CAD",
@@ -1388,6 +1416,9 @@ function openDetail(catId, vId) {
   $("detailColour").innerHTML = COLOUR_OPTIONS.map(o => `<option>${o}</option>`).join("");
   $("detailSizeGroup").style.display = "none"; // sizing is fixed per style
   $("detailMsg").value = "";
+  $("detailFiles").value = "";
+  $("detailFileList").textContent = "";
+  $("detailFileList").classList.remove("error");
   $("detailQtyNum").textContent = "1";
   // Gallery — hero first, with every real product image available to browse.
   const imgs = allVariantImages(catId, vId, v.heroIdx || 0);
@@ -1451,11 +1482,19 @@ function addDetailToCart() {
   if (!d) return;
   const colour = $("detailColour").value;
   const message = $("detailMsg").value.trim();
+  const fileInput = $("detailFiles");
+  const fileListEl = $("detailFileList");
+  if (fileInput.files.length && !validateFileSelection(fileInput, fileListEl)) {
+    return;
+  }
+  const files = Array.from(fileInput.files || []);
   const lineId = `${d.catId}:${d.vId}:${slug(colour)}:${slug(message)}`;
   const existing = STATE.cart.find(x => x.lineId === lineId);
   if (existing) {
     existing.qty += STATE.detailQty;
+    if (files.length) { ITEM_FILES[lineId] = files; existing.filesCount = files.length; }
   } else {
+    if (files.length) ITEM_FILES[lineId] = files;
     STATE.cart.push({
       lineId,
       variantId: d.vId,
@@ -1465,9 +1504,13 @@ function addDetailToCart() {
       qty: STATE.detailQty,
       colour,
       message,
+      filesCount: files.length,
       img: variantHeroImage(d.category, d.variant),
     });
   }
+  fileInput.value = "";
+  fileListEl.textContent = "";
+  fileListEl.classList.remove("error");
   renderCart();
   saveCart();
   openCart();
@@ -1493,7 +1536,7 @@ function renderCart() {
       <div class="cart-item-img"><img src="${it.img}" alt="${it.name}"></div>
       <div class="cart-item-info">
         <div class="cart-item-name">${it.name}</div>
-        <div class="cart-item-opts">Colour: ${it.colour}${it.message ? ' · Note: "' + it.message + '"' : ''}</div>
+        <div class="cart-item-opts">Colour: ${it.colour}${it.message ? ' · Note: "' + it.message + '"' : ''}${it.filesCount ? ' · ' + it.filesCount + ' file' + (it.filesCount > 1 ? 's' : '') + ' attached' : ''}</div>
         <div class="cart-item-price">${fmt(it.price * it.qty)}</div>
         <div class="cart-qty">
           <button class="qty-btn" onclick="updateQty(${i},-1)">−</button>
@@ -1508,10 +1551,10 @@ function renderCart() {
 }
 function updateQty(i, delta) {
   STATE.cart[i].qty += delta;
-  if (STATE.cart[i].qty <= 0) STATE.cart.splice(i, 1);
+  if (STATE.cart[i].qty <= 0) { delete ITEM_FILES[STATE.cart[i].lineId]; STATE.cart.splice(i, 1); }
   renderCart(); saveCart();
 }
-function removeCart(i) { STATE.cart.splice(i, 1); renderCart(); saveCart(); }
+function removeCart(i) { delete ITEM_FILES[STATE.cart[i].lineId]; STATE.cart.splice(i, 1); renderCart(); saveCart(); }
 
 function saveCart() { try { localStorage.setItem("twl_cart", JSON.stringify(STATE.cart)); } catch(e){} }
 function loadCart() {
@@ -1530,7 +1573,29 @@ async function goCheckout() {
   btn.disabled = true;
   btn.textContent = "Preparing checkout…";
 
+  // Reference photo attachments (if any) go out as their own email — separate from
+  // the Stripe/payment flow entirely, since Stripe Checkout can't carry file uploads.
+  const allAttachedFiles = STATE.cart.flatMap(it => ITEM_FILES[it.lineId] || []);
+  if (allAttachedFiles.length) {
+    const totalBytes = allAttachedFiles.reduce((s, f) => s + f.size, 0);
+    if (allAttachedFiles.length > CFORM_MAX_FILES || totalBytes > CFORM_MAX_TOTAL_BYTES) {
+      alert(`Please keep reference photos to at most ${CFORM_MAX_FILES} files and 15MB total across your order (currently ${allAttachedFiles.length} files, ${formatFileSize(totalBytes)}).`);
+      btn.disabled = false;
+      btn.textContent = "Secure checkout →";
+      return;
+    }
+    sendReferencePhotosEmail(); // fire-and-forget; doesn't block or affect checkout
+  }
+
   if (CONFIG.STRIPE_CHECKOUT_ENDPOINT) {
+    // Our own order number + email capture — entirely separate from Stripe's own
+    // checkout session below, which is built and sent exactly as before.
+    const email = prompt("Enter your email so we can send you an order confirmation:");
+    if (!email) { btn.disabled = false; btn.textContent = "Secure checkout →"; return; }
+    const orderNumber = generateOrderNumber();
+    try {
+      localStorage.setItem("twl_pending_order", JSON.stringify({ orderNumber, email }));
+    } catch (e) {}
     try {
       // Build line items for Stripe (cents)
       const items = STATE.cart.map(it => ({
@@ -1567,26 +1632,28 @@ async function goCheckout() {
   } else {
     // Fallback: no Stripe configured — submit order to Formspree as email
     try {
-      const orderSummary = STATE.cart.map(it =>
-        `${it.qty} × ${it.name} @ ${fmt(it.price)} — Colour: ${it.colour}${it.message ? ' — "' + it.message + '"' : ''}`
-      ).join("\n");
+      const orderSummary = orderSummaryText();
       const total = fmt(cartSubtotal());
       const email = prompt("Stripe isn't connected yet. Enter your email and we'll follow up with payment instructions:");
       if (!email) { btn.disabled = false; btn.textContent = "Secure checkout →"; return; }
+      const orderNumber = generateOrderNumber();
       await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, {
         method: "POST",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
         body: JSON.stringify({
-          subject: "New order via tangledwithlove.com",
+          _subject: `New order ${orderNumber} — tangledwithlove.com`,
+          orderNumber,
           email,
           total,
           order: orderSummary,
         }),
       });
+      sendOrderEmails(orderNumber, email); // fire-and-forget branded copy alongside the Formspree one
       STATE.cart = [];
+      clearItemFiles();
       saveCart(); renderCart(); closeCart();
       showPage("success");
-      $("successOrderId").textContent = "Order received — we'll email you at " + email;
+      $("successOrderId").textContent = `Order ${orderNumber} received — we'll email you at ${email}`;
       $("successOrderId").style.display = "inline-block";
     } catch (err) {
       alert("Sorry, something went wrong. Please email hello@tangledwithlove.com.");
@@ -1598,8 +1665,47 @@ async function goCheckout() {
 
 function resetAndHome() {
   STATE.cart = [];
+  clearItemFiles();
   saveCart(); renderCart();
   showPage("home");
+}
+
+/* =====================================================================
+   ORDER NUMBERS + EMAILJS NOTIFICATIONS
+   (Stripe's own checkout session is untouched by any of this — this is
+   purely our own bookkeeping/branded email layer alongside it.)
+   ===================================================================== */
+function generateOrderNumber() {
+  const d = new Date();
+  const datePart = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I — avoids visual ambiguity
+  let rand = "";
+  for (let i = 0; i < 5; i++) rand += chars[Math.floor(Math.random() * chars.length)];
+  return `TWL-${datePart}-${rand}`;
+}
+
+function orderSummaryText() {
+  return STATE.cart.map(it =>
+    `${it.qty} × ${it.name} @ ${fmt(it.price)} — Colour: ${it.colour}${it.message ? ' — "' + it.message + '"' : ''}${it.filesCount ? ' — ' + it.filesCount + ' file(s) attached (sent separately)' : ''}`
+  ).join("\n");
+}
+
+async function sendOrderEmails(orderNumber, email) {
+  if (typeof emailjs === "undefined" || !CONFIG.EMAILJS_PUBLIC_KEY) return;
+  const params = {
+    form_type: "order",
+    from_name: email ? email.split("@")[0].replace(/^\w/, c => c.toUpperCase()) : "Customer",
+    reply_to: email || "—",
+    phone: "—",
+    interest: "—",
+    message: `Order Number: ${orderNumber}\n\n${orderSummaryText()}\n\nTotal: ${fmt(cartSubtotal())}`,
+  };
+  try { await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_OWNER, params); }
+  catch (err) { console.error("Owner order email failed", err); }
+  if (email) {
+    try { await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_CUSTOMER, params); }
+    catch (err) { console.error("Customer order email failed", err); }
+  }
 }
 
 /* =====================================================================
@@ -1638,6 +1744,58 @@ document.addEventListener("keydown", (e) => {
 /* =====================================================================
    CONTACT FORM (Formspree)
    ===================================================================== */
+const CFORM_MAX_FILES = 5;
+const CFORM_MAX_TOTAL_BYTES = 15 * 1024 * 1024;
+// Actual File objects for cart-line attachments, keyed by lineId. Kept in memory only —
+// File objects can't survive the cart's JSON.stringify localStorage persistence.
+const ITEM_FILES = {};
+function clearItemFiles() { Object.keys(ITEM_FILES).forEach(k => delete ITEM_FILES[k]); }
+
+function formatFileSize(bytes) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))}KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+}
+
+function validateFileSelection(input, listEl) {
+  const files = Array.from(input.files || []);
+  if (!files.length) { listEl.textContent = ""; listEl.classList.remove("error"); return true; }
+  const totalBytes = files.reduce((sum, f) => sum + f.size, 0);
+  const totalSize = formatFileSize(totalBytes);
+  if (files.length > CFORM_MAX_FILES) {
+    listEl.textContent = `✖ Please attach at most ${CFORM_MAX_FILES} files (you selected ${files.length}, ${totalSize} total).`;
+    listEl.classList.add("error");
+    return false;
+  }
+  if (totalBytes > CFORM_MAX_TOTAL_BYTES) {
+    listEl.textContent = `✖ Total attachment size is ${totalSize} — please keep it under 15MB.`;
+    listEl.classList.add("error");
+    return false;
+  }
+  listEl.textContent = `${files.length} file${files.length > 1 ? "s" : ""} selected (${totalSize} total)`;
+  listEl.classList.remove("error");
+  return true;
+}
+function validateContactFiles(input) { return validateFileSelection(input, $("cformFileList")); }
+
+// Sends any reference photos attached to cart items as their own Formspree email,
+// entirely separate from the Stripe/payment flow (Stripe Checkout can't carry files).
+async function sendReferencePhotosEmail() {
+  if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") return;
+  const entries = STATE.cart
+    .map(it => ({ it, files: ITEM_FILES[it.lineId] || [] }))
+    .filter(x => x.files.length);
+  if (!entries.length) return;
+  try {
+    const fd = new FormData();
+    fd.append("subject", "Reference photos — order via tangledwithlove.com");
+    fd.append("summary", entries.map(x => `${x.it.name} (${x.it.colour}): ${x.files.length} file(s)`).join("\n"));
+    entries.forEach(x => x.files.forEach(f => fd.append("attachments", f, f.name)));
+    await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, { method: "POST", body: fd, headers: { Accept: "application/json" } });
+  } catch (err) {
+    console.error("Reference photo email failed", err);
+  }
+}
+
 function wireContactForm() {
   const form = $("contactForm");
   if (!form) return;
@@ -1645,23 +1803,51 @@ function wireContactForm() {
   if (CONFIG.FORMSPREE_ID && CONFIG.FORMSPREE_ID !== "FORMSPREE_ID") {
     form.action = `https://formspree.io/f/${CONFIG.FORMSPREE_ID}`;
   }
+  const fileInput = $("cformFiles");
+  if (fileInput) fileInput.addEventListener("change", () => validateContactFiles(fileInput));
+  const detailFilesInput = $("detailFiles");
+  if (detailFilesInput) detailFilesInput.addEventListener("change", () => validateFileSelection(detailFilesInput, $("detailFileList")));
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const msg = $("cformMsg");
     msg.classList.remove("show"); msg.textContent = "";
-    if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") {
-      msg.textContent = "✖ Contact form isn't connected yet. Please set CONFIG.FORMSPREE_ID.";
-      msg.classList.add("show");
+    if (fileInput && fileInput.files.length && !validateContactFiles(fileInput)) {
       return;
     }
+    const hasFiles = fileInput && fileInput.files.length > 0;
     try {
-      const data = new FormData(form);
-      const r = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } });
-      if (r.ok) {
-        msg.textContent = "✓ Thank you! We'll reply within 1–2 days.";
-        msg.classList.add("show");
-        form.reset();
-      } else throw new Error("Form error");
+      if (hasFiles) {
+        // Attachments still go through Formspree — reliable file delivery, plain template.
+        if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") {
+          msg.textContent = "✖ Contact form isn't connected yet. Please set CONFIG.FORMSPREE_ID.";
+          msg.classList.add("show");
+          return;
+        }
+        const data = new FormData(form);
+        const r = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } });
+        if (!r.ok) throw new Error("Form error");
+      } else {
+        // No attachments — send our own branded owner + customer emails via EmailJS.
+        if (typeof emailjs === "undefined" || !CONFIG.EMAILJS_PUBLIC_KEY) {
+          msg.textContent = "✖ Contact form isn't connected yet. Please set CONFIG.EMAILJS_PUBLIC_KEY.";
+          msg.classList.add("show");
+          return;
+        }
+        const params = {
+          form_type: "message",
+          from_name: form.querySelector('[name="name"]').value,
+          reply_to: form.querySelector('[name="email"]').value,
+          phone: form.querySelector('[name="phone"]').value || "—",
+          interest: form.querySelector('[name="interest"]').value,
+          message: form.querySelector('[name="message"]').value,
+        };
+        await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_OWNER, params);
+        await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_CUSTOMER, params);
+      }
+      msg.textContent = "✓ Thank you! We'll reply within 1–2 days.";
+      msg.classList.add("show");
+      form.reset();
+      $("cformFileList").textContent = "";
     } catch (err) {
       msg.textContent = "Sorry, something went wrong. Please email hello@tangledwithlove.com directly.";
       msg.classList.add("show");
@@ -1684,10 +1870,23 @@ function handleCheckoutReturn() {
   const r = u.searchParams.get("checkout");
   if (r === "success") {
     STATE.cart = [];
+    clearItemFiles();
     saveCart(); renderCart();
     showPage("success", false);
     const sid = u.searchParams.get("session_id");
-    if (sid) { $("successOrderId").textContent = "Order #" + sid.slice(-8).toUpperCase(); $("successOrderId").style.display = "inline-block"; }
+    let pending = null;
+    try { pending = JSON.parse(localStorage.getItem("twl_pending_order") || "null"); } catch (e) {}
+    const lines = [];
+    if (pending && pending.orderNumber) lines.push(`Order ${pending.orderNumber}`);
+    if (sid) lines.push(`Stripe confirmation ${sid.slice(-8).toUpperCase()}`);
+    if (lines.length) {
+      $("successOrderId").textContent = lines.join(" · ");
+      $("successOrderId").style.display = "inline-block";
+    }
+    if (pending && pending.orderNumber) {
+      sendOrderEmails(pending.orderNumber, pending.email); // fire-and-forget; our own branded copy, separate from Stripe's own receipt
+      try { localStorage.removeItem("twl_pending_order"); } catch (e) {}
+    }
     // Clean the URL
     history.replaceState({}, "", u.origin + u.pathname);
   } else if (r === "cancel") {
@@ -1710,7 +1909,7 @@ function handleTestSeed() {
     qty: 1,
     colour: "As shown",
     message: "",
-    img: "assets/products/pouch/sunshine/1.png",
+    img: "assets/products/xs-bags/sunshine/1.png",
     __skipShipping: true,
   }];
   saveCart();
@@ -1897,6 +2096,9 @@ function activateCustomWelcome() {
 }
 
 function init() {
+  if (typeof emailjs !== "undefined" && CONFIG.EMAILJS_PUBLIC_KEY) {
+    emailjs.init({ publicKey: CONFIG.EMAILJS_PUBLIC_KEY });
+  }
   loadCart();
   const testSeeded = handleTestSeed();
   const customSeeded = handleCustomSeed();
