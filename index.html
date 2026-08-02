@@ -984,11 +984,11 @@ const CATEGORIES = [
     blurb: "Bold patchwork bags built from floral rounds, hexagons and granny-square motifs. Each design has its own colour story and handmade character.",
     heroVariant: "cherry-blossom",
     variants: [
-      { id: "cherry-blossom", name: "Cherry Blossom Granny", price: 45, heroIdx: 0,
+      { id: "cherry-blossom", name: "Cherry Blossom Granny", price: 50, heroIdx: 0,
         desc: "Ivory and cherry-red granny squares with a moss-green centre for a bright, garden-inspired finish." },
       { id: "golden-daisy-granny", name: "Golden Daisy Granny", price: 50, heroIdx: 0,
         desc: "Sunny golden and cream crochet patches finished with a neat button closure and soft shoulder straps." },
-      { id: "lavender-fields", name: "Lavender Fields Hex", price: 45, heroIdx: 0,
+      { id: "lavender-fields", name: "Lavender Fields Hex", price: 50, heroIdx: 0,
         desc: "A soft lavender hexagon bag with sage-green floral centres. Light, pretty and surprisingly roomy." },
       { id: "ruby-garden-granny", name: "Ruby Garden Granny", price: 50, heroIdx: 0,
         desc: "Ruby red, moss green, charcoal and cream patches finished with braided monochrome handles." },
@@ -1163,7 +1163,9 @@ const findCategory = (catId) => CATEGORIES.find(c => c.id === catId);
 const categoryPriceText = (cat) => {
   if (cat.bundleQty && cat.bundlePrice) return `${cat.bundleQty} for ${fmt(cat.bundlePrice)}`;
   if (!cat.variants.length) return "Coming soon";
-  return `From ${fmt(Math.min(...cat.variants.map(v => v.price)))}`;
+  const prices = cat.variants.map(v => v.price);
+  const lowestPrice = Math.min(...prices);
+  return prices.every(price => price === lowestPrice) ? fmt(lowestPrice) : `From ${fmt(lowestPrice)}`;
 };
 
 // Images are stored as /1.png .. /N.png or .jpg/.jpeg — try them in order.
