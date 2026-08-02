@@ -58,8 +58,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(250,246,240,0.95);backdrop
 .hero-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:420px;width:100%}
 .product-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.10);transition:transform 0.25s,box-shadow 0.25s;cursor:pointer}
 .product-card:hover{transform:translateY(-4px);box-shadow:0 10px 36px rgba(124,80,53,0.16)}
-.product-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden}
+.product-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden;position:relative}
 .product-img-wrap img{width:100%;height:100%;object-fit:cover}
+.photo-count-badge{position:absolute;right:0.6rem;bottom:0.6rem;z-index:2;display:inline-flex;align-items:center;gap:0.3rem;background:rgba(44,26,14,0.78);color:white;padding:0.3rem 0.55rem;border-radius:2rem;font-size:0.68rem;font-weight:700;line-height:1;box-shadow:0 2px 8px rgba(44,26,14,0.18);backdrop-filter:blur(5px)}
+.photo-count-badge svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8}
 .product-info{padding:0.65rem 0.85rem 0.85rem}
 .product-name{font-family:'Playfair Display',serif;font-size:0.85rem;color:var(--dark);margin-bottom:0.2rem}
 .product-price{font-size:0.78rem;color:var(--soft-terracotta);font-weight:700}
@@ -195,11 +197,14 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 .category-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(44,26,14,0.82));color:white;padding:2rem 1rem 1rem;text-align:left;font-family:'Playfair Display',serif}
 .category-label-title{font-size:1.1rem;font-weight:600;margin-bottom:0.25rem}
 .category-label-meta{font-size:0.78rem;opacity:0.85;font-family:'Lato',sans-serif;letter-spacing:0.02em;font-weight:300}
+.category-empty-art{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pale-blush),var(--deep-sand));color:var(--warm-brown);font-family:'Playfair Display',serif;font-size:1.2rem;font-style:italic;letter-spacing:0.04em}
+.category-empty-art::before{content:"✦";margin-right:0.55rem;color:var(--soft-terracotta);font-style:normal}
+.empty-category{grid-column:1/-1;background:var(--pale-blush);border:1px solid rgba(124,80,53,0.1);border-radius:14px;padding:3rem 1.5rem;text-align:center;color:var(--warm-brown);font-family:'Playfair Display',serif;font-size:1.1rem;line-height:1.6}
 
 .variants-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
 .variant-card{background:white;border-radius:14px;overflow:hidden;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 12px rgba(124,80,53,0.06);display:flex;flex-direction:column}
 .variant-card:hover{transform:translateY(-6px);box-shadow:0 10px 28px rgba(124,80,53,0.14)}
-.variant-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden}
+.variant-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden;position:relative}
 .variant-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
 .variant-card:hover .variant-img-wrap img{transform:scale(1.04)}
 .variant-body{padding:1rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:0.3rem}
@@ -209,15 +214,24 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 /* ======= GALLERY (product detail) ======= */
 .gallery-container{padding:3rem 2rem 4rem;max-width:1200px;margin:0 auto}
 .gallery-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:start}
-.gallery-section{display:flex;flex-direction:column}
-.gallery-image-display{aspect-ratio:1;background:var(--sand);border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.08);cursor:zoom-in;position:relative}
-.gallery-image-display img{width:100%;height:100%;object-fit:cover}
-.gallery-thumbnails{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px;margin-top:1rem}
-.gallery-thumbnail{aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s,opacity 0.2s;opacity:0.65;background:var(--pale-blush)}
+.gallery-section{display:flex;flex-direction:column;min-width:0}
+.gallery-image-display{aspect-ratio:1;background:var(--sand);border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.08);position:relative;isolation:isolate}
+.gallery-hero-open{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:none;cursor:zoom-in}
+.gallery-hero-open img{width:100%;height:100%;object-fit:cover;transition:transform 0.35s ease}
+.gallery-hero-open:hover img{transform:scale(1.012)}
+.gallery-control{position:absolute;top:50%;z-index:3;width:44px;height:44px;border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(44,26,14,0.62);color:white;font-family:'Playfair Display',serif;font-size:1.7rem;line-height:1;cursor:pointer;opacity:0;transform:translateY(-50%);transition:opacity 0.2s,background 0.2s,transform 0.2s;box-shadow:0 3px 12px rgba(44,26,14,0.2);backdrop-filter:blur(5px)}
+.gallery-image-display:hover .gallery-control,.gallery-image-display:focus-within .gallery-control{opacity:1}
+.gallery-control:hover{background:var(--warm-brown);transform:translateY(-50%) scale(1.05)}
+.gallery-control.prev{left:0.8rem}
+.gallery-control.next{right:0.8rem}
+.gallery-control[hidden],.lightbox-prev[hidden],.lightbox-next[hidden]{display:none!important}
+.gallery-photo-count{position:absolute;right:0.8rem;bottom:0.8rem;z-index:3;background:rgba(44,26,14,0.72);color:white;padding:0.4rem 0.7rem;border-radius:2rem;font-size:0.75rem;font-weight:700;line-height:1;pointer-events:none;backdrop-filter:blur(5px)}
+.gallery-thumbnails{display:flex;gap:10px;margin-top:1rem;padding:0.1rem 0.1rem 0.65rem;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--deep-sand) transparent}
+.gallery-thumbnail{appearance:none;flex:0 0 78px;width:78px;padding:0;aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s,opacity 0.2s,transform 0.2s;opacity:0.65;background:var(--pale-blush);scroll-snap-align:start}
 .gallery-thumbnail:hover{opacity:1}
-.gallery-thumbnail.active{border-color:var(--soft-terracotta);opacity:1;box-shadow:0 4px 12px rgba(201,123,90,0.25)}
+.gallery-thumbnail.active{border-color:var(--soft-terracotta);opacity:1;box-shadow:0 4px 12px rgba(201,123,90,0.25);transform:translateY(-1px)}
 .gallery-thumbnail img{width:100%;height:100%;object-fit:cover}
-.gallery-info{display:flex;flex-direction:column;gap:1.25rem}
+.gallery-info{display:flex;flex-direction:column;gap:1.25rem;position:sticky;top:88px;min-width:0}
 .gallery-info h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--dark);letter-spacing:-0.02em}
 .gallery-price{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--soft-terracotta)}
 .gallery-info p{font-size:0.95rem;color:var(--light);line-height:1.7}
@@ -451,6 +465,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
   .about-text .section-label,.about-text .section-title{text-align:center}
   .about-stats{justify-content:center;flex-wrap:wrap}
   .gallery-layout{grid-template-columns:1fr;gap:2rem}
+  .gallery-info{position:static}
   .contact-grid{grid-template-columns:1fr;gap:2rem}
   .category-row{grid-template-columns:1fr 1fr}
   .testimonials-grid{grid-template-columns:1fr}
@@ -464,6 +479,11 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
   .bag-categories-grid{grid-template-columns:1fr 1fr;gap:1rem}
   .variants-grid{grid-template-columns:1fr 1fr;gap:1rem}
   .products-category h1{font-size:1.8rem}
+  .gallery-container{padding:2rem 1rem 3rem}
+  .gallery-control{width:40px;height:40px;font-size:1.5rem;opacity:1}
+  .gallery-control.prev{left:0.6rem}
+  .gallery-control.next{right:0.6rem}
+  .gallery-thumbnail{flex-basis:68px;width:68px}
   .lightbox-prev,.lightbox-next{width:44px;height:44px;font-size:1.5rem}
 }
 </style>
@@ -490,7 +510,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 <!-- ===================================================================== -->
 <!-- LIGHTBOX (global) -->
 <!-- ===================================================================== -->
-<div id="imageLightbox" class="image-lightbox" onclick="closeImageLightbox(event)">
+<div id="imageLightbox" class="image-lightbox" onclick="closeImageLightbox(event)" role="dialog" aria-modal="true" aria-label="Product photos" aria-hidden="true">
   <button class="lightbox-close" onclick="closeImageLightbox()" aria-label="Close">×</button>
   <button class="lightbox-prev" onclick="prevImageLightbox(event)" aria-label="Previous">‹</button>
   <img id="lightboxImage" src="" alt="Product image" class="lightbox-img">
@@ -676,8 +696,13 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
     <button class="back-link" id="backFromDetail">← Back</button>
     <div class="gallery-layout">
       <div class="gallery-section">
-        <div class="gallery-image-display" onclick="openImageLightbox()">
-          <img id="galleryHero" alt="Product image">
+        <div class="gallery-image-display">
+          <button type="button" class="gallery-hero-open" id="galleryHeroOpen" onclick="openImageLightbox()" aria-label="Enlarge product photo">
+            <img id="galleryHero" alt="Product image">
+          </button>
+          <button type="button" class="gallery-control prev" id="galleryPrev" onclick="stepGallery(-1,event)" aria-label="Previous product photo">‹</button>
+          <button type="button" class="gallery-control next" id="galleryNext" onclick="stepGallery(1,event)" aria-label="Next product photo">›</button>
+          <span class="gallery-photo-count" id="galleryPhotoCount" aria-live="polite">1 / 1</span>
         </div>
         <div class="gallery-thumbnails" id="galleryThumbs"></div>
       </div>
@@ -953,81 +978,161 @@ const CONFIG = {
    ===================================================================== */
 const CATEGORIES = [
   {
-    id: "medium-shoulder",
-    name: "Medium Shoulder Bag",
-    tagline: "Everyday shoulder bag with granny-square patterns.",
-    blurb: "Soft, slouchy medium-sized shoulder bags — room for a phone, wallet, book and a few essentials. Each one is made with love in small batches.",
+    id: "round-patches",
+    name: "Round Patches",
+    tagline: "Statement crochet bags shaped with colourful patchwork.",
+    blurb: "Bold patchwork bags built from floral rounds, hexagons and granny-square motifs. Each design has its own colour story and handmade character.",
     heroVariant: "cherry-blossom",
     variants: [
-      { id: "cherry-blossom",    name: "Cherry Blossom Granny", price: 65, heroIdx: 0,
-        desc: "Ivory and cherry-red granny squares with a moss-green centre. A sweet, everyday shoulder bag that brings a pop of colour to neutrals." },
-      { id: "strawberry-stripe", name: "Strawberry Stripe",     price: 70, heroIdx: 5,
-        desc: "A cream tote with dense rows of strawberry-red bobbles and sage accents — sturdy enough for a small market run, charming enough for every day." },
-      { id: "lavender-fields",   name: "Lavender Fields Hex",   price: 68, heroIdx: 0,
-        desc: "A soft lavender hexagon-shaped bag with sage-green floral centres. Light, pretty, and surprisingly roomy." },
-      { id: "midnight-daisy",    name: "Midnight Daisy",        price: 72, heroIdx: 1,
-        desc: "Deep charcoal with cream-and-gold daisy motifs. A more moody take on the granny-square shoulder bag." },
+      { id: "cherry-blossom", name: "Cherry Blossom Granny", price: 50, heroIdx: 0,
+        desc: "Ivory and cherry-red granny squares with a moss-green centre for a bright, garden-inspired finish." },
+      { id: "golden-daisy-granny", name: "Golden Daisy Granny", price: 50, heroIdx: 0,
+        desc: "Sunny golden and cream crochet patches finished with a neat button closure and soft shoulder straps." },
+      { id: "lavender-fields", name: "Lavender Fields Hex", price: 50, heroIdx: 0,
+        desc: "A soft lavender hexagon bag with sage-green floral centres. Light, pretty and surprisingly roomy." },
+      { id: "ruby-garden-granny", name: "Ruby Garden Granny", price: 50, heroIdx: 0,
+        desc: "Ruby red, moss green, charcoal and cream patches finished with braided monochrome handles." },
+      { id: "sage-meadow", name: "Sage Meadow Granny", price: 50, heroIdx: 0,
+        desc: "A generous forest-green and ivory patchwork bag with comfortable handles and an earthy palette." },
     ],
   },
   {
-    id: "larger-shoulder",
-    name: "Larger Shoulder Bag",
-    tagline: "Roomy tote for books, laptops, and small outings.",
-    blurb: "Our largest style — big enough for a thin laptop, a change of clothes, or a week's library haul. Soft straps that sit comfortably on the shoulder.",
-    heroVariant: "sage-meadow",
+    id: "small-potli",
+    name: "Small Potli",
+    tagline: "Soft drawstring potlis for everyday essentials and gifting.",
+    blurb: "Compact drawstring bags with floral details, braided cords and soft handmade structure. Perfect for a phone, keys and small keepsakes.",
+    heroVariant: "autumn-garden-potli",
     variants: [
-      { id: "sage-meadow", name: "Sage Meadow Granny", price: 85, heroIdx: 0,
-        desc: "A generous tote in forest green and ivory granny squares. Strong enough for books and laptops, soft enough to feel like a hug." },
+      { id: "autumn-garden-potli", name: "Autumn Garden Potli", price: 25, heroIdx: 0,
+        desc: "A warm oat-coloured potli shaped with floral granny-square panels in rust, cream and moss green." },
+      { id: "morning-sky", name: "Morning Sky Potli", price: 20, heroIdx: 0,
+        desc: "A sky-blue potli with a hand-stitched sunflower motif and soft drawstring handle." },
+      { id: "mocha-drawstring", name: "Mocha Drawstring Potli", price: 25, heroIdx: 0,
+        desc: "Rich mocha and cream stripes with a gathered drawstring top, pearl-tipped cords and a long strap." },
+      { id: "rosy-drawstring", name: "Rosy Drawstring Potli", price: 30, heroIdx: 0,
+        desc: "Soft blush crochet with a ring of ruby roses, deep green cords and matching flower ties." },
+      { id: "ruby-bloom-drawstring", name: "Ruby Bloom Potli", price: 28, heroIdx: 0,
+        desc: "An ivory drawstring mini with a bold ruby flower centre, rosebud edging and wooden bead details." },
+      { id: "sky-mandala-bucket", name: "Sky Mandala Potli", price: 30, heroIdx: 0,
+        desc: "A cream gathered bag centred with a sky-blue, moss and warm-brown crochet mandala." },
+      { id: "terracotta-daisy-mini", name: "Terracotta Daisy Potli", price: 25, heroIdx: 0,
+        desc: "A compact terracotta bag centred with an oversized cream-and-taupe daisy patch." },
     ],
   },
   {
-    id: "sling",
-    name: "Sling Bag",
-    tagline: "Crossbody sling bags with a chain-style strap.",
-    blurb: "A modern crossbody sling — compact but deep. The beaded-look rope strap is our signature detail.",
-    heroVariant: "rose-garden",
+    id: "large-sized-bag",
+    name: "Large Sized Bags",
+    tagline: "Roomy handmade bags for books, work and market days.",
+    blurb: "Our roomiest crochet bags, designed with comfortable handles and enough space for daily essentials, books and small outings.",
+    heroVariant: "blush-flower-patchwork",
     variants: [
-      { id: "rose-garden", name: "Rose Garden Sling", price: 60, heroIdx: 0,
-        desc: "Forest-green sling bag with a hand-crocheted pink rose on the front flap. Pairs perfectly with jeans or an oversized jumper." },
+      { id: "blush-flower-patchwork", name: "Blush Flower Patchwork", price: 50, heroIdx: 0,
+        desc: "A structured blush tote covered in dimensional crochet flowers with golden seams and sturdy top handles." },
+      { id: "midnight-daisy", name: "Midnight Daisy", price: 45, heroIdx: 1,
+        desc: "Deep charcoal crochet with cream-and-gold daisy motifs for a moodier floral statement." },
+      { id: "strawberry-stripe", name: "Strawberry Stripe", price: 40, heroIdx: 5,
+        desc: "A cream tote with dense strawberry-red bobbles and sage accents, made for colourful everyday carrying." },
+      { id: "strawberry-tassel", name: "Strawberry Tassel", price: 50, heroIdx: 0,
+        desc: "Blush, berry-red and sage granny squares finished with playful tassels and a long cream strap." },
+      { id: "terracotta-daisy", name: "Terracotta Daisy", price: 45, heroIdx: 0,
+        desc: "A warm terracotta tote built from cream-centred daisy squares with a structured, earthy finish." },
     ],
   },
   {
-    id: "small-handheld",
-    name: "Small Handheld Bag",
-    tagline: "Compact top-handle bags — the perfect everyday clutch.",
-    blurb: "Mini top-handle bags sized for your phone, keys, a lipstick and a tiny notebook. Easy to tuck under the arm.",
-    heroVariant: "berry-blossom",
+    id: "medium-bags/round",
+    name: "Medium Bags — Round",
+    tagline: "Rounded statement bags with dimensional sunflower details.",
+    blurb: "Medium round bags with sculpted crochet petals, comfortable handles and enough room for your everyday essentials.",
+    heroVariant: "forest-sunflower-round",
     variants: [
-      { id: "seafoam",         name: "Seafoam Weave",   price: 45, heroIdx: 0,
-        desc: "Cream and soft seafoam-blue stripes with a chunky weave. Coastal and calming." },
-      { id: "berry-blossom",   name: "Berry Blossom",   price: 48, heroIdx: 2,
-        desc: "Ivory handheld with a pink bobble trim — part bag, part treasure. Comes with a braided white strap." },
-      { id: "espresso-stripe", name: "Espresso Stripe", price: 52, heroIdx: 0,
-        desc: "Warm espresso and cream stripes in a classic vertical pattern. Your new coffee-shop sidekick." },
-      { id: "garden-mandala",  name: "Garden Mandala",  price: 50, heroIdx: 0,
-        desc: "Cream body with a single granny-square mandala centre and bright moss-green straps." },
+      { id: "forest-sunflower-round", name: "Forest Sunflower Round", price: 35, heroIdx: 0,
+        desc: "A deep forest-green round crossbody crowned with a large golden sunflower and braided strap." },
+      { id: "silver-sunflower-round", name: "Silver Sunflower Round", price: 30, heroIdx: 0,
+        desc: "A softly structured silver-grey round handbag with ruffled edging and a sunny floral accent." },
     ],
   },
   {
-    id: "pouch",
-    name: "Small Handheld Pouch",
-    tagline: "Little pouches — wallets, gift bags, and crochet keepsakes.",
-    blurb: "Palm-sized pouches perfect as wallets, cosmetic bags, or gift wrapping for something precious. Many make wonderful little gifts on their own.",
-    heroVariant: "sunshine",
+    id: "medium-bags/rectangle",
+    name: "Medium Bags — Rectangle",
+    tagline: "Structured rectangular bags with floral crochet character.",
+    blurb: "Practical medium bags in structured rectangle and hobo shapes, finished with flowers, granny squares and handcrafted straps.",
+    heroVariant: "mocha-daisy-handbag",
     variants: [
-      { id: "sunshine",         name: "Sunshine Pouch",    price: 32, heroIdx: 0,
-        desc: "Mustard-yellow envelope pouch with a soft lavender trim and button closure. Small ray of sunshine in a bag." },
-      { id: "morning-sky",      name: "Morning Sky",       price: 35, heroIdx: 0,
-        desc: "Sky-blue pouch with a single hand-stitched sunflower motif. Top-zip closure, drawstring handle." },
-      { id: "mocha-drawstring", name: "Mocha Drawstring",  price: 38, heroIdx: 0,
-        desc: "Rich mocha brown and cream stripes with a drawstring top and a tiny coin pouch charm." },
-      { id: "autumn-spice",     name: "Autumn Spice",      price: 30, heroIdx: 0,
-        desc: "Terracotta bi-fold pouch perfect as a wallet. Snap closure on the front flap." },
-      { id: "confetti",         name: "Confetti Pouch",    price: 35, heroIdx: 1,
-        desc: "Cream base with speckled purple, mustard and blush flecks — like confetti in yarn form. Top-handle." },
-      { id: "rosewood-stripe",  name: "Rosewood Stripe",   price: 34, heroIdx: 0,
-        desc: "Rose, charcoal and cream stripes with a granny-square flap. A cozy, wintery pouch." },
+      { id: "mocha-daisy-handbag", name: "Mocha Daisy Handbag", price: 30, heroIdx: 0,
+        desc: "A cream-and-mocha top-handle bag decorated with three raised daisies and a simple button closure." },
+      { id: "rosewood-garden-tote", name: "Rosewood Garden Tote", price: 35, heroIdx: 0,
+        desc: "A structured rosewood tote with a row of blush and golden flower panels and wrapped handles." },
+      { id: "meadow-stripe-hobo", name: "Meadow Stripe Hobo", price: 35, heroIdx: 0,
+        desc: "A relaxed cream-and-mocha hobo bag with lavender, green and golden floral corners." },
+      { id: "blue-garden-envelope", name: "Blue Garden Envelope", price: 30, heroIdx: 0,
+        desc: "A grey envelope crossbody built from blue, sage, cream and rust granny-square panels." },
+      { id: "sunflower-leaf-shoulder", name: "Sunflower Leaf Shoulder", price: 35, heroIdx: 0,
+        desc: "A warm oat shoulder bag with a sunflower flap, dimensional green leaves and a long crochet strap." },
     ],
+  },
+  {
+    id: "small-bags",
+    name: "Small Bags",
+    tagline: "Compact handbags and crossbodies with bold handmade details.",
+    blurb: "Small crochet bags sized for a phone, keys and a few essentials. Choose from structured minis, floral crossbodies and colourful handheld styles.",
+    heroVariant: "ruby-rose-crossbody",
+    variants: [
+      { id: "midnight-ruffle-mini", name: "Midnight Ruffle Mini", price: 25, heroIdx: 0,
+        desc: "A navy-and-cream mini handbag with scalloped ruffles, a flower closure and braided top handle." },
+      { id: "ruby-rose-crossbody", name: "Ruby Rose Crossbody", price: 30, heroIdx: 0,
+        desc: "A midnight-blue crossbody framed in ruby and cream with a dimensional red rose and leafy detail." },
+      { id: "sky-mandala-mini", name: "Sky Mandala Mini", price: 25, heroIdx: 0,
+        desc: "A sky-blue mini handbag centred with a plum, sage and ivory crochet mandala." },
+      { id: "ruby-garden-handbag", name: "Ruby Garden Handbag", price: 30, heroIdx: 0,
+        desc: "A vivid ruby handbag with soft pink, ivory and green floral patches and two-tone handles." },
+      { id: "berry-blossom", name: "Berry Blossom", price: 25, heroIdx: 2,
+        desc: "An ivory handheld with pink bobble trim and a braided white strap." },
+      { id: "espresso-stripe", name: "Espresso Stripe", price: 25, heroIdx: 0,
+        desc: "Warm espresso and cream stripes in a compact everyday shape." },
+      { id: "garden-mandala", name: "Garden Mandala", price: 30, heroIdx: 0,
+        desc: "A cream body with one colourful mandala centre and bright moss-green straps." },
+      { id: "rose-garden", name: "Rose Garden Crossbody", price: 30, heroIdx: 0,
+        desc: "A forest-green crossbody with a hand-crocheted pink rose on the front flap." },
+      { id: "seafoam", name: "Seafoam Weave", price: 20, heroIdx: 0,
+        desc: "Cream and soft seafoam-blue stripes with a chunky, coastal-inspired weave." },
+    ],
+  },
+  {
+    id: "xs-bags",
+    name: "XS Bags",
+    tagline: "Tiny crochet bags, wallets and gift-sized keepsakes.",
+    blurb: "Our smallest handmade pieces are ideal as wallets, cosmetic pouches and thoughtful gift bags.",
+    heroVariant: "golden-sky",
+    variants: [
+      { id: "autumn-spice", name: "Autumn Spice", price: 15, heroIdx: 0,
+        desc: "A terracotta bi-fold mini with a simple snap closure." },
+      { id: "golden-sky", name: "Golden Sky", price: 20, heroIdx: 0,
+        desc: "A cream mini framed in golden mustard with a bright sky-blue flower and soft ties." },
+      { id: "lavender-bloom", name: "Lavender Bloom", price: 20, heroIdx: 0,
+        desc: "An ivory mini edged in lavender with a sage-and-navy flower centre." },
+      { id: "rosewood-stripe", name: "Rosewood Stripe", price: 18, heroIdx: 0,
+        desc: "Rose, charcoal and cream stripes finished with a granny-square flap." },
+      { id: "sunshine", name: "Sunshine Pouch", price: 15, heroIdx: 0,
+        desc: "A mustard envelope pouch with lavender trim and a button closure." },
+    ],
+  },
+  {
+    id: "leather-bags",
+    name: "Leather Bags",
+    tagline: "Statement bags finished with structured, lasting details.",
+    blurb: "A focused collection of statement bags with sturdy construction and elevated finishing touches.",
+    heroVariant: "mocha-blossom-stripe",
+    variants: [
+      { id: "mocha-blossom-stripe", name: "Mocha Blossom Stripe", price: 60, heroIdx: 0,
+        desc: "A spacious mocha-and-cream striped bag with a crochet flower, long straps and reinforced base." },
+    ],
+  },
+  {
+    id: "rakhri-seasonal",
+    name: "Rakhri (Seasonal)",
+    tagline: "Limited seasonal pieces made for heartfelt gifting.",
+    blurb: "Our Rakhri collection is being prepared. New handmade seasonal designs will appear here soon.",
+    variants: [],
   },
 ];
 
@@ -1055,6 +1160,13 @@ const findVariant = (catId, vId) => {
   return cat ? cat.variants.find(v => v.id === vId) : null;
 };
 const findCategory = (catId) => CATEGORIES.find(c => c.id === catId);
+const categoryPriceText = (cat) => {
+  if (cat.bundleQty && cat.bundlePrice) return `${cat.bundleQty} for ${fmt(cat.bundlePrice)}`;
+  if (!cat.variants.length) return "Coming soon";
+  const prices = cat.variants.map(v => v.price);
+  const lowestPrice = Math.min(...prices);
+  return prices.every(price => price === lowestPrice) ? fmt(lowestPrice) : `From ${fmt(lowestPrice)}`;
+};
 
 // Images are stored as /1.png .. /N.png or .jpg/.jpeg — try them in order.
 // We precompute each variant's image list client-side by attempting .png / .jpg / .jpeg.
@@ -1064,23 +1176,47 @@ function variantImageUrls(catId, vId, count) {
 }
 
 // IMAGE_MAP is generated to match the actual files on disk.
+const pngSeries = (count, start=1) => Array.from({length: count}, (_, i) => `${i + start}.png`);
 const IMAGE_MAP = {
-  "medium-shoulder/cherry-blossom": ["1.png","2.png","3.png","4.png","5.jpg","6.png","7.png","8.png","9.jpg","10.jpg","11.png"],
-  "medium-shoulder/strawberry-stripe": ["1.jpeg","2.png","3.png","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg"],
-  "medium-shoulder/lavender-fields": ["1.png","2.png","3.png","4.png","5.png","6.png","7.png"],
-  "medium-shoulder/midnight-daisy": ["1.png","2.png","3.png"],
-  "larger-shoulder/sage-meadow": ["1.png","2.jpg","3.jpg","4.jpg","5.jpg","6.png"],
-  "sling/rose-garden": ["1.png","2.png","3.png","4.png","5.png","6.png"],
-  "small-handheld/seafoam": ["1.png"],
-  "small-handheld/berry-blossom": ["1.png","2.jpg","3.jpg"],
-  "small-handheld/espresso-stripe": ["1.png"],
-  "small-handheld/garden-mandala": ["1.png"],
-  "pouch/sunshine": ["1.png","2.png","3.png"],
-  "pouch/morning-sky": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.jpg"],
-  "pouch/mocha-drawstring": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.png"],
-  "pouch/autumn-spice": ["1.png","2.png","3.png"],
-  "pouch/confetti": ["1.png","2.jpg","3.jpg"],
-  "pouch/rosewood-stripe": ["1.png","2.png"],
+  "round-patches/cherry-blossom": ["1.png","2.png","3.png","4.png","5.jpg","6.png","7.png","8.png","9.jpg","10.jpg","11.png"],
+  "round-patches/golden-daisy-granny": pngSeries(7),
+  "round-patches/lavender-fields": pngSeries(6),
+  "round-patches/ruby-garden-granny": pngSeries(10),
+  "round-patches/sage-meadow": ["1.png","2.jpg","3.jpg","4.jpg","5.jpg","6.png"],
+  "small-potli/autumn-garden-potli": pngSeries(7),
+  "small-potli/morning-sky": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.jpg"],
+  "small-potli/mocha-drawstring": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.png"],
+  "small-potli/rosy-drawstring": pngSeries(15),
+  "small-potli/ruby-bloom-drawstring": pngSeries(10),
+  "small-potli/sky-mandala-bucket": pngSeries(10),
+  "small-potli/terracotta-daisy-mini": pngSeries(10),
+  "large-sized-bag/blush-flower-patchwork": pngSeries(5),
+  "large-sized-bag/midnight-daisy": pngSeries(3),
+  "large-sized-bag/strawberry-stripe": ["1.jpeg","2.png","3.png","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg"],
+  "large-sized-bag/strawberry-tassel": pngSeries(12),
+  "large-sized-bag/terracotta-daisy": pngSeries(11),
+  "medium-bags/round/forest-sunflower-round": pngSeries(10),
+  "medium-bags/round/silver-sunflower-round": pngSeries(10),
+  "medium-bags/rectangle/mocha-daisy-handbag": pngSeries(10),
+  "medium-bags/rectangle/rosewood-garden-tote": pngSeries(10),
+  "medium-bags/rectangle/meadow-stripe-hobo": pngSeries(10),
+  "medium-bags/rectangle/blue-garden-envelope": pngSeries(10),
+  "medium-bags/rectangle/sunflower-leaf-shoulder": pngSeries(3),
+  "small-bags/midnight-ruffle-mini": pngSeries(7),
+  "small-bags/ruby-rose-crossbody": pngSeries(6),
+  "small-bags/sky-mandala-mini": pngSeries(6),
+  "small-bags/ruby-garden-handbag": pngSeries(5),
+  "small-bags/berry-blossom": ["1.png","2.jpg","3.jpg"],
+  "small-bags/espresso-stripe": ["1.png"],
+  "small-bags/garden-mandala": pngSeries(12),
+  "small-bags/rose-garden": pngSeries(6),
+  "small-bags/seafoam": ["1.png"],
+  "xs-bags/autumn-spice": pngSeries(3),
+  "xs-bags/golden-sky": pngSeries(11),
+  "xs-bags/lavender-bloom": pngSeries(10),
+  "xs-bags/rosewood-stripe": pngSeries(2),
+  "xs-bags/sunshine": pngSeries(3),
+  "leather-bags/mocha-blossom-stripe": pngSeries(11),
 };
 
 function variantImage(catId, vId, index=0) {
@@ -1105,6 +1241,15 @@ function allVariantImages(catId, vId, heroIdx=0) {
     ? [files[heroIdx], ...files.filter((_, i) => i !== heroIdx)]
     : files;
   return reordered.map(f => `assets/products/${key}/${f}`);
+}
+
+function photoCountBadge(catId, vId) {
+  const count = (IMAGE_MAP[`${catId}/${vId}`] || []).length;
+  if (count < 2) return "";
+  return `<span class="photo-count-badge" aria-label="${count} product photos">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h3l1.4-2h7.2l1.4 2h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>
+    ${count}
+  </span>`;
 }
 
 /* =====================================================================
@@ -1134,10 +1279,10 @@ function navTo(anchor) {
 function renderHeroCards() {
   // Show 4 hero picks: one per category, mixing styles
   const picks = [
-    { cat: "medium-shoulder", var: "cherry-blossom" },
-    { cat: "sling", var: "rose-garden" },
-    { cat: "pouch", var: "morning-sky" },
-    { cat: "small-handheld", var: "berry-blossom" },
+    { cat: "round-patches", var: "cherry-blossom" },
+    { cat: "medium-bags/round", var: "forest-sunflower-round" },
+    { cat: "small-bags", var: "ruby-rose-crossbody" },
+    { cat: "small-potli", var: "autumn-garden-potli" },
   ];
   $("heroCards").innerHTML = picks.map(p => {
     const cat = findCategory(p.cat);
@@ -1145,7 +1290,10 @@ function renderHeroCards() {
     if (!v || !cat) return "";
     return `
       <div class="product-card" onclick="openDetail('${p.cat}','${p.var}')">
-        <div class="product-img-wrap"><img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy"></div>
+        <div class="product-img-wrap">
+          <img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy">
+          ${photoCountBadge(p.cat, p.var)}
+        </div>
         <div class="product-info">
           <div class="product-name">${v.name}</div>
           <div class="product-price">${fmt(v.price)}</div>
@@ -1156,21 +1304,23 @@ function renderHeroCards() {
 
 function renderCategoryRow() {
   $("categoryRow").innerHTML = CATEGORIES.map(cat => {
-    const startPrice = Math.min(...cat.variants.map(v => v.price));
     const variantCount = cat.variants.length;
     const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
+    const heroMarkup = heroVar
+      ? `<img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">`
+      : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
     return `
       <div class="cat-card" onclick="openCategory('${cat.id}')">
         <div class="cat-card-top">
-          ${variantCount > 1 ? '<span class="cat-tag">' + variantCount + ' styles</span>' : ''}
-          <img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">
+          ${variantCount ? '<span class="cat-tag">' + variantCount + (variantCount === 1 ? ' style' : ' styles') + '</span>' : '<span class="cat-tag">Seasonal</span>'}
+          ${heroMarkup}
         </div>
         <div class="cat-card-body">
           <div class="cat-card-name">${cat.name}</div>
           <div class="cat-card-desc">${cat.tagline}</div>
           <div class="cat-card-footer">
-            <span class="cat-card-price">From ${fmt(startPrice)}</span>
-            <button class="cat-card-cta">Shop →</button>
+            <span class="cat-card-price">${categoryPriceText(cat)}</span>
+            <button class="cat-card-cta">${variantCount ? 'Shop' : 'View'} →</button>
           </div>
         </div>
       </div>`;
@@ -1182,14 +1332,17 @@ function renderCategoryRow() {
    ===================================================================== */
 function renderCategoriesPage() {
   $("bagCategoriesGrid").innerHTML = CATEGORIES.map(cat => {
-    const startPrice = Math.min(...cat.variants.map(v => v.price));
+    const variantCount = cat.variants.length;
     const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
+    const heroMarkup = heroVar
+      ? `<img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">`
+      : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
     return `
       <div class="category-tile" onclick="openCategory('${cat.id}')">
-        <img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">
+        ${heroMarkup}
         <div class="category-label">
           <div class="category-label-title">${cat.name}</div>
-          <div class="category-label-meta">${cat.variants.length} ${cat.variants.length === 1 ? 'style' : 'styles'} · from ${fmt(startPrice)}</div>
+          <div class="category-label-meta">${variantCount ? `${variantCount} ${variantCount === 1 ? 'style' : 'styles'} · ${categoryPriceText(cat)}` : `Seasonal collection · ${categoryPriceText(cat)}`}</div>
         </div>
       </div>`;
   }).join("");
@@ -1201,14 +1354,20 @@ function openCategory(catId) {
   if (!cat) return;
   $("variantsTitle").textContent = cat.name;
   $("variantsSub").textContent = cat.blurb;
-  $("variantsGrid").innerHTML = cat.variants.map(v => `
-    <div class="variant-card" onclick="openDetail('${cat.id}','${v.id}')">
-      <div class="variant-img-wrap"><img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy"></div>
-      <div class="variant-body">
-        <div class="variant-name">${v.name}</div>
-        <div class="variant-price">${fmt(v.price)}</div>
+  $("variantsGrid").innerHTML = cat.variants.length
+    ? cat.variants.map(v => `
+      <div class="variant-card" onclick="openDetail('${cat.id}','${v.id}')">
+        <div class="variant-img-wrap">
+          <img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy">
+          ${photoCountBadge(cat.id, v.id)}
+        </div>
+        <div class="variant-body">
+          <div class="variant-name">${v.name}</div>
+          <div class="variant-price">${fmt(v.price)}</div>
+        </div>
       </div>
-    </div>`).join("");
+    `).join("")
+    : `<div class="empty-category">New seasonal Rakhri pieces are coming soon.<br><strong>${categoryPriceText(cat)}</strong></div>`;
   showPage("variants");
 }
 
@@ -1230,23 +1389,30 @@ function openDetail(catId, vId) {
   $("detailSizeGroup").style.display = "none"; // sizing is fixed per style
   $("detailMsg").value = "";
   $("detailQtyNum").textContent = "1";
-  // Gallery — hero first, only existing images
+  // Gallery — hero first, with every real product image available to browse.
   const imgs = allVariantImages(catId, vId, v.heroIdx || 0);
+  STATE.lightboxImages = imgs;
+  STATE.lightboxIdx = 0;
   $("galleryHero").src = imgs[0] || "";
   $("galleryHero").alt = v.name;
+  $("galleryHeroOpen").setAttribute("aria-label", `Enlarge ${v.name} photo 1 of ${Math.max(1, imgs.length)}`);
+  $("galleryPhotoCount").hidden = imgs.length === 0;
+  $("galleryPhotoCount").textContent = `1 / ${Math.max(1, imgs.length)}`;
+  $("galleryPrev").hidden = imgs.length < 2;
+  $("galleryNext").hidden = imgs.length < 2;
+
   if (imgs.length > 1) {
-    $("galleryThumbs").style.display = "";
+    $("galleryThumbs").style.display = "flex";
     $("galleryThumbs").innerHTML = imgs.map((src, i) => `
-      <div class="gallery-thumbnail ${i === 0 ? 'active' : ''}" onclick="pickThumb(${i}, event)">
-        <img src="${src}" alt="${v.name} image ${i+1}" loading="lazy">
-      </div>`).join("");
+      <button type="button" class="gallery-thumbnail ${i === 0 ? 'active' : ''}" onclick="pickThumb(${i}, event)" aria-label="Show ${v.name} photo ${i+1} of ${imgs.length}" aria-pressed="${i === 0}">
+        <img src="${src}" alt="${v.name} photo ${i+1}" loading="lazy">
+      </button>`).join("");
   } else {
     // Only 1 image — no point showing a thumbnail strip
     $("galleryThumbs").style.display = "none";
     $("galleryThumbs").innerHTML = "";
   }
-  STATE.lightboxImages = imgs;
-  STATE.lightboxIdx = 0;
+
   // Back button context
   $("backFromDetail").textContent = `← Back to ${cat.name}`;
   $("backFromDetail").onclick = () => openCategory(catId);
@@ -1255,11 +1421,24 @@ function openDetail(catId, vId) {
 
 function pickThumb(idx, ev) {
   ev && ev.stopPropagation();
+  if (idx < 0 || idx >= STATE.lightboxImages.length) return;
   STATE.lightboxIdx = idx;
   $("galleryHero").src = STATE.lightboxImages[idx];
-  document.querySelectorAll("#galleryThumbs .gallery-thumbnail").forEach((el, i) =>
-    el.classList.toggle("active", i === idx)
-  );
+  $("galleryPhotoCount").textContent = `${idx + 1} / ${STATE.lightboxImages.length}`;
+  const productName = STATE.detail ? STATE.detail.variant.name : "product";
+  $("galleryHeroOpen").setAttribute("aria-label", `Enlarge ${productName} photo ${idx + 1} of ${STATE.lightboxImages.length}`);
+  document.querySelectorAll("#galleryThumbs .gallery-thumbnail").forEach((el, i) => {
+    const isActive = i === idx;
+    el.classList.toggle("active", isActive);
+    el.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function stepGallery(delta, ev) {
+  ev && ev.stopPropagation();
+  if (STATE.lightboxImages.length < 2) return;
+  const nextIdx = (STATE.lightboxIdx + delta + STATE.lightboxImages.length) % STATE.lightboxImages.length;
+  pickThumb(nextIdx);
 }
 
 function detailQty(delta) {
@@ -1426,18 +1605,29 @@ function resetAndHome() {
 /* =====================================================================
    LIGHTBOX
    ===================================================================== */
-function openImageLightbox() {
-  if (!STATE.lightboxImages.length) return;
+function updateLightboxImage() {
+  const productName = STATE.detail ? STATE.detail.variant.name : "Product";
   $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx];
+  $("lightboxImage").alt = `${productName} photo ${STATE.lightboxIdx + 1}`;
   $("lightboxCounter").textContent = (STATE.lightboxIdx+1) + " / " + STATE.lightboxImages.length;
+}
+function openImageLightbox(idx, ev) {
+  ev && ev.stopPropagation();
+  if (!STATE.lightboxImages.length) return;
+  if (Number.isInteger(idx)) pickThumb(idx);
+  updateLightboxImage();
+  $("imageLightbox").setAttribute("aria-hidden", "false");
+  $("imageLightbox").querySelector(".lightbox-prev").hidden = STATE.lightboxImages.length < 2;
+  $("imageLightbox").querySelector(".lightbox-next").hidden = STATE.lightboxImages.length < 2;
   $("imageLightbox").classList.add("open");
 }
 function closeImageLightbox(ev) {
   if (ev && ev.target.id && ev.target.id !== "imageLightbox" && ev.target.className !== "lightbox-close") return;
   $("imageLightbox").classList.remove("open");
+  $("imageLightbox").setAttribute("aria-hidden", "true");
 }
-function prevImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx - 1 + STATE.lightboxImages.length) % STATE.lightboxImages.length; $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx]; $("lightboxCounter").textContent = (STATE.lightboxIdx+1)+" / "+STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx, {stopPropagation:()=>{}}); }
-function nextImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx + 1) % STATE.lightboxImages.length; $("lightboxImage").src = STATE.lightboxImages[STATE.lightboxIdx]; $("lightboxCounter").textContent = (STATE.lightboxIdx+1)+" / "+STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx, {stopPropagation:()=>{}}); }
+function prevImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx - 1 + STATE.lightboxImages.length) % STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx); updateLightboxImage(); }
+function nextImageLightbox(ev) { ev && ev.stopPropagation(); STATE.lightboxIdx = (STATE.lightboxIdx + 1) % STATE.lightboxImages.length; pickThumb(STATE.lightboxIdx); updateLightboxImage(); }
 document.addEventListener("keydown", (e) => {
   if (!$("imageLightbox").classList.contains("open")) return;
   if (e.key === "Escape") closeImageLightbox({target:{id:"imageLightbox"}});
