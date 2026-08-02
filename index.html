@@ -197,6 +197,9 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 .category-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(44,26,14,0.82));color:white;padding:2rem 1rem 1rem;text-align:left;font-family:'Playfair Display',serif}
 .category-label-title{font-size:1.1rem;font-weight:600;margin-bottom:0.25rem}
 .category-label-meta{font-size:0.78rem;opacity:0.85;font-family:'Lato',sans-serif;letter-spacing:0.02em;font-weight:300}
+.category-empty-art{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pale-blush),var(--deep-sand));color:var(--warm-brown);font-family:'Playfair Display',serif;font-size:1.2rem;font-style:italic;letter-spacing:0.04em}
+.category-empty-art::before{content:"✦";margin-right:0.55rem;color:var(--soft-terracotta);font-style:normal}
+.empty-category{grid-column:1/-1;background:var(--pale-blush);border:1px solid rgba(124,80,53,0.1);border-radius:14px;padding:3rem 1.5rem;text-align:center;color:var(--warm-brown);font-family:'Playfair Display',serif;font-size:1.1rem;line-height:1.6}
 
 .variants-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
 .variant-card{background:white;border-radius:14px;overflow:hidden;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 2px 12px rgba(124,80,53,0.06);display:flex;flex-direction:column}
@@ -975,105 +978,161 @@ const CONFIG = {
    ===================================================================== */
 const CATEGORIES = [
   {
-    id: "medium-shoulder",
-    name: "Medium Shoulder Bag",
-    tagline: "Everyday shoulder bag with granny-square patterns.",
-    blurb: "Soft, slouchy medium-sized shoulder bags — room for a phone, wallet, book and a few essentials. Each one is made with love in small batches.",
+    id: "round-patches",
+    name: "Round Patches",
+    tagline: "Statement crochet bags shaped with colourful patchwork.",
+    blurb: "Bold patchwork bags built from floral rounds, hexagons and granny-square motifs. Each design has its own colour story and handmade character.",
     heroVariant: "cherry-blossom",
     variants: [
-      { id: "cherry-blossom",    name: "Cherry Blossom Granny", price: 65, heroIdx: 0,
-        desc: "Ivory and cherry-red granny squares with a moss-green centre. A sweet, everyday shoulder bag that brings a pop of colour to neutrals." },
-      { id: "strawberry-stripe", name: "Strawberry Stripe",     price: 70, heroIdx: 5,
-        desc: "A cream tote with dense rows of strawberry-red bobbles and sage accents — sturdy enough for a small market run, charming enough for every day." },
-      { id: "lavender-fields",   name: "Lavender Fields Hex",   price: 68, heroIdx: 0,
-        desc: "A soft lavender hexagon-shaped bag with sage-green floral centres. Light, pretty, and surprisingly roomy." },
-      { id: "midnight-daisy",    name: "Midnight Daisy",        price: 72, heroIdx: 1,
-        desc: "Deep charcoal with cream-and-gold daisy motifs. A more moody take on the granny-square shoulder bag." },
-      { id: "terracotta-daisy",  name: "Terracotta Daisy",      price: 70, heroIdx: 0,
-        desc: "A warm terracotta shoulder tote built from four cream-centred daisy squares. Structured, earthy, and easy to carry." },
-      { id: "strawberry-tassel", name: "Strawberry Tassel",     price: 72, heroIdx: 0,
-        desc: "Blush, berry-red and sage granny squares finished with playful hand-tied tassels and a long cream shoulder strap." },
-    ],
-  },
-  {
-    id: "larger-shoulder",
-    name: "Larger Shoulder Bag",
-    tagline: "Roomy tote for books, laptops, and small outings.",
-    blurb: "Our largest style — big enough for a thin laptop, a change of clothes, or a week's library haul. Soft straps that sit comfortably on the shoulder.",
-    heroVariant: "sage-meadow",
-    variants: [
-      { id: "sage-meadow", name: "Sage Meadow Granny", price: 85, heroIdx: 0,
-        desc: "A generous tote in forest green and ivory granny squares. Strong enough for books and laptops, soft enough to feel like a hug." },
-      { id: "ruby-garden-granny", name: "Ruby Garden Granny", price: 88, heroIdx: 0,
-        desc: "A roomy rounded granny-square tote in ruby red, moss green, charcoal and cream, finished with braided monochrome handles." },
-      { id: "blush-flower-patchwork", name: "Blush Flower Patchwork", price: 90, heroIdx: 0,
-        desc: "A structured blush-pink tote covered in dimensional crochet flowers with golden seams and sturdy top handles." },
+      { id: "cherry-blossom", name: "Cherry Blossom Granny", price: 65, heroIdx: 0,
+        desc: "Ivory and cherry-red granny squares with a moss-green centre for a bright, garden-inspired finish." },
       { id: "golden-daisy-granny", name: "Golden Daisy Granny", price: 85, heroIdx: 0,
-        desc: "A sunny golden and cream shoulder tote made from softly patterned granny squares with a neat button closure." },
-      { id: "mocha-blossom-stripe", name: "Mocha Blossom Stripe", price: 88, heroIdx: 0,
-        desc: "A spacious mocha-and-cream striped tote with a crocheted flower detail, long shoulder straps and a reinforced base." },
+        desc: "Sunny golden and cream crochet patches finished with a neat button closure and soft shoulder straps." },
+      { id: "lavender-fields", name: "Lavender Fields Hex", price: 68, heroIdx: 0,
+        desc: "A soft lavender hexagon bag with sage-green floral centres. Light, pretty and surprisingly roomy." },
+      { id: "ruby-garden-granny", name: "Ruby Garden Granny", price: 88, heroIdx: 0,
+        desc: "Ruby red, moss green, charcoal and cream patches finished with braided monochrome handles." },
+      { id: "sage-meadow", name: "Sage Meadow Granny", price: 85, heroIdx: 0,
+        desc: "A generous forest-green and ivory patchwork bag with comfortable handles and an earthy palette." },
     ],
   },
   {
-    id: "sling",
-    name: "Sling Bag",
-    tagline: "Crossbody sling bags with a chain-style strap.",
-    blurb: "A modern crossbody sling — compact but deep. The beaded-look rope strap is our signature detail.",
-    heroVariant: "rose-garden",
+    id: "small-potli",
+    name: "Small Potli",
+    tagline: "Soft drawstring potlis for everyday essentials and gifting.",
+    blurb: "Compact drawstring bags with floral details, braided cords and soft handmade structure. Perfect for a phone, keys and small keepsakes.",
+    heroVariant: "autumn-garden-potli",
     variants: [
-      { id: "rose-garden", name: "Rose Garden Sling", price: 60, heroIdx: 0,
-        desc: "Forest-green sling bag with a hand-crocheted pink rose on the front flap. Pairs perfectly with jeans or an oversized jumper." },
+      { id: "autumn-garden-potli", name: "Autumn Garden Potli", price: 42, heroIdx: 0,
+        desc: "A warm oat-coloured potli shaped with floral granny-square panels in rust, cream and moss green." },
+      { id: "morning-sky", name: "Morning Sky Potli", price: 35, heroIdx: 0,
+        desc: "A sky-blue potli with a hand-stitched sunflower motif and soft drawstring handle." },
+      { id: "mocha-drawstring", name: "Mocha Drawstring Potli", price: 38, heroIdx: 0,
+        desc: "Rich mocha and cream stripes with a gathered drawstring top, pearl-tipped cords and a long strap." },
+      { id: "rosy-drawstring", name: "Rosy Drawstring Potli", price: 48, heroIdx: 0,
+        desc: "Soft blush crochet with a ring of ruby roses, deep green cords and matching flower ties." },
+      { id: "ruby-bloom-drawstring", name: "Ruby Bloom Potli", price: 48, heroIdx: 0,
+        desc: "An ivory drawstring mini with a bold ruby flower centre, rosebud edging and wooden bead details." },
+      { id: "sky-mandala-bucket", name: "Sky Mandala Potli", price: 50, heroIdx: 0,
+        desc: "A cream gathered bag centred with a sky-blue, moss and warm-brown crochet mandala." },
+      { id: "terracotta-daisy-mini", name: "Terracotta Daisy Potli", price: 48, heroIdx: 0,
+        desc: "A compact terracotta bag centred with an oversized cream-and-taupe daisy patch." },
     ],
   },
   {
-    id: "small-handheld",
-    name: "Small Handheld Bag",
-    tagline: "Compact top-handle bags — the perfect everyday clutch.",
-    blurb: "Mini top-handle bags sized for your phone, keys, a lipstick and a tiny notebook. Easy to tuck under the arm.",
-    heroVariant: "berry-blossom",
+    id: "large-sized-bag",
+    name: "Large Sized Bags",
+    tagline: "Roomy handmade bags for books, work and market days.",
+    blurb: "Our roomiest crochet bags, designed with comfortable handles and enough space for daily essentials, books and small outings.",
+    heroVariant: "blush-flower-patchwork",
     variants: [
-      { id: "seafoam",         name: "Seafoam Weave",   price: 45, heroIdx: 0,
-        desc: "Cream and soft seafoam-blue stripes with a chunky weave. Coastal and calming." },
-      { id: "berry-blossom",   name: "Berry Blossom",   price: 48, heroIdx: 2,
-        desc: "Ivory handheld with a pink bobble trim — part bag, part treasure. Comes with a braided white strap." },
+      { id: "blush-flower-patchwork", name: "Blush Flower Patchwork", price: 90, heroIdx: 0,
+        desc: "A structured blush tote covered in dimensional crochet flowers with golden seams and sturdy top handles." },
+      { id: "midnight-daisy", name: "Midnight Daisy", price: 72, heroIdx: 1,
+        desc: "Deep charcoal crochet with cream-and-gold daisy motifs for a moodier floral statement." },
+      { id: "strawberry-stripe", name: "Strawberry Stripe", price: 70, heroIdx: 5,
+        desc: "A cream tote with dense strawberry-red bobbles and sage accents, made for colourful everyday carrying." },
+      { id: "strawberry-tassel", name: "Strawberry Tassel", price: 72, heroIdx: 0,
+        desc: "Blush, berry-red and sage granny squares finished with playful tassels and a long cream strap." },
+      { id: "terracotta-daisy", name: "Terracotta Daisy", price: 70, heroIdx: 0,
+        desc: "A warm terracotta tote built from cream-centred daisy squares with a structured, earthy finish." },
+    ],
+  },
+  {
+    id: "medium-bags/round",
+    name: "Medium Bags — Round",
+    tagline: "Rounded statement bags with dimensional sunflower details.",
+    blurb: "Medium round bags with sculpted crochet petals, comfortable handles and enough room for your everyday essentials.",
+    heroVariant: "forest-sunflower-round",
+    variants: [
+      { id: "forest-sunflower-round", name: "Forest Sunflower Round", price: 68, heroIdx: 0,
+        desc: "A deep forest-green round crossbody crowned with a large golden sunflower and braided strap." },
+      { id: "silver-sunflower-round", name: "Silver Sunflower Round", price: 72, heroIdx: 0,
+        desc: "A softly structured silver-grey round handbag with ruffled edging and a sunny floral accent." },
+    ],
+  },
+  {
+    id: "medium-bags/rectangle",
+    name: "Medium Bags — Rectangle",
+    tagline: "Structured rectangular bags with floral crochet character.",
+    blurb: "Practical medium bags in structured rectangle and hobo shapes, finished with flowers, granny squares and handcrafted straps.",
+    heroVariant: "mocha-daisy-handbag",
+    variants: [
+      { id: "mocha-daisy-handbag", name: "Mocha Daisy Handbag", price: 68, heroIdx: 0,
+        desc: "A cream-and-mocha top-handle bag decorated with three raised daisies and a simple button closure." },
+      { id: "rosewood-garden-tote", name: "Rosewood Garden Tote", price: 72, heroIdx: 0,
+        desc: "A structured rosewood tote with a row of blush and golden flower panels and wrapped handles." },
+      { id: "meadow-stripe-hobo", name: "Meadow Stripe Hobo", price: 70, heroIdx: 0,
+        desc: "A relaxed cream-and-mocha hobo bag with lavender, green and golden floral corners." },
+      { id: "blue-garden-envelope", name: "Blue Garden Envelope", price: 68, heroIdx: 0,
+        desc: "A grey envelope crossbody built from blue, sage, cream and rust granny-square panels." },
+      { id: "sunflower-leaf-shoulder", name: "Sunflower Leaf Shoulder", price: 70, heroIdx: 0,
+        desc: "A warm oat shoulder bag with a sunflower flap, dimensional green leaves and a long crochet strap." },
+    ],
+  },
+  {
+    id: "small-bags",
+    name: "Small Bags",
+    tagline: "Compact handbags and crossbodies with bold handmade details.",
+    blurb: "Small crochet bags sized for a phone, keys and a few essentials. Choose from structured minis, floral crossbodies and colourful handheld styles.",
+    heroVariant: "ruby-rose-crossbody",
+    variants: [
+      { id: "midnight-ruffle-mini", name: "Midnight Ruffle Mini", price: 48, heroIdx: 0,
+        desc: "A navy-and-cream mini handbag with scalloped ruffles, a flower closure and braided top handle." },
+      { id: "ruby-rose-crossbody", name: "Ruby Rose Crossbody", price: 50, heroIdx: 0,
+        desc: "A midnight-blue crossbody framed in ruby and cream with a dimensional red rose and leafy detail." },
+      { id: "sky-mandala-mini", name: "Sky Mandala Mini", price: 50, heroIdx: 0,
+        desc: "A sky-blue mini handbag centred with a plum, sage and ivory crochet mandala." },
+      { id: "ruby-garden-handbag", name: "Ruby Garden Handbag", price: 52, heroIdx: 0,
+        desc: "A vivid ruby handbag with soft pink, ivory and green floral patches and two-tone handles." },
+      { id: "berry-blossom", name: "Berry Blossom", price: 48, heroIdx: 2,
+        desc: "An ivory handheld with pink bobble trim and a braided white strap." },
       { id: "espresso-stripe", name: "Espresso Stripe", price: 52, heroIdx: 0,
-        desc: "Warm espresso and cream stripes in a classic vertical pattern. Your new coffee-shop sidekick." },
-      { id: "garden-mandala",  name: "Garden Mandala",  price: 50, heroIdx: 0,
-        desc: "Cream body with a single granny-square mandala centre and bright moss-green straps." },
-      { id: "rosy-drawstring", name: "Rosy Drawstring", price: 48, heroIdx: 0,
-        desc: "A soft blush drawstring bag with a ring of ruby-red roses, deep green cords and matching flower ties." },
-      { id: "ruby-bloom-drawstring", name: "Ruby Bloom Drawstring", price: 48, heroIdx: 0,
-        desc: "An ivory drawstring mini with a bold ruby flower centre, rosebud edging and simple wooden bead details." },
-      { id: "sky-mandala-bucket", name: "Sky Mandala Bucket", price: 50, heroIdx: 0,
-        desc: "A cream bucket bag with a sky-blue, moss and warm-brown mandala, gathered top and comfortable shoulder strap." },
-      { id: "terracotta-daisy-mini", name: "Terracotta Daisy Mini", price: 48, heroIdx: 0,
-        desc: "A compact terracotta top-handle bag centred with one oversized cream-and-taupe daisy granny square." },
+        desc: "Warm espresso and cream stripes in a compact everyday shape." },
+      { id: "garden-mandala", name: "Garden Mandala", price: 50, heroIdx: 0,
+        desc: "A cream body with one colourful mandala centre and bright moss-green straps." },
+      { id: "rose-garden", name: "Rose Garden Crossbody", price: 60, heroIdx: 0,
+        desc: "A forest-green crossbody with a hand-crocheted pink rose on the front flap." },
+      { id: "seafoam", name: "Seafoam Weave", price: 45, heroIdx: 0,
+        desc: "Cream and soft seafoam-blue stripes with a chunky, coastal-inspired weave." },
     ],
   },
   {
-    id: "pouch",
-    name: "Small Handheld Pouch",
-    tagline: "Little pouches — wallets, gift bags, and crochet keepsakes.",
-    blurb: "Palm-sized pouches perfect as wallets, cosmetic bags, or gift wrapping for something precious. Many make wonderful little gifts on their own.",
-    heroVariant: "sunshine",
+    id: "xs-bags",
+    name: "XS Bags",
+    tagline: "Tiny crochet bags, wallets and gift-sized keepsakes.",
+    blurb: "Our smallest handmade pieces are ideal as wallets, cosmetic pouches and thoughtful gift bags.",
+    heroVariant: "golden-sky",
     variants: [
-      { id: "sunshine",         name: "Sunshine Pouch",    price: 32, heroIdx: 0,
-        desc: "Mustard-yellow envelope pouch with a soft lavender trim and button closure. Small ray of sunshine in a bag." },
-      { id: "morning-sky",      name: "Morning Sky",       price: 35, heroIdx: 0,
-        desc: "Sky-blue pouch with a single hand-stitched sunflower motif. Top-zip closure, drawstring handle." },
-      { id: "mocha-drawstring", name: "Mocha Drawstring",  price: 38, heroIdx: 0,
-        desc: "Rich mocha brown and cream stripes with a drawstring top and a tiny coin pouch charm." },
-      { id: "autumn-spice",     name: "Autumn Spice",      price: 30, heroIdx: 0,
-        desc: "Terracotta bi-fold pouch perfect as a wallet. Snap closure on the front flap." },
-      { id: "confetti",         name: "Confetti Pouch",    price: 35, heroIdx: 1,
-        desc: "Cream base with speckled purple, mustard and blush flecks — like confetti in yarn form. Top-handle." },
-      { id: "rosewood-stripe",  name: "Rosewood Stripe",   price: 34, heroIdx: 0,
-        desc: "Rose, charcoal and cream stripes with a granny-square flap. A cozy, wintery pouch." },
-      { id: "lavender-bloom",   name: "Lavender Bloom",    price: 35, heroIdx: 0,
-        desc: "An ivory drawstring pouch edged in lavender, with a small sage-and-navy flower centre and floral cord ends." },
-      { id: "golden-sky",       name: "Golden Sky",        price: 35, heroIdx: 0,
-        desc: "A cream pouch framed in golden mustard with a bright sky-blue flower and soft white drawstring ties." },
+      { id: "autumn-spice", name: "Autumn Spice", price: 30, heroIdx: 0,
+        desc: "A terracotta bi-fold mini with a simple snap closure." },
+      { id: "golden-sky", name: "Golden Sky", price: 35, heroIdx: 0,
+        desc: "A cream mini framed in golden mustard with a bright sky-blue flower and soft ties." },
+      { id: "lavender-bloom", name: "Lavender Bloom", price: 35, heroIdx: 0,
+        desc: "An ivory mini edged in lavender with a sage-and-navy flower centre." },
+      { id: "rosewood-stripe", name: "Rosewood Stripe", price: 34, heroIdx: 0,
+        desc: "Rose, charcoal and cream stripes finished with a granny-square flap." },
+      { id: "sunshine", name: "Sunshine Pouch", price: 32, heroIdx: 0,
+        desc: "A mustard envelope pouch with lavender trim and a button closure." },
     ],
+  },
+  {
+    id: "leather-bags",
+    name: "Leather Bags",
+    tagline: "Statement bags finished with structured, lasting details.",
+    blurb: "A focused collection of statement bags with sturdy construction and elevated finishing touches.",
+    heroVariant: "mocha-blossom-stripe",
+    variants: [
+      { id: "mocha-blossom-stripe", name: "Mocha Blossom Stripe", price: 88, heroIdx: 0,
+        desc: "A spacious mocha-and-cream striped bag with a crochet flower, long straps and reinforced base." },
+    ],
+  },
+  {
+    id: "rakhri-seasonal",
+    name: "Rakhri (Seasonal)",
+    tagline: "Limited seasonal pieces made for heartfelt gifting.",
+    blurb: "Our Rakhri collection is being prepared. New handmade seasonal designs will appear here soon.",
+    variants: [],
   },
 ];
 
@@ -1112,34 +1171,45 @@ function variantImageUrls(catId, vId, count) {
 // IMAGE_MAP is generated to match the actual files on disk.
 const pngSeries = (count, start=1) => Array.from({length: count}, (_, i) => `${i + start}.png`);
 const IMAGE_MAP = {
-  "medium-shoulder/cherry-blossom": ["1.png","2.png","3.png","4.png","5.jpg","6.png","7.png","8.png","9.jpg","10.jpg","11.png"],
-  "medium-shoulder/strawberry-stripe": ["1.jpeg","2.png","3.png","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg"],
-  "medium-shoulder/lavender-fields": ["1.png","2.png","3.png","4.png","5.png","6.png","7.png"],
-  "medium-shoulder/midnight-daisy": ["1.png","2.png","3.png"],
-  "medium-shoulder/terracotta-daisy": pngSeries(11),
-  "medium-shoulder/strawberry-tassel": pngSeries(12),
-  "larger-shoulder/sage-meadow": ["1.png","2.jpg","3.jpg","4.jpg","5.jpg","6.png"],
-  "larger-shoulder/ruby-garden-granny": pngSeries(10),
-  "larger-shoulder/blush-flower-patchwork": pngSeries(5),
-  "larger-shoulder/golden-daisy-granny": pngSeries(7),
-  "larger-shoulder/mocha-blossom-stripe": pngSeries(11),
-  "sling/rose-garden": ["1.png","2.png","3.png","4.png","5.png","6.png"],
-  "small-handheld/seafoam": ["1.png"],
-  "small-handheld/berry-blossom": ["1.png","2.jpg","3.jpg"],
-  "small-handheld/espresso-stripe": ["1.png"],
-  "small-handheld/garden-mandala": ["1.png", ...pngSeries(11, 2)],
-  "small-handheld/rosy-drawstring": pngSeries(15),
-  "small-handheld/ruby-bloom-drawstring": pngSeries(10),
-  "small-handheld/sky-mandala-bucket": pngSeries(10),
-  "small-handheld/terracotta-daisy-mini": pngSeries(10),
-  "pouch/sunshine": ["1.png","2.png","3.png"],
-  "pouch/morning-sky": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.jpg"],
-  "pouch/mocha-drawstring": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.png"],
-  "pouch/autumn-spice": ["1.png","2.png","3.png"],
-  "pouch/confetti": ["1.png","2.jpg","3.jpg"],
-  "pouch/rosewood-stripe": ["1.png","2.png"],
-  "pouch/lavender-bloom": pngSeries(10),
-  "pouch/golden-sky": pngSeries(11),
+  "round-patches/cherry-blossom": ["1.png","2.png","3.png","4.png","5.jpg","6.png","7.png","8.png","9.jpg","10.jpg","11.png"],
+  "round-patches/golden-daisy-granny": pngSeries(7),
+  "round-patches/lavender-fields": pngSeries(6),
+  "round-patches/ruby-garden-granny": pngSeries(10),
+  "round-patches/sage-meadow": ["1.png","2.jpg","3.jpg","4.jpg","5.jpg","6.png"],
+  "small-potli/autumn-garden-potli": pngSeries(7),
+  "small-potli/morning-sky": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.jpg"],
+  "small-potli/mocha-drawstring": ["1.png","2.png","3.jpg","4.jpg","5.jpg","6.png"],
+  "small-potli/rosy-drawstring": pngSeries(15),
+  "small-potli/ruby-bloom-drawstring": pngSeries(10),
+  "small-potli/sky-mandala-bucket": pngSeries(10),
+  "small-potli/terracotta-daisy-mini": pngSeries(10),
+  "large-sized-bag/blush-flower-patchwork": pngSeries(5),
+  "large-sized-bag/midnight-daisy": pngSeries(3),
+  "large-sized-bag/strawberry-stripe": ["1.jpeg","2.png","3.png","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg"],
+  "large-sized-bag/strawberry-tassel": pngSeries(12),
+  "large-sized-bag/terracotta-daisy": pngSeries(11),
+  "medium-bags/round/forest-sunflower-round": pngSeries(10),
+  "medium-bags/round/silver-sunflower-round": pngSeries(10),
+  "medium-bags/rectangle/mocha-daisy-handbag": pngSeries(10),
+  "medium-bags/rectangle/rosewood-garden-tote": pngSeries(10),
+  "medium-bags/rectangle/meadow-stripe-hobo": pngSeries(10),
+  "medium-bags/rectangle/blue-garden-envelope": pngSeries(10),
+  "medium-bags/rectangle/sunflower-leaf-shoulder": pngSeries(3),
+  "small-bags/midnight-ruffle-mini": pngSeries(7),
+  "small-bags/ruby-rose-crossbody": pngSeries(6),
+  "small-bags/sky-mandala-mini": pngSeries(6),
+  "small-bags/ruby-garden-handbag": pngSeries(5),
+  "small-bags/berry-blossom": ["1.png","2.jpg","3.jpg"],
+  "small-bags/espresso-stripe": ["1.png"],
+  "small-bags/garden-mandala": pngSeries(12),
+  "small-bags/rose-garden": pngSeries(6),
+  "small-bags/seafoam": ["1.png"],
+  "xs-bags/autumn-spice": pngSeries(3),
+  "xs-bags/golden-sky": pngSeries(11),
+  "xs-bags/lavender-bloom": pngSeries(10),
+  "xs-bags/rosewood-stripe": pngSeries(2),
+  "xs-bags/sunshine": pngSeries(3),
+  "leather-bags/mocha-blossom-stripe": pngSeries(11),
 };
 
 function variantImage(catId, vId, index=0) {
@@ -1202,10 +1272,10 @@ function navTo(anchor) {
 function renderHeroCards() {
   // Show 4 hero picks: one per category, mixing styles
   const picks = [
-    { cat: "medium-shoulder", var: "cherry-blossom" },
-    { cat: "sling", var: "rose-garden" },
-    { cat: "pouch", var: "morning-sky" },
-    { cat: "small-handheld", var: "berry-blossom" },
+    { cat: "round-patches", var: "cherry-blossom" },
+    { cat: "medium-bags/round", var: "forest-sunflower-round" },
+    { cat: "small-bags", var: "ruby-rose-crossbody" },
+    { cat: "small-potli", var: "autumn-garden-potli" },
   ];
   $("heroCards").innerHTML = picks.map(p => {
     const cat = findCategory(p.cat);
@@ -1227,21 +1297,23 @@ function renderHeroCards() {
 
 function renderCategoryRow() {
   $("categoryRow").innerHTML = CATEGORIES.map(cat => {
-    const startPrice = Math.min(...cat.variants.map(v => v.price));
     const variantCount = cat.variants.length;
     const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
+    const heroMarkup = heroVar
+      ? `<img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">`
+      : `<div class="category-empty-art" role="img" aria-label="${cat.name} coming soon">Coming soon</div>`;
     return `
       <div class="cat-card" onclick="openCategory('${cat.id}')">
         <div class="cat-card-top">
-          ${variantCount > 1 ? '<span class="cat-tag">' + variantCount + ' styles</span>' : ''}
-          <img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">
+          ${variantCount ? '<span class="cat-tag">' + variantCount + (variantCount === 1 ? ' style' : ' styles') + '</span>' : '<span class="cat-tag">Seasonal</span>'}
+          ${heroMarkup}
         </div>
         <div class="cat-card-body">
           <div class="cat-card-name">${cat.name}</div>
           <div class="cat-card-desc">${cat.tagline}</div>
           <div class="cat-card-footer">
-            <span class="cat-card-price">From ${fmt(startPrice)}</span>
-            <button class="cat-card-cta">Shop →</button>
+            <span class="cat-card-price">${variantCount ? `From ${fmt(Math.min(...cat.variants.map(v => v.price)))}` : 'Coming soon'}</span>
+            <button class="cat-card-cta">${variantCount ? 'Shop' : 'View'} →</button>
           </div>
         </div>
       </div>`;
@@ -1253,14 +1325,17 @@ function renderCategoryRow() {
    ===================================================================== */
 function renderCategoriesPage() {
   $("bagCategoriesGrid").innerHTML = CATEGORIES.map(cat => {
-    const startPrice = Math.min(...cat.variants.map(v => v.price));
+    const variantCount = cat.variants.length;
     const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
+    const heroMarkup = heroVar
+      ? `<img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">`
+      : `<div class="category-empty-art" role="img" aria-label="${cat.name} coming soon">Coming soon</div>`;
     return `
       <div class="category-tile" onclick="openCategory('${cat.id}')">
-        <img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">
+        ${heroMarkup}
         <div class="category-label">
           <div class="category-label-title">${cat.name}</div>
-          <div class="category-label-meta">${cat.variants.length} ${cat.variants.length === 1 ? 'style' : 'styles'} · from ${fmt(startPrice)}</div>
+          <div class="category-label-meta">${variantCount ? `${variantCount} ${variantCount === 1 ? 'style' : 'styles'} · from ${fmt(Math.min(...cat.variants.map(v => v.price)))}` : 'Seasonal collection · coming soon'}</div>
         </div>
       </div>`;
   }).join("");
@@ -1272,17 +1347,20 @@ function openCategory(catId) {
   if (!cat) return;
   $("variantsTitle").textContent = cat.name;
   $("variantsSub").textContent = cat.blurb;
-  $("variantsGrid").innerHTML = cat.variants.map(v => `
-    <div class="variant-card" onclick="openDetail('${cat.id}','${v.id}')">
-      <div class="variant-img-wrap">
-        <img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy">
-        ${photoCountBadge(cat.id, v.id)}
+  $("variantsGrid").innerHTML = cat.variants.length
+    ? cat.variants.map(v => `
+      <div class="variant-card" onclick="openDetail('${cat.id}','${v.id}')">
+        <div class="variant-img-wrap">
+          <img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy">
+          ${photoCountBadge(cat.id, v.id)}
+        </div>
+        <div class="variant-body">
+          <div class="variant-name">${v.name}</div>
+          <div class="variant-price">${fmt(v.price)}</div>
+        </div>
       </div>
-      <div class="variant-body">
-        <div class="variant-name">${v.name}</div>
-        <div class="variant-price">${fmt(v.price)}</div>
-      </div>
-    </div>`).join("");
+    `).join("")
+    : `<div class="empty-category">New seasonal Rakhri pieces are coming soon.<br>Check back for the next handmade collection.</div>`;
   showPage("variants");
 }
 
