@@ -120,14 +120,22 @@ if (!html.includes('id="contactEmailError"') || !html.includes('id="contactPhone
 for (const marker of ["validateContactEmail", "validateContactPhone", "clearContactValidation"]) {
   if (!app.includes(marker)) fail(`Contact validation behavior missing: ${marker}`);
 }
-if (!css.includes(".testimonials-grid{display:grid") || css.includes(".testimonials-grid{display:flex")) fail("Reviews must use the non-clipping grid layout");
-for (const marker of ["hero-stitchies", "lightbox-hint", "toast-thread", "faq-icon", "cformProgressTrack", "cformProgressFill", "contactMessageCount"]) {
+if (!html.includes("Made by Mum, stitched for you")) fail("The updated homepage introduction is missing");
+if (html.includes("hero-stitchies") || css.includes("stitchie-float") || css.includes("trust-wiggle") || app.includes("setupRevealAnimations")) fail("Scattered homepage animation was reintroduced");
+if (!css.includes(".testimonials-grid{display:grid") || !css.includes("grid-auto-flow:column") || !css.includes("scroll-snap-type:x mandatory")) fail("Reviews must use the single-row, full-card carousel");
+for (const marker of ["reviewPrev", "reviewNext", "reviewPosition"]) {
+  if (!html.includes(`id="${marker}"`)) fail(`Review carousel control missing: ${marker}`);
+}
+for (const marker of ["scrollReviews", "setupReviewRail", "updateReviewRailControls"]) {
+  if (!app.includes(marker)) fail(`Review carousel behavior missing: ${marker}`);
+}
+for (const marker of ["lightbox-hint", "toast-thread", "faq-icon", "cformProgressTrack", "cformProgressFill", "contactMessageCount"]) {
   if (!html.includes(marker)) fail(`Cute UX marker missing: ${marker}`);
 }
 for (const marker of ["cardPeekLabel", "wishlist-sparkles", "celebrateCartButton", "setupLightboxGestures", "setupFaqAccordion", "updateContactFormProgress"]) {
   if (!app.includes(marker)) fail(`Cute UX behavior missing: ${marker}`);
 }
-for (const marker of ["@keyframes stitchie-float", "@keyframes wishlist-spark", ".cat-swatches", ".cform-progress-card", ".cart-empty-yarn", "footer::before"]) {
+for (const marker of ["@keyframes wishlist-spark", ".cat-swatches", ".cform-progress-card", ".cart-empty-yarn", "footer::before"]) {
   if (!css.includes(marker)) fail(`Cute UX styling missing: ${marker}`);
 }
 for (const controlId of ["contactName", "contactEmail", "contactPhone", "contactInterest", "contactMessage", "cformFiles"]) {

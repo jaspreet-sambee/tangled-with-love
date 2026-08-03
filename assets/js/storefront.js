@@ -411,18 +411,6 @@ function runFinder() {
   $("finderResults").scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "nearest" });
 }
 
-function setupRevealAnimations() {
-  const targets = document.querySelectorAll(".trust-item,.cat-card,.custom-banner,.about-visual,.about-text,.testi-card,.faq-item,.contact-info,.contact-form-panel");
-  if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
-    targets.forEach(el => el.classList.add("revealed"));
-    return;
-  }
-  const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (entry.isIntersecting) { entry.target.classList.add("revealed"); observer.unobserve(entry.target); }
-  }), { threshold: 0.08, rootMargin: "0px 0px -30px" });
-  targets.forEach((el, index) => { el.dataset.reveal = ""; el.style.transitionDelay = `${Math.min(index % 4, 3) * 55}ms`; observer.observe(el); });
-}
-
 /* =====================================================================
    NAV / PAGE ROUTING
    ===================================================================== */
@@ -786,6 +774,63 @@ function renderReviews() {
   }).join("");
 }
 
+let reviewRailFrame = 0;
+
+function reviewRailStep() {
+  const grid = $("testimonialsGrid");
+  const card = grid?.querySelector(".testi-card");
+  if (!grid || !card) return 0;
+  const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+  return card.getBoundingClientRect().width + gap;
+}
+
+function updateReviewRailControls() {
+  const grid = $("testimonialsGrid");
+  const previous = $("reviewPrev");
+  const next = $("reviewNext");
+  const status = $("reviewPosition");
+  if (!grid || !previous || !next || !status) return;
+
+  const maximum = Math.max(0, grid.scrollWidth - grid.clientWidth);
+  previous.disabled = grid.scrollLeft <= 2;
+  next.disabled = grid.scrollLeft >= maximum - 2;
+
+  const railBounds = grid.getBoundingClientRect();
+  const fullyVisible = [...grid.querySelectorAll(".testi-card")]
+    .map((card, index) => ({ index, bounds: card.getBoundingClientRect() }))
+    .filter(({ bounds }) => bounds.left >= railBounds.left - 1 && bounds.right <= railBounds.right + 1);
+  if (!fullyVisible.length) return;
+  const first = fullyVisible[0].index + 1;
+  const last = fullyVisible.at(-1).index + 1;
+  status.textContent = first === last ? `${first} of ${REVIEWS.length}` : `${first}–${last} of ${REVIEWS.length}`;
+}
+
+function scrollReviews(direction) {
+  const grid = $("testimonialsGrid");
+  const step = reviewRailStep();
+  if (!grid || !step) return;
+  const destination = Math.round(grid.scrollLeft / step) + direction;
+  grid.scrollTo({
+    left: Math.max(0, destination * step),
+    behavior: prefersReducedMotion() ? "auto" : "smooth",
+  });
+}
+
+function setupReviewRail() {
+  const grid = $("testimonialsGrid");
+  if (!grid) return;
+  const scheduleUpdate = () => {
+    if (reviewRailFrame) return;
+    reviewRailFrame = requestAnimationFrame(() => {
+      reviewRailFrame = 0;
+      updateReviewRailControls();
+    });
+  };
+  grid.addEventListener("scroll", scheduleUpdate, { passive: true });
+  window.addEventListener("resize", scheduleUpdate);
+  requestAnimationFrame(updateReviewRailControls);
+}
+
 function openReview(idx, evt) {
   if (evt) evt.stopPropagation();
   const grid = $("testimonialsGrid");
@@ -793,7 +838,7 @@ function openReview(idx, evt) {
   if (!card || !grid || card.classList.contains("expanded")) return;
   grid.querySelectorAll(".testi-card.expanded").forEach(c => c.classList.remove("expanded"));
   card.classList.add("expanded");
-  setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+  grid.scrollTo({ left: card.offsetLeft, behavior: prefersReducedMotion() ? "auto" : "smooth" });
 }
 
 function closeReview(idx, evt) {
@@ -1921,6 +1966,7 @@ function init() {
   renderRecentlyViewed();
   updateWishlistUI();
   renderReviews();
+  setupReviewRail();
   renderCart();
   wireContactForm();
   setupFaqAccordion();
@@ -1929,6 +1975,5 @@ function init() {
   if (!testSeeded && !customSeeded && !checkoutState) migrateLegacyProductUrl();
   setupNavigation();
   if (testSeeded) openCart();
-  setupRevealAnimations();
 }
 document.addEventListener("DOMContentLoaded", init);
