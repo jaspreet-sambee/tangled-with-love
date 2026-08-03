@@ -87,14 +87,13 @@ You'll see something like:
 
 ---
 
-## Step 4 — Wire everything into `index.html`
+## Step 4 — Configure the storefront
 
-Open `index.html` and find the `CONFIG` block near the bottom (search for `STRIPE_CHECKOUT_ENDPOINT`).
+Open `assets/js/store-data.js` and find the `CONFIG` block near the top (search for `STRIPE_CHECKOUT_ENDPOINT`).
 
 ```js
 const CONFIG = {
   STRIPE_CHECKOUT_ENDPOINT: "https://tangled-stripe.YOURNAME.workers.dev",
-  STRIPE_PUBLISHABLE_KEY:   "pk_live_...",
   FORMSPREE_ID:             "xrgdqpzw",   // your Formspree form ID
   CURRENCY: "CAD",
   CURRENCY_SYMBOL: "CA$",
@@ -147,16 +146,15 @@ Also test:
 
 When ready for real money:
 
-1. In `CONFIG`, replace `pk_test_…` with `pk_live_…`
-2. In Cloudflare, re-run `wrangler secret put STRIPE_SECRET_KEY` and paste `sk_live_…`
-3. Test one real purchase with your own card (you can refund yourself in Stripe)
-4. Announce on Instagram @mummawarmth 🧶
+1. In Cloudflare, re-run `wrangler secret put STRIPE_SECRET_KEY` and paste `sk_live_…`
+2. Test one real purchase with your own card (you can refund yourself in Stripe)
+3. Announce on Instagram @mummawarmth 🧶
 
 ---
 
 ## Editing the shop later
 
-Everything is data-driven. To change prices, product names, or add new variants, edit the `CATEGORIES` array in `index.html` and push.
+Everything is data-driven. To change prices, product names, reviews, or add variants, edit `assets/js/store-data.js`, run `npm run build`, and push.
 
 - **New bag variant**: add a folder under `assets/products/CATEGORY/NEW-VARIANT-ID/` with numbered images (`1.jpg`, `2.jpg`, …), add an entry to `CATEGORIES[i].variants`, and update `IMAGE_MAP` (just copy an existing entry as a template).
 - **New category**: add an object to `CATEGORIES` with a matching `assets/products/CATEGORY-ID/` folder.
@@ -172,7 +170,7 @@ Everything is data-driven. To change prices, product names, or add new variants,
 ## Troubleshooting
 
 **"Checkout session failed" alert** — Check the browser console. Most common causes:
-- `STRIPE_CHECKOUT_ENDPOINT` wrong in `index.html`
+- `STRIPE_CHECKOUT_ENDPOINT` wrong in `assets/js/store-data.js`
 - `ALLOWED_ORIGIN` in Cloudflare doesn't include your site URL
 - `STRIPE_SECRET_KEY` not set (run `wrangler secret list` to verify)
 

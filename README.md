@@ -4,29 +4,31 @@ The online shop for Mum's handcrafted crochet bags — live at **[tangledwithlov
 
 ## Stack
 
-- **Static site** (HTML/CSS/JS, no build step) — hosted on GitHub Pages
+- **Static storefront** (semantic HTML, cacheable CSS/JS, no framework runtime) — hosted on GitHub Pages
 - **Stripe Checkout** for payments via a tiny Cloudflare Worker
-- **Formspree** for the contact form
+- **EmailJS / mail Worker** for contact messages and reference-photo attachments
+- **Node maintenance scripts** for routes, thumbnails, and catalog validation
 
 ## Structure
 
 ```
 tangled-with-love/
-├── index.html              # The whole site — single file
+├── index.html              # Semantic page shell and storefront content
 ├── 404.html                # GitHub Pages fallback for clean storefront routes
-├── scripts/                # Generates static entry pages for clean routes
-├── package.json            # Local image-optimization commands
+├── scripts/                # Route, thumbnail, and validation tools
+├── package.json            # Repeatable maintenance commands
 ├── shop/, faq/, products/  # Generated route entry pages
 ├── CNAME                   # tangledwithlove.com
 ├── DEPLOYMENT.md           # Step-by-step deployment guide
 ├── assets/
-│   └── products/
-│       ├── medium-shoulder/cherry-blossom/1.png, 2.png, ...
-│       └── ... (one folder per bag variant)
-└── stripe-worker/          # Cloudflare Worker for Stripe sessions
-    ├── src/worker.js
-    ├── wrangler.toml
-    └── package.json
+│   ├── brand/               # Logo, favicon, and touch icon assets
+│   ├── css/storefront.css  # Theme, layout, responsive and accessible states
+│   ├── js/store-data.js    # Configuration, products, reviews, and image map
+│   ├── js/storefront.js    # Navigation, cart, search, saved items, and checkout
+│   ├── products/           # Full-resolution product galleries
+│   └── thumbs/             # Optimized WebP browsing images
+├── stripe-worker/          # Secure Stripe session creation
+└── mail-worker/            # Contact and attachment delivery
 ```
 
 ## First-time setup
@@ -35,20 +37,22 @@ See **[DEPLOYMENT.md](./DEPLOYMENT.md)** — 45 minutes, free forever.
 
 ## Editing products
 
-Open `index.html` and find the `CATEGORIES` array. Each variant has:
+Open `assets/js/store-data.js` and find the `CATEGORIES` array. Each variant has:
 
 ```js
-{ id: "cherry-blossom", name: "...", price: 65, count: 11, desc: "..." }
+{ id: "cherry-blossom", name: "...", price: 50, heroIdx: 0, desc: "..." }
 ```
 
-Images live at `assets/products/{categoryId}/{variantId}/{1..N}.{ext}` and are listed in the `IMAGE_MAP` object right below `CATEGORIES`.
+Images live at `assets/products/{categoryId}/{variantId}/{1..N}.{ext}` and are listed in `IMAGE_MAP` in the same data file.
 
 After adding or changing product photos, refresh the lightweight browsing images:
 
 ```bash
-npm install
-npm run optimize-images
+npm ci
+npm run build
 ```
+
+This requires Node.js 20.9 or newer. `npm run build` regenerates clean routes and thumbnails, then verifies every product, price, image, route, script, and required DOM reference.
 
 ## Local dev
 
@@ -65,10 +69,10 @@ Production navigation uses clean URLs such as `/shop`, `/faq`, `/contacts`,
 `/collections/round-patches`, and `/products/cherry-blossom`. Their generated
 entry pages make direct visits work on GitHub Pages and the local server.
 
-After adding or renaming a product or category, regenerate those entry pages:
+For a fast code/data check without regenerating images:
 
 ```bash
-node scripts/generate-route-pages.mjs
+npm run validate
 ```
 
 Keep `404.html` as a fallback for older or mistyped links.
