@@ -448,12 +448,13 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
         <input name="phone" type="tel" placeholder="Phone number (optional) — for faster response">
         <select name="interest" required>
           <option value="">What are you interested in?</option>
-          <option>Custom bag (colour / size)</option>
-          <option>Custom blanket</option>
-          <option>Amigurumi</option>
-          <option>Wearable (hat, scarf, etc.)</option>
-          <option>Home decor</option>
+          <option>Medium Shoulder Bag</option>
+          <option>Larger Shoulder Bag</option>
+          <option>Sling Bag</option>
+          <option>Small Handheld Bag</option>
+          <option>Small Handheld Pouch</option>
           <option>Something else</option>
+          <option>Leave a review</option>
         </select>
         <textarea name="message" placeholder="Tell us what you have in mind…" required></textarea>
         <div class="cform-file">
@@ -597,8 +598,16 @@ const CONFIG = {
   // Only needed if STRIPE_CHECKOUT_ENDPOINT is set.
   STRIPE_PUBLISHABLE_KEY: "pk_test_51TTpmxLWr2b1r2xFcLJ9zIO1NzBcuVAo4MUYXNZWOR42lrRHNtnSYuQpNcCxk1Bm84opUQmueavm2rhIjOMCNl0600uAOsu0Ei",
 
-  // Formspree form id — used only for messages/orders that include file attachments
-  // (EmailJS below handles everything else with nicer branded templates).
+  // URL of your Cloudflare Worker that emails messages/reference-photos WITH
+  // attachments via Resend (see mail-worker/). Formspree's free plan doesn't
+  // support file uploads, so this replaces it for the attachment path only.
+  // Leave blank ("") to fall back to Formspree (attachments will fail unless
+  // your Formspree plan supports file uploads).
+  MAIL_WORKER_ENDPOINT: "https://tangled-mail.tangled-mail-worker.workers.dev",
+
+  // Formspree form id — fallback for messages/orders with attachments when
+  // MAIL_WORKER_ENDPOINT is blank. (EmailJS below handles everything else
+  // with nicer branded templates.)
   FORMSPREE_ID: "mojbpvdp",
 
   // EmailJS (https://emailjs.com) — sends the branded owner-notification and
@@ -1223,20 +1232,30 @@ function validateFileSelection(input, listEl) {
 }
 function validateContactFiles(input) { return validateFileSelection(input, $("cformFileList")); }
 
-// Sends any reference photos attached to cart items as their own Formspree email,
-// entirely separate from the Stripe/payment flow (Stripe Checkout can't carry files).
+// Sends any reference photos attached to cart items as their own email, entirely
+// separate from the Stripe/payment flow (Stripe Checkout can't carry files).
 async function sendReferencePhotosEmail() {
-  if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") return;
   const entries = STATE.cart
     .map(it => ({ it, files: ITEM_FILES[it.lineId] || [] }))
     .filter(x => x.files.length);
   if (!entries.length) return;
+  const summary = entries.map(x => `${x.it.name} (${x.it.colour}): ${x.files.length} file(s)`).join("\n");
+  const allFiles = entries.flatMap(x => x.files);
   try {
-    const fd = new FormData();
-    fd.append("subject", "Reference photos — order via tangledwithlove.com");
-    fd.append("summary", entries.map(x => `${x.it.name} (${x.it.colour}): ${x.files.length} file(s)`).join("\n"));
-    entries.forEach(x => x.files.forEach(f => fd.append("attachments", f, f.name)));
-    await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, { method: "POST", body: fd, headers: { Accept: "application/json" } });
+    if (CONFIG.MAIL_WORKER_ENDPOINT) {
+      const fd = new FormData();
+      fd.append("form_type", "order");
+      fd.append("message", summary);
+      allFiles.forEach(f => fd.append("attachments", f, f.name));
+      const r = await fetch(CONFIG.MAIL_WORKER_ENDPOINT, { method: "POST", body: fd });
+      if (!r.ok) throw new Error("Mail worker error (" + r.status + ")");
+    } else if (CONFIG.FORMSPREE_ID && CONFIG.FORMSPREE_ID !== "FORMSPREE_ID") {
+      const fd = new FormData();
+      fd.append("_subject", "Reference photos — order via tangledwithlove.com");
+      fd.append("summary", summary);
+      allFiles.forEach(f => fd.append("attachments", f, f.name));
+      await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, { method: "POST", body: fd, headers: { Accept: "application/json" } });
+    }
   } catch (err) {
     console.error("Reference photo email failed", err);
   }
@@ -1261,17 +1280,35 @@ function wireContactForm() {
       return;
     }
     const hasFiles = fileInput && fileInput.files.length > 0;
+    const interestVal = form.querySelector('[name="interest"]').value;
+    const isReview = interestVal === "Leave a review";
+    const formType = isReview ? "review" : "message";
     try {
-      if (hasFiles) {
-        // Attachments still go through Formspree — reliable file delivery, plain template.
-        if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") {
-          msg.textContent = "✖ Contact form isn't connected yet. Please set CONFIG.FORMSPREE_ID.";
-          msg.classList.add("show");
-          return;
+      if (hasFiles || isReview) {
+        if (CONFIG.MAIL_WORKER_ENDPOINT) {
+          // Attachments (and reviews, so they get the review email template) go
+          // through the mail Worker (Resend) — Formspree's free plan doesn't
+          // support file uploads.
+          const data = new FormData();
+          data.append("form_type", formType);
+          data.append("from_name", form.querySelector('[name="name"]').value);
+          data.append("reply_to", form.querySelector('[name="email"]').value);
+          data.append("phone", form.querySelector('[name="phone"]').value || "—");
+          data.append("interest", interestVal);
+          data.append("message", form.querySelector('[name="message"]').value);
+          Array.from(fileInput.files).forEach(f => data.append("attachments", f, f.name));
+          const r = await fetch(CONFIG.MAIL_WORKER_ENDPOINT, { method: "POST", body: data });
+          if (!r.ok) throw new Error("Form error");
+        } else {
+          if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") {
+            msg.textContent = "✖ Contact form isn't connected yet. Please set CONFIG.FORMSPREE_ID.";
+            msg.classList.add("show");
+            return;
+          }
+          const data = new FormData(form);
+          const r = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } });
+          if (!r.ok) throw new Error("Form error");
         }
-        const data = new FormData(form);
-        const r = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } });
-        if (!r.ok) throw new Error("Form error");
       } else {
         // No attachments — send our own branded owner + customer emails via EmailJS.
         if (typeof emailjs === "undefined" || !CONFIG.EMAILJS_PUBLIC_KEY) {
@@ -1280,11 +1317,11 @@ function wireContactForm() {
           return;
         }
         const params = {
-          form_type: "message",
+          form_type: formType,
           from_name: form.querySelector('[name="name"]').value,
           reply_to: form.querySelector('[name="email"]').value,
           phone: form.querySelector('[name="phone"]').value || "—",
-          interest: form.querySelector('[name="interest"]').value,
+          interest: interestVal,
           message: form.querySelector('[name="message"]').value,
         };
         await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_OWNER, params);
