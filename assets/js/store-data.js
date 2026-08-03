@@ -205,7 +205,7 @@ const CATEGORIES = [
    ===================================================================== */
 const REVIEWS = [
   {
-    name: "Rajwinder Tiwana",
+    name: "Gurjinder Tiwana",
     text: "My sister made a beautiful set of crochet sweaters for my twin grandchildren and we all loved it very much. Cute and cozy gift for the newborns.",
     images: [],
   },
@@ -227,6 +227,11 @@ const REVIEWS = [
   {
     name: "Manpreet",
     text: "I’m so happy with my crochet item! It’s adorable, beautifully crafted, and even better than I expected. The love and effort put into it really shows.",
+    images: [],
+  },
+  {
+    name: "Mohini",
+    text: "It’s truly special about receiving something handmade with love. Every stitch reflects the warmth, patience, and care of a mom’s hands. It feels less like buying a product and more like receiving a thoughtful gift made with love. I’m absolutely delighted with my purchase and would highly recommend this website to anyone who appreciates handmade creations made from the heart.",
     images: [],
   },
 ];

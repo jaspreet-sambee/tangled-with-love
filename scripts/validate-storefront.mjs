@@ -106,6 +106,8 @@ if (!html.includes('assets/brand/maker-portrait.webp')) fail("The maker portrait
 if (!html.includes('class="nav-story-link" href="/about"')) fail("The animated logo must link to About");
 if (!html.includes('class="nav-story-flip"') || !css.includes("@keyframes nav-story-flip")) fail("The logo-to-portrait flip animation is missing");
 if (html.includes("Manpreet Kaur")) fail("The contact form still contains a customer name example");
+if (data.includes('name: "Rajwinder Tiwana"')) fail("The former review name was reintroduced");
+if (!data.includes('name: "Gurjinder Tiwana"') || !data.includes('name: "Mohini"')) fail("Required customer reviews are missing");
 if (html.includes("Custom colours welcome")) fail("Removed homepage proof text was reintroduced");
 if (html.includes('id="navBack"') || app.includes('$("navBack")')) fail("The removed top back control was reintroduced");
 if (/detailDispatch|estimatedDispatchWindow|Estimated dispatch/.test(`${html}\n${app}`)) fail("Estimated dispatch dates must remain removed");
