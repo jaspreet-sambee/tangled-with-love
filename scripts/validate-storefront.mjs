@@ -104,7 +104,9 @@ for (const asset of ["assets/brand/logo-mark.png", "assets/brand/logo-mark.webp"
 if (!html.includes('assets/brand/logo-mark.webp')) fail("The storefront brand logo is missing");
 if (html.includes("Custom colours welcome")) fail("Removed homepage proof text was reintroduced");
 if (html.includes('id="navBack"') || app.includes('$("navBack")')) fail("The removed top back control was reintroduced");
-if (!html.includes('id="detailDispatch"') || !app.includes("estimatedDispatchWindow")) fail("Estimated product dispatch dates are missing");
+if (/detailDispatch|estimatedDispatchWindow|Estimated dispatch/.test(`${html}\n${app}`)) fail("Estimated dispatch dates must remain removed");
+if (html.includes("Handmade in Brampton")) fail("The old announcement copy was reintroduced");
+if (!html.includes('id="navProgressFill"') || !app.includes('$("navProgressFill")')) fail("Navigation progress feedback is missing");
 if (!html.includes('id="mainContent"')) fail("Main content landmark is missing");
 if (!html.includes('class="skip-link"')) fail("Keyboard skip link is missing");
 if (!css.includes(".skip-link")) fail("Skip-link styling is missing");

@@ -451,6 +451,9 @@ function syncNavigationState() {
   navFramePending = false;
   const nav = $("siteNav");
   const homeActive = $("page-home").classList.contains("active");
+  const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+  $("navProgressFill").style.transform = `scaleX(${progress})`;
   nav.classList.toggle("is-scrolled", window.scrollY > 10);
   $("backToTop").classList.toggle("visible", window.scrollY > 520);
 
@@ -838,6 +841,7 @@ function openCategory(catId, push=true) {
   STATE.currentCategoryId = catId;
   $("variantsBreadcrumb").textContent = cat.name;
   $("variantsTitle").textContent = cat.name;
+  $("variantsCount").textContent = cat.variants.length ? `${cat.variants.length} ${cat.variants.length === 1 ? "design" : "designs"}` : "Seasonal preview";
   $("variantsSub").textContent = cat.blurb;
   $("variantsGrid").innerHTML = cat.variants.length
     ? cat.variants.map(v => `
@@ -862,15 +866,6 @@ function openCategory(catId, push=true) {
    ===================================================================== */
 const COLOUR_OPTIONS = ["As shown", "Natural Cream", "Dusty Rose", "Sage Green", "Terracotta", "Midnight / Charcoal", "Warm Brown", "Custom (note below)"];
 
-function estimatedDispatchWindow() {
-  const start = new Date();
-  const end = new Date();
-  start.setDate(start.getDate() + 14);
-  end.setDate(end.getDate() + 21);
-  const format = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric" });
-  return `${format.format(start)}–${format.format(end)}`;
-}
-
 function openDetail(catId, vId, push=true) {
   const v = findVariant(catId, vId);
   if (!v) return;
@@ -885,7 +880,6 @@ function openDetail(catId, vId, push=true) {
   $("detailCategory").textContent = cat.name;
   $("detailName").textContent = v.name;
   $("detailPrice").textContent = fmt(v.price);
-  $("detailDispatch").textContent = estimatedDispatchWindow();
   $("detailDesc").textContent = v.desc;
   $("mobileBuyName").textContent = v.name;
   $("mobileBuyPrice").textContent = fmt(v.price);
