@@ -114,6 +114,7 @@ if (!html.includes('id="navProgressFill"') || !app.includes('$("navProgressFill"
 if (!html.includes('id="mainContent"')) fail("Main content landmark is missing");
 if (!html.includes('class="skip-link"')) fail("Keyboard skip link is missing");
 if (!css.includes(".skip-link")) fail("Skip-link styling is missing");
+if ((html.match(/instagram-link/g) || []).length < 4 || !css.includes(".instagram-link::before")) fail("Instagram handle icons are missing");
 for (const marker of ["hero-stitchies", "lightbox-hint", "toast-thread", "faq-icon", "cformProgressTrack", "cformProgressFill", "contactMessageCount"]) {
   if (!html.includes(marker)) fail(`Cute UX marker missing: ${marker}`);
 }
