@@ -1,7 +1,7 @@
 /**
  * Cloudflare Worker — Stripe Checkout session creator for tangledwithlove.com
  *
- * The static GitHub-Pages site posts { currency, items, success_url, cancel_url }
+ * The static site posts { currency, items, success_url, cancel_url, customer_email }
  * here. This Worker calls Stripe's REST API with the secret key stored in
  * Cloudflare env vars and returns { url } for the frontend to redirect to.
  *
@@ -42,7 +42,7 @@ export default {
     let body;
     try { body = await request.json(); } catch { return json({ error: "Invalid JSON" }, 400, cors); }
 
-    const { currency = "cad", items, success_url, cancel_url, skipShipping = false } = body;
+    const { currency = "cad", items, success_url, cancel_url, customer_email = "", skipShipping = false } = body;
     if (!Array.isArray(items) || items.length === 0) {
       return json({ error: "Cart is empty." }, 400, cors);
     }
@@ -61,6 +61,9 @@ export default {
     params.append("success_url", success_url.replace(/\?.*$/, "") + "?checkout=success&session_id={CHECKOUT_SESSION_ID}");
     params.append("cancel_url",  cancel_url);
     params.append("billing_address_collection", "required");
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer_email)) {
+      params.append("customer_email", customer_email);
+    }
 
     if (!skipShipping) {
       // Collect shipping — Canada + common intl destinations

@@ -134,7 +134,7 @@ GitHub Pages rebuilds in about 60 seconds.
 3. Open cart → click **Secure checkout**
 4. You should be redirected to Stripe's hosted checkout page showing your line items
 5. Pay with test card `4242 4242 4242 4242` (any future date, any CVC, any postcode) if you're in test mode
-6. You should land back on `/?checkout=success` with an order ID
+6. You should land back on `/checkout/success` with an order ID
 7. Check the Stripe dashboard — the payment appears under **Payments**
 
 Also test:
@@ -179,6 +179,8 @@ Everything is data-driven. To change prices, product names, or add new variants,
 **Contact form silently fails** — `FORMSPREE_ID` not set correctly. Open browser DevTools → Network tab → submit form → check the response.
 
 **Images don't load** — Confirm the `assets/products/` folder was committed. Run `git status` before pushing.
+
+**A clean URL such as `/faq` returns 404** — Run `node scripts/generate-route-pages.mjs`, then commit the generated route folders. Keep `404.html` as a fallback for older links.
 
 **Domain doesn't work after DNS change** — DNS can take up to 24 hours to propagate globally. Try https://dnschecker.org to see the state worldwide.
 
