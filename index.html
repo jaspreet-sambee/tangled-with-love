@@ -7,6 +7,7 @@
 <meta name="description" content="Beautifully handcrafted crochet bags made with love in Brampton, Ontario. Shoulder bags, slings, handhelds and pouches — no two alike.">
 <base href="./">
 <link rel="canonical" id="canonicalUrl" href="https://tangledwithlove.com/">
+<link rel="preload" as="image" href="assets/thumbs/round-patches/cherry-blossom.webp" type="image/webp" fetchpriority="high">
 <script>
 (() => {
   const route = new URLSearchParams(location.search).get("__route");
@@ -100,7 +101,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* ======= HERO ======= */
 .fringe{display:flex;justify-content:center;gap:5px;padding:10px 0;background:var(--rust)}
-.hero{min-height:88vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:4rem 4rem 2rem;gap:4rem;position:relative;overflow:hidden}
+.hero{min-height:88vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,500px);align-items:center;padding:clamp(3rem,6vw,5.5rem) max(2rem,calc((100vw - 1180px)/2)) clamp(3rem,5vw,4.5rem);column-gap:clamp(2.5rem,6vw,5rem);position:relative;overflow:hidden}
 .hero-content{position:relative;z-index:1}
 .hero-eyebrow{font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--soft-terracotta);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem}
 .hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--soft-terracotta)}
@@ -110,7 +111,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .hero-buttons{display:flex;gap:1rem;flex-wrap:wrap}
 .hero-story-link{border:0;background:none;color:var(--soft-terracotta);padding:0.75rem 0.2rem;font:800 0.78rem 'Lato',sans-serif;letter-spacing:0.04em;cursor:pointer;text-decoration:underline;text-underline-offset:4px;display:inline-flex;align-items:center}
 .hero-illustration{display:flex;justify-content:center;align-items:center;position:relative;z-index:1}
-.hero-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:420px;width:100%}
+.hero-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:440px;width:100%}
 .product-card{position:relative;background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(124,80,53,0.10);transition:transform 0.25s,box-shadow 0.25s;cursor:pointer}
 .product-card:hover{transform:translateY(-4px);box-shadow:0 10px 36px rgba(124,80,53,0.16)}
 .product-img-wrap{aspect-ratio:1;background:var(--pale-blush);overflow:hidden;position:relative}
@@ -124,8 +125,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .hero-proof span{display:inline-flex;align-items:center;gap:0.42rem;color:var(--warm-brown);font-size:0.76rem;font-weight:700;background:rgba(255,253,248,0.72);border:1px solid var(--line);border-radius:2rem;padding:0.45rem 0.75rem;backdrop-filter:blur(6px)}
 .hero-proof span::before{content:'✓';width:17px;height:17px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--muted-sage);color:white;font-size:0.62rem}
 .hero-card-grid{perspective:1000px}
-.hero-card-grid .product-card:nth-child(1),.hero-card-grid .product-card:nth-child(4){transform:translateY(12px)}
-.hero-card-grid .product-card:nth-child(1):hover,.hero-card-grid .product-card:nth-child(4):hover{transform:translateY(7px)}
 .wishlist-btn{position:absolute;top:0.65rem;right:0.65rem;z-index:4;width:36px;height:36px;border-radius:50%;border:1px solid rgba(124,80,53,0.12);display:flex;align-items:center;justify-content:center;background:rgba(255,253,248,0.9);color:var(--warm-brown);box-shadow:0 4px 14px rgba(44,26,14,0.1);backdrop-filter:blur(8px);cursor:pointer;transition:transform 0.2s,background 0.2s,color 0.2s}
 .wishlist-btn:hover{transform:scale(1.07);background:white}
 .wishlist-btn.active{background:var(--soft-terracotta);color:white;border-color:transparent}
@@ -403,6 +402,19 @@ body.cart-open{overflow:hidden}
 .cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;font-size:0.9rem}
 .cart-subtotal span:last-child{font-weight:700;color:var(--warm-brown)}
 .cart-note{font-size:0.72rem;color:var(--light);margin-bottom:1rem;line-height:1.45}
+.checkout-contact{margin:0.85rem 0 1rem}
+.checkout-contact-label{display:flex;align-items:baseline;justify-content:space-between;gap:0.75rem;margin-bottom:0.5rem;color:var(--dark);font-size:0.76rem;font-weight:800}
+.checkout-contact-label small{color:var(--light);font-size:0.64rem;font-weight:500}
+.checkout-email-field{position:relative}
+.checkout-email-field svg{position:absolute;left:0.85rem;top:50%;width:17px;height:17px;transform:translateY(-50%);fill:none;stroke:var(--light);stroke-width:1.8;pointer-events:none}
+.checkout-email-field input{width:100%;height:46px;border:1px solid rgba(124,80,53,0.18);border-radius:12px;background:white;color:var(--dark);padding:0 0.9rem 0 2.65rem;font:500 0.86rem 'Lato',sans-serif;transition:border-color 0.2s,box-shadow 0.2s,background 0.2s}
+.checkout-email-field input::placeholder{color:#aa907a}
+.checkout-email-field input:focus{outline:none;border-color:var(--soft-terracotta);box-shadow:0 0 0 4px rgba(201,123,90,0.13)}
+.checkout-email-field input.invalid{border-color:#b8493f;background:#fff9f8;box-shadow:0 0 0 3px rgba(184,73,63,0.1)}
+.checkout-email-error,.checkout-status{display:none;margin-top:0.45rem;font-size:0.68rem;line-height:1.45}
+.checkout-email-error.show{display:block;color:#a53d35}
+.checkout-status.show{display:block;color:var(--warm-brown)}
+.checkout-status.error{color:#a53d35}
 .checkout-btn{width:100%;background:var(--warm-brown);color:white;border:none;padding:0.9rem;border-radius:2rem;font-size:0.85rem;font-family:'Lato',sans-serif;font-weight:700;cursor:pointer;transition:background 0.2s;letter-spacing:0.04em}
 .checkout-btn:hover{background:var(--soft-terracotta)}
 .checkout-btn:disabled{opacity:0.6;cursor:wait}
@@ -870,6 +882,15 @@ body.cart-open{overflow:hidden}
   <div class="cart-footer" id="cartFooter" style="display:none">
     <div class="cart-subtotal"><span>Subtotal</span><span id="cartTotal">CA$0.00</span></div>
     <p class="cart-note">Shipping &amp; taxes calculated at checkout. Each piece is made to order — please allow 2–3 weeks.</p>
+    <div class="checkout-contact">
+      <label class="checkout-contact-label" for="checkoutEmail"><span>Confirmation email</span><small>Required for your receipt</small></label>
+      <div class="checkout-email-field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+        <input id="checkoutEmail" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required aria-required="true" aria-describedby="checkoutEmailError" oninput="clearCheckoutEmailError()">
+      </div>
+      <p class="checkout-email-error" id="checkoutEmailError" role="alert"></p>
+      <p class="checkout-status" id="checkoutStatus" role="status" aria-live="polite"></p>
+    </div>
     <button class="checkout-btn" id="checkoutBtn" onclick="goCheckout()">Secure checkout →</button>
     <div class="cart-assurance"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Payments are encrypted and securely processed by Stripe</div>
   </div>
@@ -1098,7 +1119,7 @@ body.cart-open{overflow:hidden}
     <p class="about-body">Now, in the quiet, snowy winters of Canada, those same hands haven't slowed down. While she once created out of a sense of responsibility to her parents and siblings, and later as a devoted wife and mother, she now creates for the purest reason of all: <strong>herself</strong>.</p>
     <p class="about-body">This website is a gallery of that journey — a celebration of a woman who gave everything to her family and is now weaving her own dreams, one stitch at a time.</p>
     <div class="about-stats">
-      <div><div class="stat-num">200+</div><div class="stat-label">Happy customers</div></div>
+      <div><div class="stat-num">50+</div><div class="stat-label">Happy customers</div></div>
       <div><div class="stat-num">100%</div><div class="stat-label">Handmade</div></div>
       <div><div class="stat-num">∞</div><div class="stat-label">Love stitched in</div></div>
     </div>
@@ -1748,7 +1769,7 @@ const REVIEWS = [
     images: [],
   },
   {
-    name: "Jaskiran",
+    name: "Jaskaran",
     text: "I absolutely love my aunt's crochet creations! Every piece is beautifully handmade with so much care and attention to detail. The quality is amazing, and each item is even cuter in person. I'm always surprised by how quickly she finishes her work without ever compromising on quality. You can really see the love, patience, and talent that go into every stitch. If you're looking for adorable handmade crochet, I highly recommend supporting her — you won't be disappointed!",
     images: [],
   },
@@ -1854,6 +1875,11 @@ function variantImage(catId, vId, index=0) {
 function variantHeroImage(cat, v) {
   const idx = Math.min(v.heroIdx || 0, (IMAGE_MAP[`${cat.id}/${v.id}`] || []).length - 1);
   return variantImage(cat.id, v.id, Math.max(0, idx));
+}
+
+// Lightweight WebP previews keep browsing fast; product galleries still use originals.
+function variantCardImage(cat, v) {
+  return `assets/thumbs/${cat.id}/${v.id}.webp`;
 }
 
 // Returns the full list of images for a variant, with the hero image moved to position 0.
@@ -2004,7 +2030,7 @@ function renderRecentlyViewed() {
   $("recentSection").hidden = items.length === 0;
   $("recentGrid").innerHTML = items.map(({ cat, variant }) => `
     <article class="recent-card">
-      <div class="recent-card-img"><img src="${variantHeroImage(cat, variant)}" alt="${variant.name}" loading="lazy">${wishlistButton(cat.id, variant.id)}</div>
+      <div class="recent-card-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
       <a class="recent-card-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><div class="recent-card-category">${cat.name}</div><div class="recent-card-name">${variant.name}</div><div class="recent-card-price">${fmt(variant.price)}</div></a>
     </article>`).join("");
 }
@@ -2047,7 +2073,7 @@ function renderSearchResults() {
   $("searchCount").textContent = `${products.length} ${products.length === 1 ? "piece" : "pieces"}`;
   $("searchResults").innerHTML = products.length ? products.map(({ cat, variant }) => `
     <article class="search-result">
-      <div class="search-result-img"><img src="${variantHeroImage(cat, variant)}" alt="${variant.name}" loading="lazy">${wishlistButton(cat.id, variant.id)}</div>
+      <div class="search-result-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
       <a class="search-result-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','search')"><div class="search-result-cat">${cat.name}</div><div class="search-result-name">${variant.name}</div><div class="search-result-price">${fmt(variant.price)}</div></a>
     </article>`).join("") : `<div class="search-empty"><div class="search-empty-icon">🧶</div><strong>${STATE.searchSavedOnly ? "No saved pieces yet" : "No pieces found"}</strong><span>${STATE.searchSavedOnly ? "Tap the heart on any product to keep it here." : "Try another colour, style, or category."}</span></div>`;
 }
@@ -2169,7 +2195,7 @@ function runFinder() {
   localStorage.setItem("twl_finder", JSON.stringify(STATE.finder));
   $("finderResultsGrid").innerHTML = matches.map(({ cat, variant }) => `
     <a class="finder-result" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','finder')">
-      <img src="${variantHeroImage(cat, variant)}" alt="${variant.name}" loading="lazy">
+      <img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">
       <div class="finder-result-copy"><small>${cat.name}</small><strong>${variant.name}</strong><span>${fmt(variant.price)}</span></div>
     </a>`).join("");
   $("finderResults").classList.add("show");
@@ -2509,7 +2535,7 @@ function renderHeroCards() {
     return `
       <article class="product-card">
         <div class="product-img-wrap">
-          <img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="${p === picks[0] ? 'eager' : 'lazy'}" ${p === picks[0] ? 'fetchpriority="high"' : ''}>
+          <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="eager" decoding="async" ${p === picks[0] ? 'fetchpriority="high"' : ''}>
           ${wishlistButton(p.cat, p.var)}
           ${photoCountBadge(p.cat, p.var)}
         </div>
@@ -2576,7 +2602,7 @@ function renderCategoryRow() {
     const variantCount = cat.variants.length;
     const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
     const heroMarkup = heroVar
-      ? `<img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">`
+      ? `<img src="${variantCardImage(cat, heroVar)}" data-fallback="${variantHeroImage(cat, heroVar)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${cat.name}" loading="lazy" decoding="async">`
       : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
     return `
       <a class="cat-card" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
@@ -2604,7 +2630,7 @@ function renderCategoriesPage() {
     const variantCount = cat.variants.length;
     const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
     const heroMarkup = heroVar
-      ? `<img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">`
+      ? `<img src="${variantCardImage(cat, heroVar)}" data-fallback="${variantHeroImage(cat, heroVar)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${cat.name}" loading="lazy" decoding="async">`
       : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
     return `
       <a class="category-tile" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
@@ -2629,7 +2655,7 @@ function openCategory(catId, push=true) {
     ? cat.variants.map(v => `
       <article class="variant-card">
         <div class="variant-img-wrap">
-          <img src="${variantHeroImage(cat, v)}" alt="${v.name}" loading="lazy">
+          <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="lazy" decoding="async">
           ${wishlistButton(cat.id, v.id)}
           ${photoCountBadge(cat.id, v.id)}
         </div>
@@ -2717,7 +2743,7 @@ function renderRelatedProducts(catId, vId) {
     .slice(0, 3);
   $("detailRelatedGrid").innerHTML = related.map(({ cat, variant }) => `
     <article class="detail-related-card">
-      <div class="detail-related-image"><img src="${variantHeroImage(cat, variant)}" alt="${variant.name}" loading="lazy">${wishlistButton(cat.id, variant.id)}</div>
+      <div class="detail-related-image"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
       <a class="detail-related-copy card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><small>${cat.name}</small><strong>${variant.name}</strong><span>${fmt(variant.price)}</span></a>
     </article>`).join("");
 }
@@ -2902,14 +2928,72 @@ function loadCart() {
   } catch(e){}
 }
 
+function restoreCheckoutEmail() {
+  try {
+    const savedEmail = localStorage.getItem("twl_checkout_email") || "";
+    if ($("checkoutEmail")) $("checkoutEmail").value = savedEmail;
+  } catch (e) {}
+}
+
+function clearCheckoutEmailError() {
+  const input = $("checkoutEmail");
+  const error = $("checkoutEmailError");
+  if (input) {
+    input.classList.remove("invalid");
+    input.removeAttribute("aria-invalid");
+  }
+  if (error) { error.textContent = ""; error.classList.remove("show"); }
+  showCheckoutStatus("");
+}
+
+function showCheckoutStatus(message, type="") {
+  const status = $("checkoutStatus");
+  if (!status) return;
+  status.textContent = message;
+  status.classList.toggle("show", Boolean(message));
+  status.classList.toggle("error", type === "error");
+}
+
+function validatedCheckoutEmail() {
+  const input = $("checkoutEmail");
+  const error = $("checkoutEmailError");
+  const email = input?.value.trim() || "";
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (valid) {
+    clearCheckoutEmailError();
+    try { localStorage.setItem("twl_checkout_email", email); } catch (e) {}
+    return email;
+  }
+  if (input) {
+    input.classList.add("invalid");
+    input.setAttribute("aria-invalid", "true");
+    input.focus();
+  }
+  if (error) {
+    error.textContent = email ? "Please check the email address and try again." : "Enter your email so we can send your receipt and order updates.";
+    error.classList.add("show");
+  }
+  return "";
+}
+
+function resetCheckoutButton() {
+  const btn = $("checkoutBtn");
+  if (!btn) return;
+  btn.disabled = false;
+  btn.textContent = "Secure checkout →";
+}
+
 /* =====================================================================
    CHECKOUT — Stripe Checkout (via Worker) OR Formspree fallback
    ===================================================================== */
 async function goCheckout() {
   if (STATE.cart.length === 0) return;
+  const email = validatedCheckoutEmail();
+  if (!email) return;
   const btn = $("checkoutBtn");
   btn.disabled = true;
   btn.textContent = "Preparing checkout…";
+  showCheckoutStatus("Preparing your secure checkout…");
 
   // Reference photo attachments (if any) go out as their own email — separate from
   // the Stripe/payment flow entirely, since Stripe Checkout can't carry file uploads.
@@ -2917,19 +3001,14 @@ async function goCheckout() {
   if (allAttachedFiles.length) {
     const totalBytes = allAttachedFiles.reduce((s, f) => s + f.size, 0);
     if (allAttachedFiles.length > CFORM_MAX_FILES || totalBytes > CFORM_MAX_TOTAL_BYTES) {
-      alert(`Please keep reference photos to at most ${CFORM_MAX_FILES} files and 15MB total across your order (currently ${allAttachedFiles.length} files, ${formatFileSize(totalBytes)}).`);
-      btn.disabled = false;
-      btn.textContent = "Secure checkout →";
+      showCheckoutStatus(`Please keep reference photos to ${CFORM_MAX_FILES} files and 15MB total. Your order currently has ${allAttachedFiles.length} files (${formatFileSize(totalBytes)}).`, "error");
+      resetCheckoutButton();
       return;
     }
-    sendReferencePhotosEmail(); // fire-and-forget; doesn't block or affect checkout
+    sendReferencePhotosEmail(email); // fire-and-forget; doesn't block or affect checkout
   }
 
   if (CONFIG.STRIPE_CHECKOUT_ENDPOINT) {
-    // Our own order number + email capture — entirely separate from Stripe's own
-    // checkout session below, which is built and sent exactly as before.
-    const email = prompt("Enter your email so we can send you an order confirmation:");
-    if (!email) { btn.disabled = false; btn.textContent = "Secure checkout →"; return; }
     const orderNumber = generateOrderNumber();
     try {
       localStorage.setItem("twl_pending_order", JSON.stringify({ orderNumber, email }));
@@ -2951,6 +3030,7 @@ async function goCheckout() {
           items,
           success_url: location.origin + "/checkout/success",
           cancel_url:  location.origin + "/checkout/cancel",
+          customer_email: email,
           skipShipping,
         }),
       });
@@ -2963,17 +3043,14 @@ async function goCheckout() {
       throw new Error("Missing checkout URL");
     } catch (err) {
       console.error(err);
-      alert("Sorry, we couldn't start checkout right now. Please email hello@tangledwithlove.com and we'll sort it out.\n\n" + err.message);
-      btn.disabled = false;
-      btn.textContent = "Secure checkout →";
+      showCheckoutStatus("We couldn't start checkout right now. Please try again, or email hello@tangledwithlove.com and we'll help.", "error");
+      resetCheckoutButton();
     }
   } else {
     // Fallback: no Stripe configured — submit order to Formspree as email
     try {
       const orderSummary = orderSummaryText();
       const total = fmt(cartSubtotal());
-      const email = prompt("Stripe isn't connected yet. Enter your email and we'll follow up with payment instructions:");
-      if (!email) { btn.disabled = false; btn.textContent = "Secure checkout →"; return; }
       const orderNumber = generateOrderNumber();
       await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, {
         method: "POST",
@@ -2994,9 +3071,9 @@ async function goCheckout() {
       $("successOrderId").textContent = `Order ${orderNumber} received — we'll email you at ${email}`;
       $("successOrderId").style.display = "inline-block";
     } catch (err) {
-      alert("Sorry, something went wrong. Please email hello@tangledwithlove.com.");
-      btn.disabled = false;
-      btn.textContent = "Secure checkout →";
+      console.error(err);
+      showCheckoutStatus("Something went wrong. Please try again, or email hello@tangledwithlove.com.", "error");
+      resetCheckoutButton();
     }
   }
 }
@@ -3117,7 +3194,7 @@ function validateContactFiles(input) { return validateFileSelection(input, $("cf
 
 // Sends any reference photos attached to cart items as their own email, entirely
 // separate from the Stripe/payment flow (Stripe Checkout can't carry files).
-async function sendReferencePhotosEmail() {
+async function sendReferencePhotosEmail(email="") {
   const entries = STATE.cart
     .map(it => ({ it, files: ITEM_FILES[it.lineId] || [] }))
     .filter(x => x.files.length);
@@ -3128,6 +3205,7 @@ async function sendReferencePhotosEmail() {
     if (CONFIG.MAIL_WORKER_ENDPOINT) {
       const fd = new FormData();
       fd.append("form_type", "order");
+      if (email) fd.append("reply_to", email);
       fd.append("message", summary);
       allFiles.forEach(f => fd.append("attachments", f, f.name));
       const r = await fetch(CONFIG.MAIL_WORKER_ENDPOINT, { method: "POST", body: fd });
@@ -3135,6 +3213,7 @@ async function sendReferencePhotosEmail() {
     } else if (CONFIG.FORMSPREE_ID && CONFIG.FORMSPREE_ID !== "FORMSPREE_ID") {
       const fd = new FormData();
       fd.append("_subject", "Reference photos — order via tangledwithlove.com");
+      if (email) fd.append("email", email);
       fd.append("summary", summary);
       allFiles.forEach(f => fd.append("attachments", f, f.name));
       await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, { method: "POST", body: fd, headers: { Accept: "application/json" } });
@@ -3474,6 +3553,7 @@ function init() {
     emailjs.init({ publicKey: CONFIG.EMAILJS_PUBLIC_KEY });
   }
   loadCart();
+  restoreCheckoutEmail();
   loadPersonalization();
   const testSeeded = handleTestSeed();
   const customSeeded = handleCustomSeed();

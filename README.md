@@ -15,6 +15,7 @@ tangled-with-love/
 ├── index.html              # The whole site — single file
 ├── 404.html                # GitHub Pages fallback for clean storefront routes
 ├── scripts/                # Generates static entry pages for clean routes
+├── package.json            # Local image-optimization commands
 ├── shop/, faq/, products/  # Generated route entry pages
 ├── CNAME                   # tangledwithlove.com
 ├── DEPLOYMENT.md           # Step-by-step deployment guide
@@ -41,6 +42,13 @@ Open `index.html` and find the `CATEGORIES` array. Each variant has:
 ```
 
 Images live at `assets/products/{categoryId}/{variantId}/{1..N}.{ext}` and are listed in the `IMAGE_MAP` object right below `CATEGORIES`.
+
+After adding or changing product photos, refresh the lightweight browsing images:
+
+```bash
+npm install
+npm run optimize-images
+```
 
 ## Local dev
 

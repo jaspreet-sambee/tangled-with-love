@@ -1,0 +1,11 @@
+{
+  "name": "tangled-with-love-storefront",
+  "private": true,
+  "scripts": {
+    "optimize-images": "node scripts/generate-thumbnails.mjs",
+    "generate-routes": "node scripts/generate-route-pages.mjs"
+  },
+  "devDependencies": {
+    "sharp": "0.34.5"
+  }
+}
