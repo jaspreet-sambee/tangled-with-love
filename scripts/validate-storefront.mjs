@@ -98,6 +98,11 @@ if (missingRefs.length) fail(`Missing DOM ids: ${missingRefs.join(", ")}`);
 for (const asset of ["assets/css/storefront.css", "assets/js/store-data.js", "assets/js/storefront.js"]) {
   if (!html.includes(asset)) fail(`index.html does not load ${asset}`);
 }
+for (const asset of ["assets/brand/logo-mark.png", "assets/brand/logo-mark.webp", "assets/brand/favicon-64.png", "assets/brand/apple-touch-icon.png"]) {
+  await access(join(root, asset));
+}
+if (!html.includes('assets/brand/logo-mark.webp')) fail("The storefront brand logo is missing");
+if (html.includes("Custom colours welcome")) fail("Removed homepage proof text was reintroduced");
 if (!html.includes('id="mainContent"')) fail("Main content landmark is missing");
 if (!html.includes('class="skip-link"')) fail("Keyboard skip link is missing");
 if (!css.includes(".skip-link")) fail("Skip-link styling is missing");

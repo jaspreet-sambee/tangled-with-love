@@ -21,6 +21,7 @@ tangled-with-love/
 ├── CNAME                   # tangledwithlove.com
 ├── DEPLOYMENT.md           # Step-by-step deployment guide
 ├── assets/
+│   ├── brand/               # Logo, favicon, and touch icon assets
 │   ├── css/storefront.css  # Theme, layout, responsive and accessible states
 │   ├── js/store-data.js    # Configuration, products, reviews, and image map
 │   ├── js/storefront.js    # Navigation, cart, search, saved items, and checkout

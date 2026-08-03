@@ -844,6 +844,7 @@ function openCategory(catId, push=true) {
   if (!cat) return;
   document.title = `${cat.name} — Tangled with Love`;
   STATE.currentCategoryId = catId;
+  $("variantsBreadcrumb").textContent = cat.name;
   $("variantsTitle").textContent = cat.name;
   $("variantsSub").textContent = cat.blurb;
   $("variantsGrid").innerHTML = cat.variants.length
@@ -875,6 +876,11 @@ function openDetail(catId, vId, push=true) {
   const cat = findCategory(catId);
   STATE.detail = { catId, vId, variant: v, category: cat };
   STATE.detailQty = 1;
+  const categoryBreadcrumb = $("detailCategoryBreadcrumb");
+  categoryBreadcrumb.textContent = cat.name;
+  categoryBreadcrumb.href = routeHref(categoryRoutePath(cat.id));
+  categoryBreadcrumb.onclick = event => navigateCategoryLink(event, cat.id);
+  $("detailProductBreadcrumb").textContent = v.name;
   $("detailCategory").textContent = cat.name;
   $("detailName").textContent = v.name;
   $("detailPrice").textContent = fmt(v.price);
@@ -913,8 +919,6 @@ function openDetail(catId, vId, push=true) {
     $("galleryThumbs").innerHTML = "";
   }
 
-  $("backFromDetail").textContent = "← Back";
-  $("backFromDetail").onclick = () => navigateBack();
   rememberViewed(catId, vId);
   updateWishlistUI();
   renderRelatedProducts(catId, vId);

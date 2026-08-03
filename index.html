@@ -24,11 +24,12 @@
   }
 })();
 </script>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='.9em' font-size='54'%3E%F0%9F%A7%B6%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/brand/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;family=Lato:wght@300;400;700&amp;family=Caveat:wght@400;500;600;700&amp;family=Quicksand:wght@300;400;500;600;700&amp;family=Yeseva+One&amp;display=swap" rel="stylesheet">
-<script id="storeSchema" type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"Tangled with Love","description":"One-of-a-kind handmade crochet bags and custom pieces crafted in Brampton, Ontario.","address":{"@type":"PostalAddress","addressLocality":"Brampton","addressRegion":"Ontario","addressCountry":"CA"},"sameAs":["https://instagram.com/mummawarmth"],"currenciesAccepted":"CAD"}</script>
+<script id="storeSchema" type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"Tangled with Love","description":"One-of-a-kind handmade crochet bags and custom pieces crafted in Brampton, Ontario.","logo":"https://tangledwithlove.com/assets/brand/logo-mark.png","image":"https://tangledwithlove.com/assets/thumbs/round-patches/cherry-blossom.webp","address":{"@type":"PostalAddress","addressLocality":"Brampton","addressRegion":"Ontario","addressCountry":"CA"},"sameAs":["https://instagram.com/mummawarmth"],"currenciesAccepted":"CAD"}</script>
 <script id="productSchema" type="application/ld+json">{}</script>
 <link rel="stylesheet" href="assets/css/storefront.css">
 </head>
@@ -170,7 +171,7 @@
 <nav class="site-nav" id="siteNav" aria-label="Primary navigation">
   <div class="nav-brand">
     <button class="nav-back" id="navBack" type="button" onclick="navigateBack()" aria-label="Go back">← <span>Back</span></button>
-    <a class="nav-logo" href="/" onclick="return navigateHomeLink(event)" aria-label="Tangled with Love home">Tangled with Love</a>
+    <a class="nav-logo" href="/" onclick="return navigateHomeLink(event)" aria-label="Tangled with Love home"><img class="nav-logo-mark" src="assets/brand/logo-mark.webp" alt="" width="40" height="40" decoding="async"><span>Tangled with Love</span></a>
   </div>
   <ul class="nav-links" id="navLinks">
     <li><a href="/shop" data-nav-section="shop" onclick="return navigateSectionLink(event,'shop')">Shop</a></li>
@@ -222,9 +223,6 @@
       <a class="btn-primary" href="/shop" onclick="return navigateSectionLink(event,'shop')">Browse the shop</a>
       <button class="btn-secondary" type="button" onclick="openFinder()">Find my perfect bag</button>
       <a class="hero-story-link" href="/about" onclick="return navigateSectionLink(event,'about')">Meet the maker →</a>
-    </div>
-    <div class="hero-proof" aria-label="Shopping benefits">
-      <span>Custom colours welcome</span>
     </div>
   </div>
   <div class="hero-illustration">
@@ -383,7 +381,7 @@
 <footer>
   <div class="footer-main">
     <div class="footer-col">
-      <div class="footer-brand">Tangled with Love</div>
+      <div class="footer-brand"><img src="assets/brand/logo-mark.webp" alt="" width="44" height="44" loading="lazy" decoding="async"><span>Tangled with Love</span></div>
       <p class="footer-story">One-of-a-kind crochet pieces, made slowly by hand in our Brampton home studio. Every stitch carries patience, colour, and a little piece of our family story.</p>
       <a class="footer-social" href="https://instagram.com/mummawarmth" target="_blank" rel="noopener">Follow @mummawarmth ↗</a>
     </div>
@@ -417,7 +415,11 @@
 <!-- ===================================================================== -->
 <div class="page" id="page-categories">
   <div class="products-category">
-    <button class="back-link" onclick="navigateBack()">← Back to home</button>
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/" onclick="return navigateHomeLink(event)">Home</a>
+      <span class="breadcrumbs-separator" aria-hidden="true">/</span>
+      <span aria-current="page">Shop</span>
+    </nav>
     <h1>Crochet Bags</h1>
     <p class="cat-sub">Each style comes in multiple colour &amp; pattern variants. Pick a style to see what's available right now.</p>
     <div class="bag-categories-grid" id="bagCategoriesGrid"></div>
@@ -429,7 +431,13 @@
 <!-- ===================================================================== -->
 <div class="page" id="page-variants">
   <div class="products-category">
-    <button class="back-link" onclick="navigateBack()">← Back</button>
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/" onclick="return navigateHomeLink(event)">Home</a>
+      <span class="breadcrumbs-separator" aria-hidden="true">/</span>
+      <a href="/shop" onclick="return navigateSectionLink(event,'shop')">Shop</a>
+      <span class="breadcrumbs-separator" aria-hidden="true">/</span>
+      <span id="variantsBreadcrumb" aria-current="page">Collection</span>
+    </nav>
     <h1 id="variantsTitle">Bags</h1>
     <p class="cat-sub" id="variantsSub"></p>
     <div class="variants-grid" id="variantsGrid"></div>
@@ -441,7 +449,15 @@
 <!-- ===================================================================== -->
 <div class="page" id="page-detail">
   <div class="gallery-container">
-    <button class="back-link" id="backFromDetail">← Back</button>
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/" onclick="return navigateHomeLink(event)">Home</a>
+      <span class="breadcrumbs-separator" aria-hidden="true">/</span>
+      <a href="/shop" onclick="return navigateSectionLink(event,'shop')">Shop</a>
+      <span class="breadcrumbs-separator" aria-hidden="true">/</span>
+      <a id="detailCategoryBreadcrumb" href="/shop">Collection</a>
+      <span class="breadcrumbs-separator" aria-hidden="true">/</span>
+      <span id="detailProductBreadcrumb" aria-current="page">Product</span>
+    </nav>
     <div class="gallery-layout">
       <div class="gallery-section">
         <div class="gallery-image-display">
