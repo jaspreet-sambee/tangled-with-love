@@ -7,7 +7,8 @@
 <meta name="description" content="Beautifully handcrafted crochet bags made with love in Brampton, Ontario. Shoulder bags, slings, handhelds and pouches — no two alike.">
 <base href="./">
 <link rel="canonical" id="canonicalUrl" href="https://tangledwithlove.com/">
-<link rel="preload" as="image" href="assets/thumbs/round-patches/cherry-blossom.webp" type="image/webp" fetchpriority="high">
+<!-- keep this version in sync with THUMB_VERSION below so the preload isn't wasted -->
+<link rel="preload" as="image" href="assets/thumbs/round-patches/cherry-blossom.webp?v=20260803c" type="image/webp" fetchpriority="high">
 <script>
 (() => {
   const route = new URLSearchParams(location.search).get("__route");
@@ -1880,9 +1881,13 @@ function variantHeroImage(cat, v) {
   return variantImage(cat.id, v.id, Math.max(0, idx));
 }
 
+// Bump this whenever thumbnails are regenerated so browsers/CDNs don't keep
+// serving a cached, since-replaced .webp file under the same filename.
+const THUMB_VERSION = "20260803c";
+
 // Lightweight WebP previews keep browsing fast; product galleries still use originals.
 function variantCardImage(cat, v) {
-  return `assets/thumbs/${cat.id}/${v.id}.webp`;
+  return `assets/thumbs/${cat.id}/${v.id}.webp?v=${THUMB_VERSION}`;
 }
 
 // Returns the full list of images for a variant, with the hero image moved to position 0.
