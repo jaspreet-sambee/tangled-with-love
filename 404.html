@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Opening Tangled with Love…</title>
+</head>
+<body>
+  <script>
+    const cleanPath = location.pathname === "/" ? "/" : location.pathname.replace(/\/+$/, "");
+    const route = cleanPath + location.search + location.hash;
+    location.replace("/?__route=" + encodeURIComponent(route));
+  </script>
+  <noscript><p>Please enable JavaScript and return to <a href="/">Tangled with Love</a>.</p></noscript>
+</body>
+</html>

@@ -13,6 +13,10 @@ The online shop for Mum's handcrafted crochet bags — live at **[tangledwithlov
 ```
 tangled-with-love/
 ├── index.html              # The whole site — single file
+├── 404.html                # GitHub Pages fallback for clean storefront routes
+├── scripts/                # Generates static entry pages for clean routes
+├── package.json            # Local image-optimization commands
+├── shop/, faq/, products/  # Generated route entry pages
 ├── CNAME                   # tangledwithlove.com
 ├── DEPLOYMENT.md           # Step-by-step deployment guide
 ├── assets/
@@ -39,12 +43,34 @@ Open `index.html` and find the `CATEGORIES` array. Each variant has:
 
 Images live at `assets/products/{categoryId}/{variantId}/{1..N}.{ext}` and are listed in the `IMAGE_MAP` object right below `CATEGORIES`.
 
-## Local dev
+After adding or changing product photos, refresh the lightweight browsing images:
 
 ```bash
-# Just open index.html in your browser, or:
+npm install
+npm run optimize-images
+```
+
+## Local dev
+
+You can double-click `index.html` for a quick offline preview; product photos and
+navigation work directly from the downloaded folder. For production-like HTTP
+testing, run:
+
+```bash
 python3 -m http.server 8080
 # visit http://localhost:8080
 ```
+
+Production navigation uses clean URLs such as `/shop`, `/faq`, `/contacts`,
+`/collections/round-patches`, and `/products/cherry-blossom`. Their generated
+entry pages make direct visits work on GitHub Pages and the local server.
+
+After adding or renaming a product or category, regenerate those entry pages:
+
+```bash
+node scripts/generate-route-pages.mjs
+```
+
+Keep `404.html` as a fallback for older or mistyped links.
 
 Made with love for Mum. 🧶
