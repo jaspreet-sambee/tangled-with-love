@@ -78,6 +78,7 @@
   <button class="lightbox-prev" onclick="prevImageLightbox(event)" aria-label="Previous">‹</button>
   <img id="lightboxImage" src="" alt="Product image" class="lightbox-img">
   <button class="lightbox-next" onclick="nextImageLightbox(event)" aria-label="Next">›</button>
+  <div class="lightbox-hint" aria-hidden="true"><span>↔</span> Swipe or use arrow keys</div>
   <div id="lightboxCounter" class="lightbox-counter">1 / 1</div>
 </div>
 
@@ -163,6 +164,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span class="toast-icon" id="toastIcon">✓</span>
   <span id="toastMessage"></span>
+  <span class="toast-thread" aria-hidden="true"></span>
 </div>
 
 <!-- ===================================================================== -->
@@ -215,6 +217,7 @@
 <div class="page active" id="page-home">
 
 <section class="hero" id="top">
+  <div class="hero-stitchies" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
   <svg class="thread-overlay" viewBox="0 0 1200 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M-20,200 Q200,120 400,280 T900,200" fill="none" stroke="#C97B5A" stroke-width="1.5" opacity="0.12"/>
     <path d="M-20,350 Q300,250 600,400 T1220,300" fill="none" stroke="#7C5035" stroke-width="1" opacity="0.08"/>
@@ -320,11 +323,11 @@
       <a class="btn-secondary" href="/contacts" onclick="return navigateSectionLink(event,'contact')">Ask us anything</a>
     </div>
     <div class="faq-list">
-      <details class="faq-item"><summary>How long does a handmade order take?</summary><div class="faq-answer">Most pieces are made to order and are ready in approximately 2–3 weeks. If you need something for a specific date, send us a message before ordering and we’ll confirm what’s possible.</div></details>
-      <details class="faq-item"><summary>Can I request different colours?</summary><div class="faq-answer">Yes. Choose “Custom” in the colour menu and leave a note, or use the contact form for a more detailed colour plan. Reference photos can be attached to both product and custom-order requests.</div></details>
-      <details class="faq-item"><summary>Do you ship outside Brampton?</summary><div class="faq-answer">Yes. Shipping is available across Canada and internationally. Final shipping costs and applicable taxes are calculated during secure checkout.</div></details>
-      <details class="faq-item"><summary>Will my piece look exactly like the photo?</summary><div class="faq-answer">Every piece is handmade, so small variations in stitch, colour placement, and dimensions are part of its character. The overall design and palette will stay true to the piece you selected.</div></details>
-      <details class="faq-item"><summary>How should I care for crochet pieces?</summary><div class="faq-answer">Gentle hand washing in cool water is best. Reshape while damp, dry flat, and avoid hanging the piece while wet so the fibres keep their form.</div></details>
+      <details class="faq-item"><summary><span class="faq-summary-copy"><span class="faq-icon" aria-hidden="true">◷</span>How long does a handmade order take?</span></summary><div class="faq-answer">Most pieces are made to order and are ready in approximately 2–3 weeks. If you need something for a specific date, send us a message before ordering and we’ll confirm what’s possible.</div></details>
+      <details class="faq-item"><summary><span class="faq-summary-copy"><span class="faq-icon" aria-hidden="true">✿</span>Can I request different colours?</span></summary><div class="faq-answer">Yes. Choose “Custom” in the colour menu and leave a note, or use the contact form for a more detailed colour plan. Reference photos can be attached to both product and custom-order requests.</div></details>
+      <details class="faq-item"><summary><span class="faq-summary-copy"><span class="faq-icon" aria-hidden="true">⌁</span>Do you ship outside Brampton?</span></summary><div class="faq-answer">Yes. Shipping is available across Canada and internationally. Final shipping costs and applicable taxes are calculated during secure checkout.</div></details>
+      <details class="faq-item"><summary><span class="faq-summary-copy"><span class="faq-icon" aria-hidden="true">✦</span>Will my piece look exactly like the photo?</span></summary><div class="faq-answer">Every piece is handmade, so small variations in stitch, colour placement, and dimensions are part of its character. The overall design and palette will stay true to the piece you selected.</div></details>
+      <details class="faq-item"><summary><span class="faq-summary-copy"><span class="faq-icon" aria-hidden="true">♨</span>How should I care for crochet pieces?</span></summary><div class="faq-answer">Gentle hand washing in cool water is best. Reshape while damp, dry flat, and avoid hanging the piece while wet so the fibres keep their form.</div></details>
     </div>
   </div>
 </section>
@@ -349,6 +352,10 @@
       <h3>Send a message</h3>
       <p class="cform-intro">Tell us what you’re imagining. Fields marked required help us reply with the right details.</p>
       <form class="cform" id="contactForm" action="https://formspree.io/f/mojbpvdp" method="POST">
+        <div class="cform-progress-card">
+          <div class="cform-progress-copy"><span>Your lovely idea</span><strong id="cformProgressText">0 of 4 essentials</strong></div>
+          <div class="cform-progress-track" id="cformProgressTrack" role="progressbar" aria-label="Message form completion" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><span id="cformProgressFill"></span></div>
+        </div>
         <div class="cform-fields">
           <div class="cform-field">
             <label for="contactName">Your name <span>Required</span></label>
@@ -380,7 +387,8 @@
           </div>
           <div class="cform-field cform-field-wide">
             <label for="contactMessage">Your idea <span>Required</span></label>
-            <textarea id="contactMessage" name="message" placeholder="Colours, size, occasion, or anything else that would help…" required></textarea>
+            <textarea id="contactMessage" name="message" maxlength="600" placeholder="Colours, size, occasion, or anything else that would help…" required></textarea>
+            <div class="cform-field-meta"><span>A few details help us reply thoughtfully.</span><span id="contactMessageCount">0 / 600</span></div>
           </div>
         </div>
         <div class="cform-file">

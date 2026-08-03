@@ -114,6 +114,15 @@ if (!html.includes('id="navProgressFill"') || !app.includes('$("navProgressFill"
 if (!html.includes('id="mainContent"')) fail("Main content landmark is missing");
 if (!html.includes('class="skip-link"')) fail("Keyboard skip link is missing");
 if (!css.includes(".skip-link")) fail("Skip-link styling is missing");
+for (const marker of ["hero-stitchies", "lightbox-hint", "toast-thread", "faq-icon", "cformProgressTrack", "cformProgressFill", "contactMessageCount"]) {
+  if (!html.includes(marker)) fail(`Cute UX marker missing: ${marker}`);
+}
+for (const marker of ["cardPeekLabel", "wishlist-sparkles", "celebrateCartButton", "setupLightboxGestures", "setupFaqAccordion", "updateContactFormProgress"]) {
+  if (!app.includes(marker)) fail(`Cute UX behavior missing: ${marker}`);
+}
+for (const marker of ["@keyframes stitchie-float", "@keyframes wishlist-spark", ".cat-swatches", ".cform-progress-card", ".cart-empty-yarn", "footer::before"]) {
+  if (!css.includes(marker)) fail(`Cute UX styling missing: ${marker}`);
+}
 for (const controlId of ["contactName", "contactEmail", "contactPhone", "contactInterest", "contactMessage", "cformFiles"]) {
   if (!html.includes(`for="${controlId}"`)) fail(`Accessible label missing for ${controlId}`);
 }

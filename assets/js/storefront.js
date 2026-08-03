@@ -98,6 +98,10 @@ function photoCountBadge(catId, vId) {
   </span>`;
 }
 
+function cardPeekLabel() {
+  return `<span class="card-peek" aria-hidden="true">Peek inside <span>↗</span></span>`;
+}
+
 const HEART_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>`;
 const productKey = (catId, vId) => `${catId}::${vId}`;
 
@@ -167,7 +171,7 @@ function isWishlisted(catId, vId) {
 function wishlistButton(catId, vId) {
   const active = isWishlisted(catId, vId);
   const name = findVariant(catId, vId)?.name || "product";
-  return `<button type="button" class="wishlist-btn ${active ? "active" : ""}" data-wishlist-key="${productKey(catId, vId)}" onclick="toggleWishlist('${catId}','${vId}',event)" aria-label="${active ? "Remove" : "Save"} ${name}" aria-pressed="${active}">${HEART_ICON}</button>`;
+  return `<button type="button" class="wishlist-btn ${active ? "active" : ""}" data-wishlist-key="${productKey(catId, vId)}" onclick="toggleWishlist('${catId}','${vId}',event)" aria-label="${active ? "Remove" : "Save"} ${name}" aria-pressed="${active}">${HEART_ICON}<span class="wishlist-sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>`;
 }
 
 function updateWishlistUI() {
@@ -189,6 +193,7 @@ function updateWishlistUI() {
 
 function toggleWishlist(catId, vId, event) {
   if (event) { event.preventDefault(); event.stopPropagation(); }
+  const sourceButton = event?.currentTarget || null;
   const key = productKey(catId, vId);
   const name = findVariant(catId, vId)?.name || "Product";
   const index = STATE.wishlist.indexOf(key);
@@ -198,6 +203,12 @@ function toggleWishlist(catId, vId, event) {
   } else {
     STATE.wishlist.unshift(key);
     showToast(`${name} saved for later`, "♥");
+    if (sourceButton) {
+      sourceButton.classList.remove("celebrate");
+      void sourceButton.offsetWidth;
+      sourceButton.classList.add("celebrate");
+      setTimeout(() => sourceButton.classList.remove("celebrate"), 700);
+    }
   }
   localStorage.setItem("twl_wishlist", JSON.stringify(STATE.wishlist));
   updateWishlistUI();
@@ -225,7 +236,7 @@ function renderRecentlyViewed() {
   $("recentSection").hidden = items.length === 0;
   $("recentGrid").innerHTML = items.map(({ cat, variant }) => `
     <article class="recent-card">
-      <div class="recent-card-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
+      <div class="recent-card-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}${cardPeekLabel()}</div>
       <a class="recent-card-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><div class="recent-card-category">${cat.name}</div><div class="recent-card-name">${variant.name}</div><div class="recent-card-price">${fmt(variant.price)}</div></a>
     </article>`).join("");
 }
@@ -234,8 +245,11 @@ function showToast(message, icon="✓") {
   clearTimeout(STATE.toastTimer);
   $("toastMessage").textContent = message;
   $("toastIcon").textContent = icon;
+  $("toast").classList.remove("pop");
+  void $("toast").offsetWidth;
   $("toast").classList.add("show");
-  STATE.toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2600);
+  $("toast").classList.add("pop");
+  STATE.toastTimer = setTimeout(() => $("toast").classList.remove("show", "pop"), 2600);
 }
 
 function renderSearchFilters() {
@@ -268,7 +282,7 @@ function renderSearchResults() {
   $("searchCount").textContent = `${products.length} ${products.length === 1 ? "piece" : "pieces"}`;
   $("searchResults").innerHTML = products.length ? products.map(({ cat, variant }) => `
     <article class="search-result">
-      <div class="search-result-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
+      <div class="search-result-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}${cardPeekLabel()}</div>
       <a class="search-result-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','search')"><div class="search-result-cat">${cat.name}</div><div class="search-result-name">${variant.name}</div><div class="search-result-price">${fmt(variant.price)}</div></a>
     </article>`).join("") : `<div class="search-empty"><div class="search-empty-icon">🧶</div><strong>${STATE.searchSavedOnly ? "No saved pieces yet" : "No pieces found"}</strong><span>${STATE.searchSavedOnly ? "Tap the heart on any product to keep it here." : "Try another colour, style, or category."}</span></div>`;
 }
@@ -726,6 +740,7 @@ function renderHeroCards() {
           <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="eager" decoding="async" ${p === picks[0] ? 'fetchpriority="high"' : ''}>
           ${wishlistButton(p.cat, p.var)}
           ${photoCountBadge(p.cat, p.var)}
+          ${cardPeekLabel()}
         </div>
         <a class="product-info card-route-link" href="${routeHref(productRoutePath(p.var))}" onclick="return navigateProductLink(event,'${p.cat}','${p.var}')">
           <div class="product-name">${v.name}</div>
@@ -788,16 +803,17 @@ function closeReview(idx, evt) {
 }
 
 function renderCategoryRow() {
-  $("categoryRow").innerHTML = CATEGORIES.map(cat => {
+  $("categoryRow").innerHTML = CATEGORIES.map((cat, index) => {
     const variantCount = cat.variants.length;
     const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
     const heroMarkup = heroVar
       ? `<img src="${variantCardImage(cat, heroVar)}" data-fallback="${variantHeroImage(cat, heroVar)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${cat.name}" loading="lazy" decoding="async">`
       : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
     return `
-      <a class="cat-card" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
+      <a class="cat-card cat-tone-${index % 4}" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
         <div class="cat-card-top">
           ${variantCount ? '<span class="cat-tag">' + variantCount + (variantCount === 1 ? ' style' : ' styles') + '</span>' : '<span class="cat-tag">Seasonal</span>'}
+          <span class="cat-swatches" aria-hidden="true"><i></i><i></i><i></i></span>
           ${heroMarkup}
         </div>
         <div class="cat-card-body">
@@ -816,14 +832,15 @@ function renderCategoryRow() {
    CATEGORY PAGE
    ===================================================================== */
 function renderCategoriesPage() {
-  $("bagCategoriesGrid").innerHTML = CATEGORIES.map(cat => {
+  $("bagCategoriesGrid").innerHTML = CATEGORIES.map((cat, index) => {
     const variantCount = cat.variants.length;
     const heroVar = cat.variants.find(v => v.id === cat.heroVariant) || cat.variants[0];
     const heroMarkup = heroVar
       ? `<img src="${variantCardImage(cat, heroVar)}" data-fallback="${variantHeroImage(cat, heroVar)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${cat.name}" loading="lazy" decoding="async">`
       : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
     return `
-      <a class="category-tile" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
+      <a class="category-tile cat-tone-${index % 4}" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
+        <span class="cat-swatches" aria-hidden="true"><i></i><i></i><i></i></span>
         ${heroMarkup}
         <div class="category-label">
           <div class="category-label-title">${cat.name}</div>
@@ -850,6 +867,7 @@ function openCategory(catId, push=true) {
           <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="lazy" decoding="async">
           ${wishlistButton(cat.id, v.id)}
           ${photoCountBadge(cat.id, v.id)}
+          ${cardPeekLabel()}
         </div>
         <a class="variant-body card-route-link" href="${routeHref(productRoutePath(v.id))}" onclick="return navigateProductLink(event,'${cat.id}','${v.id}')">
           <div class="variant-name">${v.name}</div>
@@ -1018,6 +1036,15 @@ function detailQty(delta) {
   $("detailQtyNum").textContent = STATE.detailQty;
 }
 
+function celebrateCartButton() {
+  const button = document.querySelector(".cart-btn");
+  if (!button) return;
+  button.classList.remove("cart-bump");
+  void button.offsetWidth;
+  button.classList.add("cart-bump");
+  setTimeout(() => button.classList.remove("cart-bump"), 700);
+}
+
 function addDetailToCart() {
   const d = STATE.detail;
   if (!d) return;
@@ -1054,6 +1081,7 @@ function addDetailToCart() {
   fileListEl.classList.remove("error");
   renderCart();
   saveCart();
+  celebrateCartButton();
   showToast(`${d.variant.name} added to your cart`, "✓");
   openCart();
 }
@@ -1086,7 +1114,15 @@ function cartCount()    { return STATE.cart.reduce((s,i)=>s + i.qty, 0); }
 function renderCart() {
   $("cartCount").textContent = cartCount();
   if (STATE.cart.length === 0) {
-    $("cartItems").innerHTML = `<div class="cart-empty"><div class="cart-empty-emoji">🧶</div>Your cart is empty.<br>Find something made with love.<br><button class="btn-primary" type="button" onclick="closeCart(false);navTo('shop')" style="margin-top:1.1rem">Explore the collection</button></div>`;
+    $("cartItems").innerHTML = `<div class="cart-empty">
+      <div class="cart-empty-yarn" aria-hidden="true"><span></span></div>
+      <h4>Your basket is waiting</h4>
+      <p>Save a little handmade joy for later, or let us help you find the right piece.</p>
+      <div class="cart-empty-actions">
+        <button class="btn-primary" type="button" onclick="closeCart(false);navTo('shop')">Explore the collection</button>
+        <button class="cart-empty-link" type="button" onclick="closeCart(false);openFinder()">Help me choose ✦</button>
+      </div>
+    </div>`;
     $("cartFooter").style.display = "none";
     return;
   }
@@ -1354,6 +1390,33 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") nextImageLightbox();
 });
 
+function setupLightboxGestures() {
+  const lightbox = $("imageLightbox");
+  let touchStart = null;
+  lightbox.addEventListener("touchstart", event => {
+    const touch = event.touches[0];
+    if (touch) touchStart = { x: touch.clientX, y: touch.clientY };
+  }, { passive: true });
+  lightbox.addEventListener("touchend", event => {
+    if (!touchStart || STATE.lightboxImages.length < 2) return;
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+    const dx = touch.clientX - touchStart.x;
+    const dy = touch.clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    dx > 0 ? prevImageLightbox() : nextImageLightbox();
+  }, { passive: true });
+}
+
+function setupFaqAccordion() {
+  const items = [...document.querySelectorAll(".faq-item")];
+  items.forEach(item => item.addEventListener("toggle", () => {
+    if (!item.open) return;
+    items.forEach(other => { if (other !== item) other.open = false; });
+  }));
+}
+
 /* =====================================================================
    CONTACT FORM (Formspree)
    ===================================================================== */
@@ -1421,6 +1484,24 @@ async function sendReferencePhotosEmail(email="") {
   }
 }
 
+function updateContactFormProgress() {
+  const name = $("contactName");
+  const email = $("contactEmail");
+  const interest = $("contactInterest");
+  const message = $("contactMessage");
+  if (!name || !email || !interest || !message) return;
+  const completed = [
+    name.value.trim().length >= 2,
+    email.value.trim().length > 0 && email.validity.valid,
+    Boolean(interest.value),
+    message.value.trim().length >= 10,
+  ].filter(Boolean).length;
+  $("cformProgressText").textContent = completed === 4 ? "Ready to send ♥" : `${completed} of 4 essentials`;
+  $("cformProgressFill").style.width = `${completed * 25}%`;
+  $("cformProgressTrack").setAttribute("aria-valuenow", String(completed));
+  $("contactMessageCount").textContent = `${message.value.length} / 600`;
+}
+
 function wireContactForm() {
   const form = $("contactForm");
   if (!form) return;
@@ -1432,6 +1513,11 @@ function wireContactForm() {
   if (fileInput) fileInput.addEventListener("change", () => validateContactFiles(fileInput));
   const detailFilesInput = $("detailFiles");
   if (detailFilesInput) detailFilesInput.addEventListener("change", () => validateFileSelection(detailFilesInput, $("detailFileList")));
+  ["contactName", "contactEmail", "contactInterest", "contactMessage"].forEach(id => {
+    $(id).addEventListener("input", updateContactFormProgress);
+    $(id).addEventListener("change", updateContactFormProgress);
+  });
+  updateContactFormProgress();
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const msg = $("cformMsg");
@@ -1492,6 +1578,7 @@ function wireContactForm() {
       msg.classList.add("show");
       form.reset();
       $("cformFileList").textContent = "";
+      updateContactFormProgress();
     } catch (err) {
       msg.textContent = "Sorry, something went wrong. Please email hello@tangledwithlove.com directly.";
       msg.classList.add("show");
@@ -1761,6 +1848,8 @@ function init() {
   renderReviews();
   renderCart();
   wireContactForm();
+  setupFaqAccordion();
+  setupLightboxGestures();
   const checkoutState = handleCheckoutReturn();
   if (!testSeeded && !customSeeded && !checkoutState) migrateLegacyProductUrl();
   setupNavigation();
