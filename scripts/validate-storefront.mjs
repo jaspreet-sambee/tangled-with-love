@@ -103,12 +103,15 @@ for (const asset of ["assets/brand/logo-mark.png", "assets/brand/logo-mark.webp"
 }
 if (!html.includes('assets/brand/logo-mark.webp')) fail("The storefront brand logo is missing");
 if (html.includes("Custom colours welcome")) fail("Removed homepage proof text was reintroduced");
+if (html.includes('id="navBack"') || app.includes('$("navBack")')) fail("The removed top back control was reintroduced");
+if (!html.includes('id="detailDispatch"') || !app.includes("estimatedDispatchWindow")) fail("Estimated product dispatch dates are missing");
 if (!html.includes('id="mainContent"')) fail("Main content landmark is missing");
 if (!html.includes('class="skip-link"')) fail("Keyboard skip link is missing");
 if (!css.includes(".skip-link")) fail("Skip-link styling is missing");
 for (const controlId of ["contactName", "contactEmail", "contactPhone", "contactInterest", "contactMessage", "cformFiles"]) {
   if (!html.includes(`for="${controlId}"`)) fail(`Accessible label missing for ${controlId}`);
 }
+if (/<label class="sr-only" for="contact/.test(html)) fail("Contact form labels must remain visible");
 if (html.includes("@emailjs/browser")) fail("EmailJS should be loaded on demand, not during initial rendering");
 if (!app.includes("function loadEmailJs()")) fail("On-demand EmailJS loader is missing");
 

@@ -170,7 +170,6 @@
 <!-- ===================================================================== -->
 <nav class="site-nav" id="siteNav" aria-label="Primary navigation">
   <div class="nav-brand">
-    <button class="nav-back" id="navBack" type="button" onclick="navigateBack()" aria-label="Go back">← <span>Back</span></button>
     <a class="nav-logo" href="/" onclick="return navigateHomeLink(event)" aria-label="Tangled with Love home"><img class="nav-logo-mark" src="assets/brand/logo-mark.webp" alt="" width="40" height="40" decoding="async"><span>Tangled with Love</span></a>
   </div>
   <ul class="nav-links" id="navLinks">
@@ -233,10 +232,10 @@
 <div class="fringe"></div>
 
 <div class="trust-strip" aria-label="Why shop Tangled with Love">
-  <div class="trust-item"><span class="trust-icon">✦</span><div class="trust-copy"><strong>Made by hand</strong><span>Never factory produced</span></div></div>
-  <div class="trust-item"><span class="trust-icon">🧶</span><div class="trust-copy"><strong>Made for you</strong><span>Colours can be personalized</span></div></div>
-  <div class="trust-item"><span class="trust-icon">⌂</span><div class="trust-copy"><strong>Local studio</strong><span>Crafted in Brampton</span></div></div>
-  <div class="trust-item"><span class="trust-icon">♢</span><div class="trust-copy"><strong>Secure payment</strong><span>Protected by Stripe</span></div></div>
+  <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/><circle cx="12" cy="12" r="3"/></svg></span><div class="trust-copy"><strong>Made by hand</strong><span>Never factory produced</span></div></div>
+  <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M5.8 8.8c4.2-.5 8.7 2.1 11.8 6.6M7.2 17.6c1.4-4.9 5.5-8.7 10.3-10.2M4.4 12.5c5.2 1.2 9.1 4.4 10.7 7"/></svg></span><div class="trust-copy"><strong>Made for you</strong><span>Colours can be personalized</span></div></div>
+  <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M9 20v-6h6v6"/></svg></span><div class="trust-copy"><strong>Local studio</strong><span>Crafted in Brampton</span></div></div>
+  <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.6 2.8 8.1 7 10 4.2-1.9 7-5.4 7-10V6Z"/><path d="m9 12 2 2 4-4"/></svg></span><div class="trust-copy"><strong>Secure payment</strong><span>Protected by Stripe</span></div></div>
 </div>
 
 <!-- Shop — category list -->
@@ -270,9 +269,7 @@
 </section>
 
 <div class="mandala-divider">
-  <span style="font-size:1.8rem">🧶</span>
   <span>Made with patience, given with love</span>
-  <span style="font-size:1.8rem">🧶</span>
 </div>
 
 <!-- About -->
@@ -343,29 +340,42 @@
     </div>
     <div class="contact-form-panel">
       <h3>Send a message</h3>
+      <p class="cform-intro">Tell us what you’re imagining. Fields marked required help us reply with the right details.</p>
       <form class="cform" id="contactForm" action="https://formspree.io/f/mojbpvdp" method="POST">
-        <label class="sr-only" for="contactName">Your name</label>
-        <input id="contactName" name="name" type="text" placeholder="Your name" autocomplete="name" required>
-        <label class="sr-only" for="contactEmail">Your email</label>
-        <input id="contactEmail" name="email" type="email" placeholder="Your email" autocomplete="email" required>
-        <label class="sr-only" for="contactPhone">Phone number (optional)</label>
-        <input id="contactPhone" name="phone" type="tel" placeholder="Phone number (optional) — for faster response" autocomplete="tel">
-        <label class="sr-only" for="contactInterest">What are you interested in?</label>
-        <select id="contactInterest" name="interest" required>
-          <option value="">What are you interested in?</option>
-          <option>Round Patches</option>
-          <option>Small Potli</option>
-          <option>Large Sized Bags</option>
-          <option>Medium Bags — Round</option>
-          <option>Medium Bags — Rectangle</option>
-          <option>Small Bags</option>
-          <option>XS Bags</option>
-          <option>Leather Bags</option>
-          <option>Something else</option>
-          <option>Leave a review</option>
-        </select>
-        <label class="sr-only" for="contactMessage">Your message</label>
-        <textarea id="contactMessage" name="message" placeholder="Tell us what you have in mind…" required></textarea>
+        <div class="cform-fields">
+          <div class="cform-field">
+            <label for="contactName">Your name <span>Required</span></label>
+            <input id="contactName" name="name" type="text" placeholder="e.g. Manpreet Kaur" autocomplete="name" required>
+          </div>
+          <div class="cform-field">
+            <label for="contactEmail">Email address <span>Required</span></label>
+            <input id="contactEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+          <div class="cform-field">
+            <label for="contactPhone">Phone number <span>Optional</span></label>
+            <input id="contactPhone" name="phone" type="tel" placeholder="For a faster reply" autocomplete="tel">
+          </div>
+          <div class="cform-field">
+            <label for="contactInterest">I’m interested in <span>Required</span></label>
+            <select id="contactInterest" name="interest" required>
+              <option value="">Choose a collection</option>
+              <option>Round Patches</option>
+              <option>Small Potli</option>
+              <option>Large Sized Bags</option>
+              <option>Medium Bags — Round</option>
+              <option>Medium Bags — Rectangle</option>
+              <option>Small Bags</option>
+              <option>XS Bags</option>
+              <option>Leather Bags</option>
+              <option>Something else</option>
+              <option>Leave a review</option>
+            </select>
+          </div>
+          <div class="cform-field cform-field-wide">
+            <label for="contactMessage">Your idea <span>Required</span></label>
+            <textarea id="contactMessage" name="message" placeholder="Colours, size, occasion, or anything else that would help…" required></textarea>
+          </div>
+        </div>
         <div class="cform-file">
           <label for="cformFiles">Attach files (optional) <span class="cform-file-hint">Up to 5 files, 15MB total</span></label>
           <input type="file" id="cformFiles" name="attachments" multiple>
@@ -475,6 +485,7 @@
         <h1 id="detailName"></h1>
         <div class="gallery-price" id="detailPrice"></div>
         <div class="detail-price-note">CAD · Shipping and applicable taxes calculated at checkout</div>
+        <div class="detail-dispatch"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span>Estimated dispatch <strong id="detailDispatch">in 2–3 weeks</strong></span></div>
         <p id="detailDesc"></p>
         <div class="gallery-options">
           <div class="option-group" id="detailColourGroup">
@@ -511,9 +522,9 @@
             <button class="detail-share-btn" type="button" onclick="shareCurrentProduct()" aria-label="Share this product"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg></button>
           </div>
           <div class="detail-assurance" aria-label="Order assurances">
-            <div class="assurance-item"><span>🧶</span>Handmade for you</div>
-            <div class="assurance-item"><span>⌂</span>Brampton studio</div>
-            <div class="assurance-item"><span>♢</span>Secure payment</div>
+            <div class="assurance-item"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M5.8 8.8c4.2-.5 8.7 2.1 11.8 6.6M7.2 17.6c1.4-4.9 5.5-8.7 10.3-10.2"/></svg>Handmade for you</div>
+            <div class="assurance-item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M9 20v-6h6v6"/></svg>Brampton studio</div>
+            <div class="assurance-item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.6 2.8 8.1 7 10 4.2-1.9 7-5.4 7-10V6Z"/><path d="m9 12 2 2 4-4"/></svg>Secure payment</div>
           </div>
           <div class="detail-info-list">
             <details class="detail-info-item" open><summary>Making &amp; delivery</summary><div class="detail-info-copy">Made to order in our Brampton studio. Please allow approximately 2–3 weeks before dispatch. Shipping options and final costs are shown during secure checkout.</div></details>

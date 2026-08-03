@@ -556,11 +556,6 @@ function updateCanonicalPath(path) {
   if (canonical) canonical.href = `https://tangledwithlove.com${path === "/" ? "/" : path}`;
 }
 
-function updateBackControl() {
-  const backButton = $("navBack");
-  if (backButton) backButton.classList.toggle("visible", currentRoutePath() !== "/");
-}
-
 function setBrowserRoute(route, replace=false) {
   const path = pathForRoute(route);
   const hasNonRouteQuery = location.protocol !== "file:" && Boolean(location.search);
@@ -568,7 +563,6 @@ function setBrowserRoute(route, replace=false) {
   const method = replace || samePath ? "replaceState" : "pushState";
   history[method](null, "", routeHref(path));
   updateCanonicalPath(path);
-  updateBackControl();
 }
 
 function renderLocationRoute(scrollBehavior="auto") {
@@ -602,18 +596,7 @@ function renderLocationRoute(scrollBehavior="auto") {
       window.scrollTo({ top: 0, behavior: scrollBehavior });
     }
     syncNavigationState();
-    updateBackControl();
   }));
-}
-
-function navigateBack(fallback="home") {
-  closeNavMenu();
-  if (history.length > 1) {
-    history.back();
-    return;
-  }
-  showPage(fallback, false);
-  setBrowserRoute({ id: fallback }, true);
 }
 
 function showPage(id, push=true, routeData={}) {
@@ -622,8 +605,16 @@ function showPage(id, push=true, routeData={}) {
   if (id === "home") document.title = "Tangled with Love — Handcrafted Crochet Bags";
   else if (id === "categories") document.title = "Shop Handmade Crochet Bags — Tangled with Love";
   closeNavMenu();
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  el.classList.add("active");
+  const activePage = document.querySelector(".page.active");
+  const activatePage = () => {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    el.classList.add("active");
+  };
+  if (activePage && activePage !== el && document.startViewTransition && !prefersReducedMotion()) {
+    document.startViewTransition(activatePage);
+  } else {
+    activatePage();
+  }
   window.scrollTo({ top: 0, behavior: "auto" });
   if (push) setBrowserRoute({ id, ...routeData });
   requestAnimationFrame(syncNavigationState);
@@ -684,7 +675,6 @@ function setupNavigation() {
   history.scrollRestoration = "manual";
   updateLocalRouteLinks();
   renderLocationRoute("auto");
-  updateBackControl();
   window.addEventListener("popstate", () => {
     renderLocationRoute("auto");
   });
@@ -764,20 +754,22 @@ function renderReviews() {
       : "";
     const expandable = hasLongText || hasImages;
     return `
-      <div class="testi-card" data-idx="${i}" ${expandable ? `onclick="openReview(${i})"` : ""} style="${expandable ? "" : "cursor:default"}">
+      <article class="testi-card" data-idx="${i}">
         ${expandable ? `<button class="testi-close" onclick="closeReview(${i}, event)" aria-label="Close review">✕</button>` : ""}
+        <div class="testi-stars" role="img" aria-label="5 out of 5 stars">★★★★★</div>
         <p class="testi-quote testi-excerpt">"${escHtml(excerpt)}"</p>
         <div class="testi-author">— ${escHtml(r.name)}</div>
-        ${expandable ? `<div class="testi-more">${hasLongText ? "Read full review" : "View photos"} →</div>` : ""}
+        ${expandable ? `<button type="button" class="testi-more" onclick="openReview(${i}, event)">${hasLongText ? "Read full review" : "View photos"} →</button>` : ""}
         <div class="testi-expand"><div class="testi-expand-inner"><div class="testi-expand-content">
           ${hasLongText ? `<p class="testi-quote">"${escHtml(r.text).replace(/\n\n/g, "\"</p><p class=\"testi-quote\">\"")}"</p>` : ""}
           ${images}
         </div></div></div>
-      </div>`;
+      </article>`;
   }).join("");
 }
 
-function openReview(idx) {
+function openReview(idx, evt) {
+  if (evt) evt.stopPropagation();
   const grid = $("testimonialsGrid");
   const card = document.querySelector(`.testi-card[data-idx="${idx}"]`);
   if (!card || !grid || card.classList.contains("expanded")) return;
@@ -870,6 +862,15 @@ function openCategory(catId, push=true) {
    ===================================================================== */
 const COLOUR_OPTIONS = ["As shown", "Natural Cream", "Dusty Rose", "Sage Green", "Terracotta", "Midnight / Charcoal", "Warm Brown", "Custom (note below)"];
 
+function estimatedDispatchWindow() {
+  const start = new Date();
+  const end = new Date();
+  start.setDate(start.getDate() + 14);
+  end.setDate(end.getDate() + 21);
+  const format = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric" });
+  return `${format.format(start)}–${format.format(end)}`;
+}
+
 function openDetail(catId, vId, push=true) {
   const v = findVariant(catId, vId);
   if (!v) return;
@@ -884,6 +885,7 @@ function openDetail(catId, vId, push=true) {
   $("detailCategory").textContent = cat.name;
   $("detailName").textContent = v.name;
   $("detailPrice").textContent = fmt(v.price);
+  $("detailDispatch").textContent = estimatedDispatchWindow();
   $("detailDesc").textContent = v.desc;
   $("mobileBuyName").textContent = v.name;
   $("mobileBuyPrice").textContent = fmt(v.price);
