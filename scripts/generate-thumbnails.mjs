@@ -12,7 +12,7 @@ try {
 }
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const source = await readFile(join(root, "index.html"), "utf8");
+const source = await readFile(join(root, "assets", "js", "store-data.js"), "utf8");
 const categoriesStartMarker = "const CATEGORIES = ";
 const categoriesStart = source.indexOf(categoriesStartMarker);
 const categoryEndPatterns = [
@@ -28,7 +28,7 @@ const categoriesEnd = Math.min(...categoryEndPatterns
   .filter(index => index >= 0));
 
 if (categoriesStart < 0 || !Number.isFinite(categoriesEnd)) {
-  throw new Error("Could not locate CATEGORIES in index.html");
+  throw new Error("Could not locate CATEGORIES in assets/js/store-data.js");
 }
 
 const categoriesLiteral = source
@@ -38,9 +38,9 @@ const categoriesLiteral = source
 const categories = Function(`"use strict"; return (${categoriesLiteral});`)();
 
 const mapStart = source.indexOf("const pngSeries =");
-const mapEndMatch = mapStart >= 0 ? source.slice(mapStart).match(/\r?\n\r?\nfunction variantImage/) : null;
-const mapEnd = mapEndMatch ? mapStart + mapEndMatch.index : -1;
-if (mapStart < 0 || mapEnd < 0) throw new Error("Could not locate IMAGE_MAP in index.html");
+const mapEndMatch = mapStart >= 0 ? source.slice(mapStart).match(/\r?\n};/) : null;
+const mapEnd = mapEndMatch ? mapStart + mapEndMatch.index + mapEndMatch[0].length : -1;
+if (mapStart < 0 || mapEnd < 0) throw new Error("Could not locate IMAGE_MAP in assets/js/store-data.js");
 const imageMap = Function(`"use strict"; ${source.slice(mapStart, mapEnd)}; return IMAGE_MAP;`)();
 
 let originalBytes = 0;

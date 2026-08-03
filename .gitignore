@@ -1,18 +1,19 @@
+# OS, editor, and local-machine files
 .DS_Store
-mum.HEIC # the original HEIC source
-.DS_Store
-mum.HEIC
-
-# wrangler files
-.wrangler
-.dev.vars*
-!.dev.vars.example
-.env*
-!.env.example
-node_modules/
-
-# local machine config / screenshots — never push personal or system info
 .claude/
 *.local.json
 Screenshot*.png
 Screenshot*.jpg
+
+# Local source files
+mum.HEIC
+
+# Dependencies
+node_modules/
+
+# Cloudflare Worker files and secrets
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

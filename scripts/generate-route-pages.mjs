@@ -3,22 +3,26 @@ import { dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const indexPath = join(root, "index.html");
-const source = await readFile(indexPath, "utf8");
+const catalogPath = join(root, "assets", "js", "store-data.js");
+const source = await readFile(catalogPath, "utf8");
 
 const startMarker = "const CATEGORIES = ";
 const start = source.indexOf(startMarker);
-const endMarkers = [
-  "\n\n/* =====================================================================\n   REVIEWS",
-  "\n\n/* =====================================================================\n   STATE",
+const endPatterns = [
+  /\r?\n\r?\n\/\* =+\r?\n {3}REVIEWS/,
+  /\r?\n\r?\n\/\* =+\r?\n {3}STATE/,
 ];
-const endCandidates = endMarkers
-  .map(marker => source.indexOf(marker, start))
+const endCandidates = endPatterns
+  .map(pattern => {
+    if (start < 0) return -1;
+    const match = source.slice(start).match(pattern);
+    return match ? start + match.index : -1;
+  })
   .filter(index => index >= 0);
 const end = endCandidates.length ? Math.min(...endCandidates) : -1;
 
 if (start < 0 || end < 0) {
-  throw new Error("Could not locate CATEGORIES in index.html");
+  throw new Error("Could not locate CATEGORIES in assets/js/store-data.js");
 }
 
 const literal = source.slice(start + startMarker.length, end).trim().replace(/;$/, "");
