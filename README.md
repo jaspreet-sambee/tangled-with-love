@@ -44,6 +44,10 @@ Images live at `assets/products/{categoryId}/{variantId}/{1..N}.{ext}` and are l
 
 ## Local dev
 
+You can double-click `index.html` for a quick offline preview; product photos and
+navigation work directly from the downloaded folder. For production-like HTTP
+testing, run:
+
 ```bash
 python3 -m http.server 8080
 # visit http://localhost:8080

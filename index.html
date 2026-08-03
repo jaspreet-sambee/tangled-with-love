@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tangled with Love — Handcrafted Crochet Bags</title>
 <meta name="description" content="Beautifully handcrafted crochet bags made with love in Brampton, Ontario. Shoulder bags, slings, handhelds and pouches — no two alike.">
-<base href="/">
+<base href="./">
 <link rel="canonical" id="canonicalUrl" href="https://tangledwithlove.com/">
 <script>
 (() => {
@@ -1949,7 +1949,7 @@ function renderRecentlyViewed() {
   $("recentGrid").innerHTML = items.map(({ cat, variant }) => `
     <article class="recent-card">
       <div class="recent-card-img"><img src="${variantHeroImage(cat, variant)}" alt="${variant.name}" loading="lazy">${wishlistButton(cat.id, variant.id)}</div>
-      <a class="recent-card-body card-route-link" href="${productRoutePath(variant.id)}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><div class="recent-card-category">${cat.name}</div><div class="recent-card-name">${variant.name}</div><div class="recent-card-price">${fmt(variant.price)}</div></a>
+      <a class="recent-card-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><div class="recent-card-category">${cat.name}</div><div class="recent-card-name">${variant.name}</div><div class="recent-card-price">${fmt(variant.price)}</div></a>
     </article>`).join("");
 }
 
@@ -1992,7 +1992,7 @@ function renderSearchResults() {
   $("searchResults").innerHTML = products.length ? products.map(({ cat, variant }) => `
     <article class="search-result">
       <div class="search-result-img"><img src="${variantHeroImage(cat, variant)}" alt="${variant.name}" loading="lazy">${wishlistButton(cat.id, variant.id)}</div>
-      <a class="search-result-body card-route-link" href="${productRoutePath(variant.id)}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','search')"><div class="search-result-cat">${cat.name}</div><div class="search-result-name">${variant.name}</div><div class="search-result-price">${fmt(variant.price)}</div></a>
+      <a class="search-result-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','search')"><div class="search-result-cat">${cat.name}</div><div class="search-result-name">${variant.name}</div><div class="search-result-price">${fmt(variant.price)}</div></a>
     </article>`).join("") : `<div class="search-empty"><div class="search-empty-icon">🧶</div><strong>${STATE.searchSavedOnly ? "No saved pieces yet" : "No pieces found"}</strong><span>${STATE.searchSavedOnly ? "Tap the heart on any product to keep it here." : "Try another colour, style, or category."}</span></div>`;
 }
 
@@ -2112,7 +2112,7 @@ function runFinder() {
     .slice(0, 3);
   localStorage.setItem("twl_finder", JSON.stringify(STATE.finder));
   $("finderResultsGrid").innerHTML = matches.map(({ cat, variant }) => `
-    <a class="finder-result" href="${productRoutePath(variant.id)}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','finder')">
+    <a class="finder-result" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','finder')">
       <img src="${variantHeroImage(cat, variant)}" alt="${variant.name}" loading="lazy">
       <div class="finder-result-copy"><small>${cat.name}</small><strong>${variant.name}</strong><span>${fmt(variant.price)}</span></div>
     </a>`).join("");
@@ -2213,6 +2213,30 @@ function normalizeRoutePath(pathname=location.pathname) {
   return decoded.replace(/\/+$/, "") || "/";
 }
 
+function currentRoutePath() {
+  const localPath = location.protocol === "file:"
+    ? new URLSearchParams(location.search).get("__path") || "/"
+    : location.pathname;
+  return normalizeRoutePath(localPath);
+}
+
+function routeHref(path) {
+  if (location.protocol !== "file:") return path;
+  const target = new URL(location.href);
+  target.search = "";
+  target.hash = "";
+  if (path !== "/") target.searchParams.set("__path", path);
+  return target.href;
+}
+
+function updateLocalRouteLinks(root=document) {
+  if (location.protocol !== "file:") return;
+  root.querySelectorAll('a[href^="/"]').forEach(link => {
+    const path = link.getAttribute("href");
+    if (path) link.href = routeHref(path);
+  });
+}
+
 function categoryRoutePath(catId) { return `/collections/${slug(catId)}`; }
 function productRoutePath(vId) { return `/products/${slug(vId)}`; }
 
@@ -2228,7 +2252,7 @@ function pathForRoute(route) {
 }
 
 function routeFromLocation() {
-  const path = normalizeRoutePath();
+  const path = currentRoutePath();
   if (path === "/") return { id: "home" };
   const section = Object.entries(SECTION_PATHS).find(([, sectionPath]) => sectionPath === path);
   if (section) return { id: "home", anchor: section[0] };
@@ -2257,14 +2281,15 @@ function updateCanonicalPath(path) {
 
 function updateBackControl() {
   const backButton = $("navBack");
-  if (backButton) backButton.classList.toggle("visible", normalizeRoutePath() !== "/");
+  if (backButton) backButton.classList.toggle("visible", currentRoutePath() !== "/");
 }
 
 function setBrowserRoute(route, replace=false) {
   const path = pathForRoute(route);
-  const samePath = normalizeRoutePath() === path && !location.search && !location.hash;
+  const hasNonRouteQuery = location.protocol !== "file:" && Boolean(location.search);
+  const samePath = currentRoutePath() === path && !hasNonRouteQuery && !location.hash;
   const method = replace || samePath ? "replaceState" : "pushState";
-  history[method](null, "", path);
+  history[method](null, "", routeHref(path));
   updateCanonicalPath(path);
   updateBackControl();
 }
@@ -2380,6 +2405,7 @@ function scrollToTop() {
 function setupNavigation() {
   history.replaceState(null, "", location.href);
   history.scrollRestoration = "manual";
+  updateLocalRouteLinks();
   renderLocationRoute("auto");
   updateBackControl();
   window.addEventListener("popstate", () => {
@@ -2431,7 +2457,7 @@ function renderHeroCards() {
           ${wishlistButton(p.cat, p.var)}
           ${photoCountBadge(p.cat, p.var)}
         </div>
-        <a class="product-info card-route-link" href="${productRoutePath(p.var)}" onclick="return navigateProductLink(event,'${p.cat}','${p.var}')">
+        <a class="product-info card-route-link" href="${routeHref(productRoutePath(p.var))}" onclick="return navigateProductLink(event,'${p.cat}','${p.var}')">
           <div class="product-name">${v.name}</div>
           <div class="product-price">${fmt(v.price)}</div>
         </a>
@@ -2447,7 +2473,7 @@ function renderCategoryRow() {
       ? `<img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">`
       : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
     return `
-      <a class="cat-card" href="${categoryRoutePath(cat.id)}" onclick="return navigateCategoryLink(event,'${cat.id}')">
+      <a class="cat-card" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
         <div class="cat-card-top">
           ${variantCount ? '<span class="cat-tag">' + variantCount + (variantCount === 1 ? ' style' : ' styles') + '</span>' : '<span class="cat-tag">Seasonal</span>'}
           ${heroMarkup}
@@ -2475,7 +2501,7 @@ function renderCategoriesPage() {
       ? `<img src="${variantHeroImage(cat, heroVar)}" alt="${cat.name}" loading="lazy">`
       : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
     return `
-      <a class="category-tile" href="${categoryRoutePath(cat.id)}" onclick="return navigateCategoryLink(event,'${cat.id}')">
+      <a class="category-tile" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
         ${heroMarkup}
         <div class="category-label">
           <div class="category-label-title">${cat.name}</div>
@@ -2501,7 +2527,7 @@ function openCategory(catId, push=true) {
           ${wishlistButton(cat.id, v.id)}
           ${photoCountBadge(cat.id, v.id)}
         </div>
-        <a class="variant-body card-route-link" href="${productRoutePath(v.id)}" onclick="return navigateProductLink(event,'${cat.id}','${v.id}')">
+        <a class="variant-body card-route-link" href="${routeHref(productRoutePath(v.id))}" onclick="return navigateProductLink(event,'${cat.id}','${v.id}')">
           <div class="variant-name">${v.name}</div>
           <div class="variant-price">${fmt(v.price)}</div>
         </a>
@@ -2586,12 +2612,12 @@ function renderRelatedProducts(catId, vId) {
   $("detailRelatedGrid").innerHTML = related.map(({ cat, variant }) => `
     <article class="detail-related-card">
       <div class="detail-related-image"><img src="${variantHeroImage(cat, variant)}" alt="${variant.name}" loading="lazy">${wishlistButton(cat.id, variant.id)}</div>
-      <a class="detail-related-copy card-route-link" href="${productRoutePath(variant.id)}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><small>${cat.name}</small><strong>${variant.name}</strong><span>${fmt(variant.price)}</span></a>
+      <a class="detail-related-copy card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><small>${cat.name}</small><strong>${variant.name}</strong><span>${fmt(variant.price)}</span></a>
     </article>`).join("");
 }
 
 function productShareUrl(catId, vId) {
-  return new URL(productRoutePath(vId), location.origin).href;
+  return `https://tangledwithlove.com${productRoutePath(vId)}`;
 }
 
 function updateProductSchema(cat, variant) {
@@ -2600,7 +2626,7 @@ function updateProductSchema(cat, variant) {
     "@type": "Product",
     name: variant.name,
     description: variant.desc,
-    image: allVariantImages(cat.id, variant.id, variant.heroIdx || 0).map(src => new URL(src, location.href).href),
+    image: allVariantImages(cat.id, variant.id, variant.heroIdx || 0).map(src => new URL(src, document.baseURI).href),
     brand: { "@type": "Brand", name: "Tangled with Love" },
     category: cat.name,
     offers: {
@@ -3093,9 +3119,9 @@ function handleCheckoutReturn() {
       sendOrderEmails(pending.orderNumber, pending.email); // fire-and-forget; our own branded copy, separate from Stripe's own receipt
       try { localStorage.removeItem("twl_pending_order"); } catch (e) {}
     }
-    history.replaceState({}, "", "/checkout/success");
+    history.replaceState({}, "", routeHref("/checkout/success"));
   } else if (r === "cancel") {
-    history.replaceState({}, "", "/checkout/cancel");
+    history.replaceState({}, "", routeHref("/checkout/cancel"));
   }
   return r;
 }
@@ -3118,7 +3144,7 @@ function handleTestSeed() {
     __skipShipping: true,
   }];
   saveCart();
-  history.replaceState({}, "", "/");
+  history.replaceState({}, "", routeHref("/"));
   return true;
 }
 
@@ -3225,7 +3251,7 @@ function handleCustomSeed() {
     }
   }
 
-  history.replaceState({}, "", "/custom-order");
+  history.replaceState({}, "", routeHref("/custom-order"));
   return true;
 }
 
@@ -3305,7 +3331,7 @@ function migrateLegacyProductUrl() {
   if (!key) return false;
   const [catId, vId] = key.split("::");
   if (!findVariant(catId, vId)) return false;
-  history.replaceState({}, "", productRoutePath(vId));
+  history.replaceState({}, "", routeHref(productRoutePath(vId)));
   return true;
 }
 
