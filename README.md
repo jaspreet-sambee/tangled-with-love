@@ -13,6 +13,9 @@ The online shop for Mum's handcrafted crochet bags — live at **[tangledwithlov
 ```
 tangled-with-love/
 ├── index.html              # The whole site — single file
+├── 404.html                # GitHub Pages fallback for clean storefront routes
+├── scripts/                # Generates static entry pages for clean routes
+├── shop/, faq/, products/  # Generated route entry pages
 ├── CNAME                   # tangledwithlove.com
 ├── DEPLOYMENT.md           # Step-by-step deployment guide
 ├── assets/
@@ -42,9 +45,20 @@ Images live at `assets/products/{categoryId}/{variantId}/{1..N}.{ext}` and are l
 ## Local dev
 
 ```bash
-# Just open index.html in your browser, or:
 python3 -m http.server 8080
 # visit http://localhost:8080
 ```
+
+Production navigation uses clean URLs such as `/shop`, `/faq`, `/contacts`,
+`/collections/round-patches`, and `/products/cherry-blossom`. Their generated
+entry pages make direct visits work on GitHub Pages and the local server.
+
+After adding or renaming a product or category, regenerate those entry pages:
+
+```bash
+node scripts/generate-route-pages.mjs
+```
+
+Keep `404.html` as a fallback for older or mistyped links.
 
 Made with love for Mum. 🧶
