@@ -114,11 +114,29 @@ section{padding:5rem 4rem;position:relative;overflow:hidden}
 
 /* ======= TESTIMONIALS ======= */
 .testimonials-section{background:var(--pale-blush)}
-.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:960px;margin:0 auto;position:relative;z-index:1}
-.testi-card{background:white;border-radius:18px;padding:2rem 1.75rem;box-shadow:0 2px 16px rgba(124,80,53,0.06);border-top:3px solid var(--mustard)}
+.testimonials-grid{display:flex;align-items:flex-start;gap:22px;max-width:100%;margin:0 auto;position:relative;z-index:1;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;padding:6px 6px 22px;scrollbar-width:thin;scrollbar-color:var(--soft-terracotta) transparent}
+.testimonials-grid::-webkit-scrollbar{height:6px}
+.testimonials-grid::-webkit-scrollbar-thumb{background:var(--soft-terracotta);border-radius:3px}
+.testimonials-grid::-webkit-scrollbar-track{background:transparent}
+.testi-card{position:relative;flex:0 0 280px;width:280px;scroll-snap-align:start;background:white;border-radius:18px;padding:2rem 1.75rem;box-shadow:0 2px 16px rgba(124,80,53,0.06);border-top:3px solid var(--mustard);cursor:pointer;overflow:hidden;transition:box-shadow .25s ease}
+.testi-card:hover{box-shadow:0 6px 24px rgba(124,80,53,0.12)}
+.testi-card.expanded{flex-basis:600px;width:600px;cursor:default}
 .testi-stars{color:var(--soft-terracotta);font-size:0.9rem;letter-spacing:2px;margin-bottom:1rem}
-.testi-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;line-height:1.75;color:var(--dark);margin-bottom:1.25rem}
-.testi-author{font-size:0.8rem;font-weight:700;color:var(--warm-brown);letter-spacing:0.05em;text-transform:uppercase}
+.testi-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;line-height:1.75;color:var(--dark);margin-bottom:1rem}
+.testi-author{font-size:0.8rem;font-weight:700;color:var(--warm-brown);letter-spacing:0.05em;text-transform:uppercase;white-space:nowrap}
+.testi-more{margin-top:0.75rem;font-size:0.8rem;font-weight:700;color:var(--soft-terracotta);letter-spacing:0.03em;white-space:nowrap}
+.testi-card.expanded .testi-excerpt,.testi-card.expanded .testi-more{display:none}
+.testi-close{display:none;position:absolute;top:10px;right:10px;background:var(--pale-blush);border:none;width:28px;height:28px;border-radius:50%;font-size:0.95rem;line-height:1;color:var(--warm-brown);cursor:pointer;transition:background .2s ease;z-index:2}
+.testi-close:hover{background:var(--soft-terracotta);color:white}
+.testi-card.expanded .testi-close{display:block}
+.testi-empty{font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);text-align:center;flex:1 1 100%}
+.testi-expand{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.testi-card.expanded .testi-expand{grid-template-rows:1fr}
+.testi-expand-inner{overflow:hidden}
+.testi-expand-content{padding-top:0}
+.testi-card.expanded .testi-expand-content{padding-top:0.25rem}
+.testi-images{display:flex;gap:10px;flex-wrap:wrap;margin-top:1rem}
+.testi-images img{width:110px;height:110px;object-fit:cover;border-radius:10px}
 
 /* ======= CONTACT ======= */
 .contact-section{background:var(--warm-brown);text-align:center;padding:5rem 2rem}
@@ -478,7 +496,8 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
   .gallery-info{position:static}
   .contact-grid{grid-template-columns:1fr;gap:2rem}
   .category-row{grid-template-columns:1fr 1fr}
-  .testimonials-grid{grid-template-columns:1fr}
+  .testi-card{flex-basis:240px;width:240px}
+  .testi-card.expanded{flex-basis:300px;width:300px}
 }
 @media(max-width:640px){
   nav{padding:0 1rem}
@@ -621,11 +640,7 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
   <div class="section-label">Kind words</div>
   <h2 class="section-title">What people are saying</h2>
   <p class="section-sub">Handmade gifts leave a lasting impression. Here's what some of our customers have shared.</p>
-  <div class="testimonials-grid">
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"I ordered a granny-square shoulder bag for my sister and she literally cried. The softness and care that went into it was so obvious. Will order again."</p><div class="testi-author">— Sarah M.</div></div>
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"The little pouch I got for my daughter is her absolute favourite. It's beautifully made and so charming. Thank you so much!"</p><div class="testi-author">— Priya R.</div></div>
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"Ordered a custom colour sling bag and it turned out even better than I imagined. The communication was lovely and delivery was quick."</p><div class="testi-author">— Claire T.</div></div>
-  </div>
+  <div class="testimonials-grid" id="testimonialsGrid"></div>
 </section>
 
 <!-- Contact -->
@@ -678,7 +693,9 @@ footer{background:var(--dark);border-top:2px solid var(--rust);text-align:center
 
 <footer>
   <div class="footer-content">
-    <p>&copy; 2026 <strong>Tangled with Love</strong> — Handcrafted with care, one stitch at a time 🧶 &nbsp;·&nbsp; <a href="mailto:hello@tangledwithlove.com">hello@tangledwithlove.com</a></p>
+    <p>&copy; 2026 <strong>Tangled with Love</strong>
+      <svg width="18" height="12" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin:0 1px;border-radius:2px" aria-label="India flag"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#FF9933"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.2" fill="none" stroke="#000080" stroke-width="0.5"/><circle cx="15" cy="10" r="0.4" fill="#000080"/></svg><svg width="24" height="12" viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin:0 1px;border-radius:2px" aria-label="Canada flag"><rect width="40" height="20" fill="#fff"/><rect width="10" height="20" fill="#FF0000"/><rect x="30" width="10" height="20" fill="#FF0000"/><text x="20" y="15.5" font-size="13" text-anchor="middle">🍁</text></svg>
+      — Handcrafted with care, one stitch at a time 🧶 &nbsp;·&nbsp; <a href="mailto:hello@tangledwithlove.com">hello@tangledwithlove.com</a></p>
   </div>
 </footer>
 
@@ -1169,10 +1186,39 @@ const CATEGORIES = [
   },
   {
     id: "rakhri-seasonal",
-    name: "Rakhri (Seasonal)",
+    name: "Raakhi (Seasonal)",
     tagline: "Limited seasonal pieces made for heartfelt gifting.",
-    blurb: "Our Rakhri collection is being prepared. New handmade seasonal designs will appear here soon.",
+    blurb: "Our Raakhi collection is being prepared. New handmade seasonal designs will appear here soon.",
     variants: [],
+  },
+];
+
+/* =====================================================================
+   REVIEWS — genuine customer reviews only. Add entries here as they come
+   in through the contact form's "Leave a review" option (with any photos
+   the customer attached copied into assets/reviews/).
+   Each entry: { name, text, images: [] (optional paths) }
+   ===================================================================== */
+const REVIEWS = [
+  {
+    name: "Rajwinder Tiwana",
+    text: "My sister made a beautiful set of crochet sweaters for my twin grandchildren and we all loved it very much. Cute and cozy gift for the newborns.",
+    images: [],
+  },
+  {
+    name: "Aman",
+    text: "I bought a crochet bag for myself, and when I showed it to my friends back in India, they each asked for one too — now I'm taking back 5 bags in total! The best part is that they're fully customizable, and aunty makes them so quickly.",
+    images: [],
+  },
+  {
+    name: "Babli",
+    text: "She's so passionate about her work that as soon as you talk to her about anything — a bag, a sweater, anything that can be made with crochet — she will immediately say, \"I can make this,\" and the next thing you know, she delivers the exact same product within days. She actively works on it to show that yes, she can make anything. She's a peaceful force you hardly understand fully, but when she delivers, she delivers soft and cozy crochet products, and you absolutely fall in love with their colours and designs, and ultimately with her.\n\nI heard a line that suits what she does: \"Tradition is not the worship of ashes. It is the preservation of fire.\" And she has preserved this fire well.",
+    images: [],
+  },
+  {
+    name: "Jaskiran",
+    text: "I absolutely love my aunt's crochet creations! Every piece is beautifully handmade with so much care and attention to detail. The quality is amazing, and each item is even cuter in person. I'm always surprised by how quickly she finishes her work without ever compromising on quality. You can really see the love, patience, and talent that go into every stitch. If you're looking for adorable handmade crochet, I highly recommend supporting her — you won't be disappointed!",
+    images: [],
   },
 ];
 
@@ -1342,6 +1388,56 @@ function renderHeroCards() {
   }).join("");
 }
 
+function escHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+const REVIEW_EXCERPT_LEN = 150;
+
+function renderReviews() {
+  const grid = $("testimonialsGrid");
+  if (!grid) return;
+  if (!REVIEWS.length) {
+    grid.innerHTML = `<p class="testi-empty">Reviews are coming soon — be the first to share yours in the contact form below!</p>`;
+    return;
+  }
+  grid.innerHTML = REVIEWS.map((r, i) => {
+    const hasLongText = r.text.length > REVIEW_EXCERPT_LEN;
+    const hasImages = Array.isArray(r.images) && r.images.length > 0;
+    const excerpt = hasLongText ? r.text.slice(0, REVIEW_EXCERPT_LEN).trim() + "…" : r.text;
+    const images = hasImages
+      ? `<div class="testi-images">${r.images.map(src => `<img src="${escHtml(src)}" alt="Photo from ${escHtml(r.name)}'s review" loading="lazy">`).join("")}</div>`
+      : "";
+    const expandable = hasLongText || hasImages;
+    return `
+      <div class="testi-card" data-idx="${i}" ${expandable ? `onclick="openReview(${i})"` : ""} style="${expandable ? "" : "cursor:default"}">
+        ${expandable ? `<button class="testi-close" onclick="closeReview(${i}, event)" aria-label="Close review">✕</button>` : ""}
+        <p class="testi-quote testi-excerpt">"${escHtml(excerpt)}"</p>
+        <div class="testi-author">— ${escHtml(r.name)}</div>
+        ${expandable ? `<div class="testi-more">${hasLongText ? "Read full review" : "View photos"} →</div>` : ""}
+        <div class="testi-expand"><div class="testi-expand-inner"><div class="testi-expand-content">
+          ${hasLongText ? `<p class="testi-quote">"${escHtml(r.text).replace(/\n\n/g, "\"</p><p class=\"testi-quote\">\"")}"</p>` : ""}
+          ${images}
+        </div></div></div>
+      </div>`;
+  }).join("");
+}
+
+function openReview(idx) {
+  const grid = $("testimonialsGrid");
+  const card = document.querySelector(`.testi-card[data-idx="${idx}"]`);
+  if (!card || !grid || card.classList.contains("expanded")) return;
+  grid.querySelectorAll(".testi-card.expanded").forEach(c => c.classList.remove("expanded"));
+  card.classList.add("expanded");
+  setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" }), 50);
+}
+
+function closeReview(idx, evt) {
+  if (evt) evt.stopPropagation();
+  const card = document.querySelector(`.testi-card[data-idx="${idx}"]`);
+  if (card) card.classList.remove("expanded");
+}
+
 function renderCategoryRow() {
   $("categoryRow").innerHTML = CATEGORIES.map(cat => {
     const variantCount = cat.variants.length;
@@ -1407,7 +1503,7 @@ function openCategory(catId) {
         </div>
       </div>
     `).join("")
-    : `<div class="empty-category">New seasonal Rakhri pieces are coming soon.<br><strong>${categoryPriceText(cat)}</strong></div>`;
+    : `<div class="empty-category">New seasonal Raakhi pieces are coming soon.<br><strong>${categoryPriceText(cat)}</strong></div>`;
   showPage("variants");
 }
 
@@ -2145,6 +2241,7 @@ function init() {
   renderHeroCards();
   renderCategoryRow();
   renderCategoriesPage();
+  renderReviews();
   renderCart();
   wireContactForm();
   handleCheckoutReturn();
