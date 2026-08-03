@@ -10,3 +10,9 @@ mum.HEIC
 .env*
 !.env.example
 node_modules/
+
+# local machine config / screenshots — never push personal or system info
+.claude/
+*.local.json
+Screenshot*.png
+Screenshot*.jpg
