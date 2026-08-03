@@ -341,7 +341,7 @@
     <div class="contact-info">
       <h3>Get in touch</h3>
       <div class="contact-detail">
-        <div class="contact-item"><span class="label">Email</span><span class="val"><a href="mailto:hello@tangledwithlove.com">hello@tangledwithlove.com</a></span></div>
+        <div class="contact-item"><span class="label">Email</span><span class="val"><a class="email-link" href="mailto:hello@tangledwithlove.com">hello@tangledwithlove.com</a></span></div>
         <div class="contact-item"><span class="label">Instagram</span><span class="val"><a class="instagram-link" href="https://instagram.com/mummawarmth" target="_blank" rel="noopener">@mummawarmth</a></span></div>
         <div class="contact-item"><span class="label">Location</span><span class="val">Brampton, Ontario, Canada</span></div>
         <div class="contact-item"><span class="label">Shipping</span><span class="val">Canada &amp; International</span></div>
@@ -363,11 +363,13 @@
           </div>
           <div class="cform-field">
             <label for="contactEmail">Email address <span>Required</span></label>
-            <input id="contactEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+            <input id="contactEmail" name="email" type="email" inputmode="email" maxlength="254" placeholder="you@example.com" autocomplete="email" spellcheck="false" aria-describedby="contactEmailError" required>
+            <p class="cform-field-error" id="contactEmailError" role="alert"></p>
           </div>
           <div class="cform-field">
             <label for="contactPhone">Phone number <span>Optional</span></label>
-            <input id="contactPhone" name="phone" type="tel" placeholder="For a faster reply" autocomplete="tel">
+            <input id="contactPhone" name="phone" type="tel" inputmode="tel" maxlength="24" placeholder="e.g. +1 647 555 0123" autocomplete="tel" aria-describedby="contactPhoneError">
+            <p class="cform-field-error" id="contactPhoneError" role="alert"></p>
           </div>
           <div class="cform-field">
             <label for="contactInterest">I’m interested in <span>Required</span></label>
@@ -425,7 +427,7 @@
       <ul class="footer-links">
         <li><a href="/faq" onclick="return navigateSectionLink(event,'faq')">Order questions</a></li>
         <li><a href="/contacts" onclick="return navigateSectionLink(event,'contact')">Custom orders</a></li>
-        <li><a href="mailto:hello@tangledwithlove.com">Email us</a></li>
+        <li><a class="email-link" href="mailto:hello@tangledwithlove.com">Email us</a></li>
         <li><span style="font-size:0.8rem">Brampton, Ontario</span></li>
       </ul>
     </div>

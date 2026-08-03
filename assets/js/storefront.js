@@ -793,7 +793,7 @@ function openReview(idx, evt) {
   if (!card || !grid || card.classList.contains("expanded")) return;
   grid.querySelectorAll(".testi-card.expanded").forEach(c => c.classList.remove("expanded"));
   card.classList.add("expanded");
-  setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" }), 50);
+  setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
 }
 
 function closeReview(idx, evt) {
@@ -1484,6 +1484,63 @@ async function sendReferencePhotosEmail(email="") {
   }
 }
 
+const CONTACT_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function setContactFieldState(input, error, valid, message="", showError=false) {
+  const hasValue = Boolean(input.value.trim());
+  if (valid) {
+    input.classList.remove("invalid");
+    input.classList.toggle("valid", hasValue);
+    input.removeAttribute("aria-invalid");
+    error.textContent = "";
+    error.classList.remove("show");
+    return;
+  }
+  input.classList.remove("valid");
+  if (!showError) return;
+  input.classList.add("invalid");
+  input.setAttribute("aria-invalid", "true");
+  error.textContent = message;
+  error.classList.add("show");
+}
+
+function validateContactEmail(showError=false) {
+  const input = $("contactEmail");
+  const error = $("contactEmailError");
+  const value = input.value.trim();
+  const valid = CONTACT_EMAIL_PATTERN.test(value) && input.validity.valid;
+  const message = value ? "Enter a complete email, such as name@example.com." : "Enter your email so we know where to reply.";
+  setContactFieldState(input, error, valid, message, showError);
+  return valid;
+}
+
+function validateContactPhone(showError=false) {
+  const input = $("contactPhone");
+  const error = $("contactPhoneError");
+  const value = input.value.trim();
+  if (!value) {
+    setContactFieldState(input, error, true);
+    input.classList.remove("valid");
+    return true;
+  }
+  const digits = value.replace(/\D/g, "");
+  const allowedCharacters = /^\+?[\d\s().-]+$/.test(value);
+  const valid = allowedCharacters && digits.length >= 7 && digits.length <= 15;
+  setContactFieldState(input, error, valid, "Use 7–15 digits. Spaces, brackets, + and dashes are okay.", showError);
+  return valid;
+}
+
+function clearContactValidation() {
+  ["contactEmail", "contactPhone"].forEach(id => {
+    const input = $(id);
+    const error = $(`${id}Error`);
+    input.classList.remove("invalid", "valid");
+    input.removeAttribute("aria-invalid");
+    error.textContent = "";
+    error.classList.remove("show");
+  });
+}
+
 function updateContactFormProgress() {
   const name = $("contactName");
   const email = $("contactEmail");
@@ -1492,7 +1549,7 @@ function updateContactFormProgress() {
   if (!name || !email || !interest || !message) return;
   const completed = [
     name.value.trim().length >= 2,
-    email.value.trim().length > 0 && email.validity.valid,
+    CONTACT_EMAIL_PATTERN.test(email.value.trim()) && email.validity.valid,
     Boolean(interest.value),
     message.value.trim().length >= 10,
   ].filter(Boolean).length;
@@ -1517,11 +1574,28 @@ function wireContactForm() {
     $(id).addEventListener("input", updateContactFormProgress);
     $(id).addEventListener("change", updateContactFormProgress);
   });
+  $("contactEmail").addEventListener("blur", () => validateContactEmail(true));
+  $("contactEmail").addEventListener("invalid", event => { event.preventDefault(); validateContactEmail(true); });
+  $("contactEmail").addEventListener("input", () => {
+    if ($("contactEmail").hasAttribute("aria-invalid")) validateContactEmail(true);
+  });
+  $("contactPhone").addEventListener("blur", () => validateContactPhone(true));
+  $("contactPhone").addEventListener("input", () => {
+    if ($("contactPhone").hasAttribute("aria-invalid")) validateContactPhone(true);
+  });
   updateContactFormProgress();
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const msg = $("cformMsg");
     msg.classList.remove("show"); msg.textContent = "";
+    const emailValid = validateContactEmail(true);
+    const phoneValid = validateContactPhone(true);
+    if (!emailValid || !phoneValid) {
+      msg.textContent = "Please check the highlighted contact details.";
+      msg.classList.add("show");
+      (emailValid ? $("contactPhone") : $("contactEmail")).focus();
+      return;
+    }
     if (fileInput && fileInput.files.length && !validateContactFiles(fileInput)) {
       return;
     }
@@ -1578,6 +1652,7 @@ function wireContactForm() {
       msg.classList.add("show");
       form.reset();
       $("cformFileList").textContent = "";
+      clearContactValidation();
       updateContactFormProgress();
     } catch (err) {
       msg.textContent = "Sorry, something went wrong. Please email hello@tangledwithlove.com directly.";

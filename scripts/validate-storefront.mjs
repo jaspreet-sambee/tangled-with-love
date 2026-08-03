@@ -115,6 +115,12 @@ if (!html.includes('id="mainContent"')) fail("Main content landmark is missing")
 if (!html.includes('class="skip-link"')) fail("Keyboard skip link is missing");
 if (!css.includes(".skip-link")) fail("Skip-link styling is missing");
 if ((html.match(/instagram-link/g) || []).length < 4 || !css.includes(".instagram-link::before")) fail("Instagram handle icons are missing");
+if ((html.match(/email-link/g) || []).length < 2 || !css.includes(".email-link::before")) fail("Email link icons are missing");
+if (!html.includes('id="contactEmailError"') || !html.includes('id="contactPhoneError"')) fail("Contact validation messages are missing");
+for (const marker of ["validateContactEmail", "validateContactPhone", "clearContactValidation"]) {
+  if (!app.includes(marker)) fail(`Contact validation behavior missing: ${marker}`);
+}
+if (!css.includes(".testimonials-grid{display:grid") || css.includes(".testimonials-grid{display:flex")) fail("Reviews must use the non-clipping grid layout");
 for (const marker of ["hero-stitchies", "lightbox-hint", "toast-thread", "faq-icon", "cformProgressTrack", "cformProgressFill", "contactMessageCount"]) {
   if (!html.includes(marker)) fail(`Cute UX marker missing: ${marker}`);
 }
