@@ -170,7 +170,13 @@
 <!-- ===================================================================== -->
 <nav class="site-nav" id="siteNav" aria-label="Primary navigation">
   <div class="nav-brand">
-    <a class="nav-logo" href="/" onclick="return navigateHomeLink(event)" aria-label="Tangled with Love home"><img class="nav-logo-mark" src="assets/brand/logo-mark.webp" alt="" width="40" height="40" decoding="async"><span>Tangled with Love</span></a>
+    <a class="nav-story-link" href="/about" onclick="return navigateSectionLink(event,'about')" aria-label="Meet the maker">
+      <picture>
+        <source media="(prefers-reduced-motion: reduce)" srcset="assets/brand/logo-mark.webp">
+        <img class="nav-logo-mark" src="assets/brand/logo-story.gif" alt="" width="40" height="40" decoding="async">
+      </picture>
+    </a>
+    <a class="nav-logo" href="/" onclick="return navigateHomeLink(event)" aria-label="Tangled with Love home">Tangled with Love</a>
   </div>
   <ul class="nav-links" id="navLinks">
     <li><a href="/shop" data-nav-section="shop" onclick="return navigateSectionLink(event,'shop')">Shop</a></li>
@@ -346,7 +352,7 @@
         <div class="cform-fields">
           <div class="cform-field">
             <label for="contactName">Your name <span>Required</span></label>
-            <input id="contactName" name="name" type="text" placeholder="e.g. Manpreet Kaur" autocomplete="name" required>
+            <input id="contactName" name="name" type="text" placeholder="Your full name" autocomplete="name" required>
           </div>
           <div class="cform-field">
             <label for="contactEmail">Email address <span>Required</span></label>
