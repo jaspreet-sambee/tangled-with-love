@@ -205,13 +205,8 @@ const CATEGORIES = [
    ===================================================================== */
 const REVIEWS = [
   {
-    name: "Gurjinder Tiwana",
-    text: "My sister made a beautiful set of crochet sweaters for my twin grandchildren and we all loved it very much. Cute and cozy gift for the newborns.",
-    images: [],
-  },
-  {
-    name: "Aman",
-    text: "I bought a crochet bag for myself, and when I showed it to my friends back in India, they each asked for one too — now I'm taking back 5 bags in total! The best part is that they're fully customizable, and aunty makes them so quickly.",
+    name: "Manpreet Kaur",
+    text: "I’m so happy with my crochet item! It’s adorable, beautifully crafted, and even better than I expected. The love and effort put into it really shows.",
     images: [],
   },
   {
@@ -220,18 +215,23 @@ const REVIEWS = [
     images: [],
   },
   {
+    name: "Mohini",
+    text: "It’s truly special about receiving something handmade with love. Every stitch reflects the warmth, patience, and care of a mom’s hands. It feels less like buying a product and more like receiving a thoughtful gift made with love. I’m absolutely delighted with my purchase and would highly recommend this website to anyone who appreciates handmade creations made from the heart.",
+    images: [],
+  },
+  {
     name: "Jaskaran",
     text: "I absolutely love my aunt's crochet creations! Every piece is beautifully handmade with so much care and attention to detail. The quality is amazing, and each item is even cuter in person. I'm always surprised by how quickly she finishes her work without ever compromising on quality. You can really see the love, patience, and talent that go into every stitch. If you're looking for adorable handmade crochet, I highly recommend supporting her — you won't be disappointed!",
     images: [],
   },
   {
-    name: "Manpreet",
-    text: "I’m so happy with my crochet item! It’s adorable, beautifully crafted, and even better than I expected. The love and effort put into it really shows.",
+    name: "Aman",
+    text: "I bought a crochet bag for myself, and when I showed it to my friends back in India, they each asked for one too — now I'm taking back 5 bags in total! The best part is that they're fully customizable, and aunty makes them so quickly.",
     images: [],
   },
   {
-    name: "Mohini",
-    text: "It’s truly special about receiving something handmade with love. Every stitch reflects the warmth, patience, and care of a mom’s hands. It feels less like buying a product and more like receiving a thoughtful gift made with love. I’m absolutely delighted with my purchase and would highly recommend this website to anyone who appreciates handmade creations made from the heart.",
+    name: "Gurjinder Tiwana",
+    text: "My sister made a beautiful set of crochet sweaters for my twin grandchildren and we all loved it very much. Cute and cozy gift for the newborns.",
     images: [],
   },
 ];
