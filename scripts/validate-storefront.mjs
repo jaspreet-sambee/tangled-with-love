@@ -1,4 +1,4 @@
-import { access, readFile, stat } from "node:fs/promises";
+import { access, readFile, readdir, stat } from "node:fs/promises";
 import { join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -50,6 +50,7 @@ const expectedPrices = {
 };
 
 const productIds = new Set();
+const referencedProductImages = new Set();
 let productCount = 0;
 let originalCount = 0;
 let thumbnailBytes = 0;
@@ -76,6 +77,7 @@ for (const category of categories) {
       const imagePath = join(root, "assets", "products", key, filename);
       if (!imagePath.startsWith(root + sep)) fail(`Unsafe image path: ${key}/${filename}`);
       await access(imagePath);
+      referencedProductImages.add(imagePath);
       originalCount += 1;
     }
     const thumbnailPath = join(root, "assets", "thumbs", category.id, `${variant.id}.webp`);
@@ -83,6 +85,21 @@ for (const category of categories) {
     thumbnailBytes += (await stat(thumbnailPath)).size;
     await access(join(root, "products", variant.id, "index.html"));
   }
+}
+
+const collectFiles = async directory => {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const entryPath = join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await collectFiles(entryPath));
+    else files.push(entryPath);
+  }
+  return files;
+};
+const unusedProductImages = (await collectFiles(join(root, "assets", "products")))
+  .filter(imagePath => !referencedProductImages.has(imagePath));
+if (unusedProductImages.length) {
+  fail(`Unused product images: ${unusedProductImages.map(imagePath => imagePath.slice(root.length + 1)).join(", ")}`);
 }
 
 if (productCount !== 39) fail(`Expected 39 products, found ${productCount}`);
