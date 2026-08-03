@@ -1,0 +1,21 @@
+name = "tangled-mail"
+main = "src/worker.js"
+compatibility_date = "2025-10-01"
+
+# Allowed origins for CORS (comma-separated). In production this should
+# be exactly your live site — not "*" — to prevent other sites using your worker.
+[vars]
+ALLOWED_ORIGIN = "https://tangledwithlove.com,http://localhost:8080,http://127.0.0.1:8080,http://127.0.0.1:5500,http://localhost:8090,http://127.0.0.1:8090,null"
+
+# Inbox that receives owner notifications + reference photos (your existing mailbox).
+OWNER_EMAIL = "hello@tangledwithlove.com"
+
+# "From" address emails are sent as. The DOMAIN in this address must be verified
+# in Resend (Resend dashboard -> Domains -> Add Domain), which means adding a few
+# DNS records at Namecheap. Use a subdomain like mail.tangledwithlove.com so it
+# doesn't touch the DNS records your existing hello@tangledwithlove.com mailbox
+# already relies on.
+FROM_EMAIL = "Team Tangled with Love <hello@mail.tangledwithlove.com>"
+
+# RESEND_API_KEY is set as a secret:
+#   wrangler secret put RESEND_API_KEY

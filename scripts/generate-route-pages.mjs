@@ -7,9 +7,15 @@ const indexPath = join(root, "index.html");
 const source = await readFile(indexPath, "utf8");
 
 const startMarker = "const CATEGORIES = ";
-const endMarker = "\n\n/* =====================================================================\n   STATE";
 const start = source.indexOf(startMarker);
-const end = source.indexOf(endMarker, start);
+const endMarkers = [
+  "\n\n/* =====================================================================\n   REVIEWS",
+  "\n\n/* =====================================================================\n   STATE",
+];
+const endCandidates = endMarkers
+  .map(marker => source.indexOf(marker, start))
+  .filter(index => index >= 0);
+const end = endCandidates.length ? Math.min(...endCandidates) : -1;
 
 if (start < 0 || end < 0) {
   throw new Error("Could not locate CATEGORIES in index.html");

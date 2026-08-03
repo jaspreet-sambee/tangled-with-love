@@ -185,11 +185,29 @@ section{padding:5rem 4rem;position:relative;overflow:hidden}
 
 /* ======= TESTIMONIALS ======= */
 .testimonials-section{background:var(--pale-blush)}
-.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:960px;margin:0 auto;position:relative;z-index:1}
-.testi-card{background:white;border-radius:18px;padding:2rem 1.75rem;box-shadow:0 2px 16px rgba(124,80,53,0.06);border-top:3px solid var(--mustard)}
+.testimonials-grid{display:flex;align-items:flex-start;gap:22px;max-width:100%;margin:0 auto;position:relative;z-index:1;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;padding:6px 6px 22px;scrollbar-width:thin;scrollbar-color:var(--soft-terracotta) transparent}
+.testimonials-grid::-webkit-scrollbar{height:6px}
+.testimonials-grid::-webkit-scrollbar-thumb{background:var(--soft-terracotta);border-radius:3px}
+.testimonials-grid::-webkit-scrollbar-track{background:transparent}
+.testi-card{position:relative;flex:0 0 280px;width:280px;scroll-snap-align:start;background:white;border-radius:18px;padding:2rem 1.75rem;box-shadow:0 2px 16px rgba(124,80,53,0.06);border-top:3px solid var(--mustard);cursor:pointer;overflow:hidden;transition:box-shadow .25s ease}
+.testi-card:hover{box-shadow:0 6px 24px rgba(124,80,53,0.12)}
+.testi-card.expanded{flex-basis:600px;width:600px;cursor:default}
 .testi-stars{color:var(--soft-terracotta);font-size:0.9rem;letter-spacing:2px;margin-bottom:1rem}
-.testi-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;line-height:1.75;color:var(--dark);margin-bottom:1.25rem}
-.testi-author{font-size:0.8rem;font-weight:700;color:var(--warm-brown);letter-spacing:0.05em;text-transform:uppercase}
+.testi-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:0.95rem;line-height:1.75;color:var(--dark);margin-bottom:1rem}
+.testi-author{font-size:0.8rem;font-weight:700;color:var(--warm-brown);letter-spacing:0.05em;text-transform:uppercase;white-space:nowrap}
+.testi-more{margin-top:0.75rem;font-size:0.8rem;font-weight:700;color:var(--soft-terracotta);letter-spacing:0.03em;white-space:nowrap}
+.testi-card.expanded .testi-excerpt,.testi-card.expanded .testi-more{display:none}
+.testi-close{display:none;position:absolute;top:10px;right:10px;background:var(--pale-blush);border:none;width:28px;height:28px;border-radius:50%;font-size:0.95rem;line-height:1;color:var(--warm-brown);cursor:pointer;transition:background .2s ease;z-index:2}
+.testi-close:hover{background:var(--soft-terracotta);color:white}
+.testi-card.expanded .testi-close{display:block}
+.testi-empty{font-family:'Playfair Display',serif;font-style:italic;color:var(--warm-brown);text-align:center;flex:1 1 100%}
+.testi-expand{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.testi-card.expanded .testi-expand{grid-template-rows:1fr}
+.testi-expand-inner{overflow:hidden}
+.testi-expand-content{padding-top:0}
+.testi-card.expanded .testi-expand-content{padding-top:0.25rem}
+.testi-images{display:flex;gap:10px;flex-wrap:wrap;margin-top:1rem}
+.testi-images img{width:110px;height:110px;object-fit:cover;border-radius:10px}
 
 /* ======= RECENTLY VIEWED ======= */
 .recent-section{background:var(--surface-soft);padding:5rem 4rem}
@@ -719,7 +737,6 @@ body.cart-open{overflow:hidden}
   .gallery-info{position:static}
   .contact-grid{grid-template-columns:1fr;gap:2rem}
   .category-row{grid-template-columns:1fr 1fr}
-  .testimonials-grid{grid-template-columns:1fr}
   .trust-strip{grid-template-columns:1fr 1fr}
   .recent-grid{grid-template-columns:1fr 1fr}
   .faq-grid{grid-template-columns:1fr;gap:2.5rem}
@@ -734,6 +751,8 @@ body.cart-open{overflow:hidden}
   .detail-related-grid{grid-template-columns:1fr}
   .footer-main{grid-template-columns:1.4fr 0.8fr;gap:2.5rem}
   .footer-main .footer-col:first-child{grid-column:1/-1}
+  .testi-card{flex-basis:240px;width:240px}
+  .testi-card.expanded{flex-basis:300px;width:300px}
 }
 @media(max-width:820px){
   .site-nav{padding:0 1rem}
@@ -1092,11 +1111,7 @@ body.cart-open{overflow:hidden}
   <div class="section-label">Kind words</div>
   <h2 class="section-title">What people are saying</h2>
   <p class="section-sub">Handmade gifts leave a lasting impression. Here's what some of our customers have shared.</p>
-  <div class="testimonials-grid">
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"I ordered a granny-square shoulder bag for my sister and she literally cried. The softness and care that went into it was so obvious. Will order again."</p><div class="testi-author">— Sarah M.</div></div>
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"The little pouch I got for my daughter is her absolute favourite. It's beautifully made and so charming. Thank you so much!"</p><div class="testi-author">— Priya R.</div></div>
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"Ordered a custom colour sling bag and it turned out even better than I imagined. The communication was lovely and delivery was quick."</p><div class="testi-author">— Claire T.</div></div>
-  </div>
+  <div class="testimonials-grid" id="testimonialsGrid"></div>
 </section>
 
 <!-- FAQ -->
@@ -1142,12 +1157,16 @@ body.cart-open{overflow:hidden}
         <input name="phone" type="tel" placeholder="Phone number (optional) — for faster response">
         <select name="interest" required>
           <option value="">What are you interested in?</option>
-          <option>Custom bag (colour / size)</option>
-          <option>Custom blanket</option>
-          <option>Amigurumi</option>
-          <option>Wearable (hat, scarf, etc.)</option>
-          <option>Home decor</option>
+          <option>Round Patches</option>
+          <option>Small Potli</option>
+          <option>Large Sized Bags</option>
+          <option>Medium Bags — Round</option>
+          <option>Medium Bags — Rectangle</option>
+          <option>Small Bags</option>
+          <option>XS Bags</option>
+          <option>Leather Bags</option>
           <option>Something else</option>
+          <option>Leave a review</option>
         </select>
         <textarea name="message" placeholder="Tell us what you have in mind…" required></textarea>
         <div class="cform-file">
@@ -1518,8 +1537,16 @@ const CONFIG = {
   // Only needed if STRIPE_CHECKOUT_ENDPOINT is set.
   STRIPE_PUBLISHABLE_KEY: "pk_live_51TToRWLlmU3TgjkK3laPQ1D01ZnhzV5lGPEUrJHEIj93pfX4QNtolApPpkZYnCrnPelMItkgMfhDprKYkdudJHdD00up4cjGRR",
 
-  // Formspree form id — used only for messages/orders that include file attachments
-  // (EmailJS below handles everything else with nicer branded templates).
+  // URL of your Cloudflare Worker that emails messages/reference-photos WITH
+  // attachments via Resend (see mail-worker/). Formspree's free plan doesn't
+  // support file uploads, so this replaces it for the attachment path only.
+  // Leave blank ("") to fall back to Formspree (attachments will fail unless
+  // your Formspree plan supports file uploads).
+  MAIL_WORKER_ENDPOINT: "https://tangled-mail.tangled-mail-worker.workers.dev",
+
+  // Formspree form id — fallback for messages/orders with attachments when
+  // MAIL_WORKER_ENDPOINT is blank. (EmailJS below handles everything else
+  // with nicer branded templates.)
   FORMSPREE_ID: "mojbpvdp",
 
   // EmailJS (https://emailjs.com) — sends the branded owner-notification and
@@ -1691,10 +1718,39 @@ const CATEGORIES = [
   },
   {
     id: "rakhri-seasonal",
-    name: "Rakhri (Seasonal)",
+    name: "Raakhi (Seasonal)",
     tagline: "Limited seasonal pieces made for heartfelt gifting.",
-    blurb: "Our Rakhri collection is being prepared. New handmade seasonal designs will appear here soon.",
+    blurb: "Our Raakhi collection is being prepared. New handmade seasonal designs will appear here soon.",
     variants: [],
+  },
+];
+
+/* =====================================================================
+   REVIEWS — genuine customer reviews only. Add entries here as they come
+   in through the contact form's "Leave a review" option (with any photos
+   the customer attached copied into assets/reviews/).
+   Each entry: { name, text, images: [] (optional paths) }
+   ===================================================================== */
+const REVIEWS = [
+  {
+    name: "Rajwinder Tiwana",
+    text: "My sister made a beautiful set of crochet sweaters for my twin grandchildren and we all loved it very much. Cute and cozy gift for the newborns.",
+    images: [],
+  },
+  {
+    name: "Aman",
+    text: "I bought a crochet bag for myself, and when I showed it to my friends back in India, they each asked for one too — now I'm taking back 5 bags in total! The best part is that they're fully customizable, and aunty makes them so quickly.",
+    images: [],
+  },
+  {
+    name: "Babli",
+    text: "She's so passionate about her work that as soon as you talk to her about anything — a bag, a sweater, anything that can be made with crochet — she will immediately say, \"I can make this,\" and the next thing you know, she delivers the exact same product within days. She actively works on it to show that yes, she can make anything. She's a peaceful force you hardly understand fully, but when she delivers, she delivers soft and cozy crochet products, and you absolutely fall in love with their colours and designs, and ultimately with her.\n\nI heard a line that suits what she does: \"Tradition is not the worship of ashes. It is the preservation of fire.\" And she has preserved this fire well.",
+    images: [],
+  },
+  {
+    name: "Jaskiran",
+    text: "I absolutely love my aunt's crochet creations! Every piece is beautifully handmade with so much care and attention to detail. The quality is amazing, and each item is even cuter in person. I'm always surprised by how quickly she finishes her work without ever compromising on quality. You can really see the love, patience, and talent that go into every stitch. If you're looking for adorable handmade crochet, I highly recommend supporting her — you won't be disappointed!",
+    images: [],
   },
 ];
 
@@ -2465,6 +2521,56 @@ function renderHeroCards() {
   }).join("");
 }
 
+function escHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+const REVIEW_EXCERPT_LEN = 150;
+
+function renderReviews() {
+  const grid = $("testimonialsGrid");
+  if (!grid) return;
+  if (!REVIEWS.length) {
+    grid.innerHTML = `<p class="testi-empty">Reviews are coming soon — be the first to share yours in the contact form below!</p>`;
+    return;
+  }
+  grid.innerHTML = REVIEWS.map((r, i) => {
+    const hasLongText = r.text.length > REVIEW_EXCERPT_LEN;
+    const hasImages = Array.isArray(r.images) && r.images.length > 0;
+    const excerpt = hasLongText ? r.text.slice(0, REVIEW_EXCERPT_LEN).trim() + "…" : r.text;
+    const images = hasImages
+      ? `<div class="testi-images">${r.images.map(src => `<img src="${escHtml(src)}" alt="Photo from ${escHtml(r.name)}'s review" loading="lazy">`).join("")}</div>`
+      : "";
+    const expandable = hasLongText || hasImages;
+    return `
+      <div class="testi-card" data-idx="${i}" ${expandable ? `onclick="openReview(${i})"` : ""} style="${expandable ? "" : "cursor:default"}">
+        ${expandable ? `<button class="testi-close" onclick="closeReview(${i}, event)" aria-label="Close review">✕</button>` : ""}
+        <p class="testi-quote testi-excerpt">"${escHtml(excerpt)}"</p>
+        <div class="testi-author">— ${escHtml(r.name)}</div>
+        ${expandable ? `<div class="testi-more">${hasLongText ? "Read full review" : "View photos"} →</div>` : ""}
+        <div class="testi-expand"><div class="testi-expand-inner"><div class="testi-expand-content">
+          ${hasLongText ? `<p class="testi-quote">"${escHtml(r.text).replace(/\n\n/g, "\"</p><p class=\"testi-quote\">\"")}"</p>` : ""}
+          ${images}
+        </div></div></div>
+      </div>`;
+  }).join("");
+}
+
+function openReview(idx) {
+  const grid = $("testimonialsGrid");
+  const card = document.querySelector(`.testi-card[data-idx="${idx}"]`);
+  if (!card || !grid || card.classList.contains("expanded")) return;
+  grid.querySelectorAll(".testi-card.expanded").forEach(c => c.classList.remove("expanded"));
+  card.classList.add("expanded");
+  setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" }), 50);
+}
+
+function closeReview(idx, evt) {
+  if (evt) evt.stopPropagation();
+  const card = document.querySelector(`.testi-card[data-idx="${idx}"]`);
+  if (card) card.classList.remove("expanded");
+}
+
 function renderCategoryRow() {
   $("categoryRow").innerHTML = CATEGORIES.map(cat => {
     const variantCount = cat.variants.length;
@@ -2533,7 +2639,7 @@ function openCategory(catId, push=true) {
         </a>
       </article>
     `).join("")
-    : `<div class="empty-category">New seasonal Rakhri pieces are coming soon.<br><strong>${categoryPriceText(cat)}</strong></div>`;
+    : `<div class="empty-category">New seasonal Raakhi pieces are coming soon.<br><strong>${categoryPriceText(cat)}</strong></div>`;
   showPage("variants", push, { catId });
 }
 
@@ -3009,20 +3115,30 @@ function validateFileSelection(input, listEl) {
 }
 function validateContactFiles(input) { return validateFileSelection(input, $("cformFileList")); }
 
-// Sends any reference photos attached to cart items as their own Formspree email,
-// entirely separate from the Stripe/payment flow (Stripe Checkout can't carry files).
+// Sends any reference photos attached to cart items as their own email, entirely
+// separate from the Stripe/payment flow (Stripe Checkout can't carry files).
 async function sendReferencePhotosEmail() {
-  if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") return;
   const entries = STATE.cart
     .map(it => ({ it, files: ITEM_FILES[it.lineId] || [] }))
     .filter(x => x.files.length);
   if (!entries.length) return;
+  const summary = entries.map(x => `${x.it.name} (${x.it.colour}): ${x.files.length} file(s)`).join("\n");
+  const allFiles = entries.flatMap(x => x.files);
   try {
-    const fd = new FormData();
-    fd.append("subject", "Reference photos — order via tangledwithlove.com");
-    fd.append("summary", entries.map(x => `${x.it.name} (${x.it.colour}): ${x.files.length} file(s)`).join("\n"));
-    entries.forEach(x => x.files.forEach(f => fd.append("attachments", f, f.name)));
-    await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, { method: "POST", body: fd, headers: { Accept: "application/json" } });
+    if (CONFIG.MAIL_WORKER_ENDPOINT) {
+      const fd = new FormData();
+      fd.append("form_type", "order");
+      fd.append("message", summary);
+      allFiles.forEach(f => fd.append("attachments", f, f.name));
+      const r = await fetch(CONFIG.MAIL_WORKER_ENDPOINT, { method: "POST", body: fd });
+      if (!r.ok) throw new Error("Mail worker error (" + r.status + ")");
+    } else if (CONFIG.FORMSPREE_ID && CONFIG.FORMSPREE_ID !== "FORMSPREE_ID") {
+      const fd = new FormData();
+      fd.append("_subject", "Reference photos — order via tangledwithlove.com");
+      fd.append("summary", summary);
+      allFiles.forEach(f => fd.append("attachments", f, f.name));
+      await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, { method: "POST", body: fd, headers: { Accept: "application/json" } });
+    }
   } catch (err) {
     console.error("Reference photo email failed", err);
   }
@@ -3047,17 +3163,35 @@ function wireContactForm() {
       return;
     }
     const hasFiles = fileInput && fileInput.files.length > 0;
+    const interestVal = form.querySelector('[name="interest"]').value;
+    const isReview = interestVal === "Leave a review";
+    const formType = isReview ? "review" : "message";
     try {
-      if (hasFiles) {
-        // Attachments still go through Formspree — reliable file delivery, plain template.
-        if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") {
-          msg.textContent = "✖ Contact form isn't connected yet. Please set CONFIG.FORMSPREE_ID.";
-          msg.classList.add("show");
-          return;
+      if (hasFiles || isReview) {
+        if (CONFIG.MAIL_WORKER_ENDPOINT) {
+          // Attachments (and reviews, so they get the review email template) go
+          // through the mail Worker (Resend) — Formspree's free plan doesn't
+          // support file uploads.
+          const data = new FormData();
+          data.append("form_type", formType);
+          data.append("from_name", form.querySelector('[name="name"]').value);
+          data.append("reply_to", form.querySelector('[name="email"]').value);
+          data.append("phone", form.querySelector('[name="phone"]').value || "—");
+          data.append("interest", interestVal);
+          data.append("message", form.querySelector('[name="message"]').value);
+          Array.from(fileInput.files).forEach(f => data.append("attachments", f, f.name));
+          const r = await fetch(CONFIG.MAIL_WORKER_ENDPOINT, { method: "POST", body: data });
+          if (!r.ok) throw new Error("Form error");
+        } else {
+          if (!CONFIG.FORMSPREE_ID || CONFIG.FORMSPREE_ID === "FORMSPREE_ID") {
+            msg.textContent = "✖ Contact form isn't connected yet. Please set CONFIG.FORMSPREE_ID.";
+            msg.classList.add("show");
+            return;
+          }
+          const data = new FormData(form);
+          const r = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } });
+          if (!r.ok) throw new Error("Form error");
         }
-        const data = new FormData(form);
-        const r = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } });
-        if (!r.ok) throw new Error("Form error");
       } else {
         // No attachments — send our own branded owner + customer emails via EmailJS.
         if (typeof emailjs === "undefined" || !CONFIG.EMAILJS_PUBLIC_KEY) {
@@ -3066,11 +3200,11 @@ function wireContactForm() {
           return;
         }
         const params = {
-          form_type: "message",
+          form_type: formType,
           from_name: form.querySelector('[name="name"]').value,
           reply_to: form.querySelector('[name="email"]').value,
           phone: form.querySelector('[name="phone"]').value || "—",
-          interest: form.querySelector('[name="interest"]').value,
+          interest: interestVal,
           message: form.querySelector('[name="message"]').value,
         };
         await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_OWNER, params);
@@ -3348,6 +3482,7 @@ function init() {
   renderCategoriesPage();
   renderRecentlyViewed();
   updateWishlistUI();
+  renderReviews();
   renderCart();
   wireContactForm();
   const checkoutState = handleCheckoutReturn();
