@@ -98,12 +98,13 @@ if (missingRefs.length) fail(`Missing DOM ids: ${missingRefs.join(", ")}`);
 for (const asset of ["assets/css/storefront.css", "assets/js/store-data.js", "assets/js/storefront.js"]) {
   if (!html.includes(asset)) fail(`index.html does not load ${asset}`);
 }
-for (const asset of ["assets/brand/logo-mark.png", "assets/brand/logo-mark.webp", "assets/brand/logo-story.gif", "assets/brand/favicon-64.png", "assets/brand/apple-touch-icon.png"]) {
+for (const asset of ["assets/brand/logo-mark.png", "assets/brand/logo-mark.webp", "assets/brand/maker-portrait.webp", "assets/brand/favicon-64.png", "assets/brand/apple-touch-icon.png"]) {
   await access(join(root, asset));
 }
 if (!html.includes('assets/brand/logo-mark.webp')) fail("The storefront brand logo is missing");
-if (!html.includes('assets/brand/logo-story.gif')) fail("The animated About logo is missing");
+if (!html.includes('assets/brand/maker-portrait.webp')) fail("The maker portrait is missing from the animated logo");
 if (!html.includes('class="nav-story-link" href="/about"')) fail("The animated logo must link to About");
+if (!html.includes('class="nav-story-flip"') || !css.includes("@keyframes nav-story-flip")) fail("The logo-to-portrait flip animation is missing");
 if (html.includes("Manpreet Kaur")) fail("The contact form still contains a customer name example");
 if (html.includes("Custom colours welcome")) fail("Removed homepage proof text was reintroduced");
 if (html.includes('id="navBack"') || app.includes('$("navBack")')) fail("The removed top back control was reintroduced");

@@ -171,10 +171,10 @@
 <nav class="site-nav" id="siteNav" aria-label="Primary navigation">
   <div class="nav-brand">
     <a class="nav-story-link" href="/about" onclick="return navigateSectionLink(event,'about')" aria-label="Meet the maker">
-      <picture>
-        <source media="(prefers-reduced-motion: reduce)" srcset="assets/brand/logo-mark.webp">
-        <img class="nav-logo-mark" src="assets/brand/logo-story.gif" alt="" width="40" height="40" decoding="async">
-      </picture>
+      <span class="nav-story-flip" aria-hidden="true">
+        <span class="nav-story-face nav-story-logo"><img src="assets/brand/logo-mark.webp" alt="" width="44" height="44" decoding="async"></span>
+        <span class="nav-story-face nav-story-photo"><img src="assets/brand/maker-portrait.webp" alt="" width="44" height="44" decoding="async"></span>
+      </span>
     </a>
     <a class="nav-logo" href="/" onclick="return navigateHomeLink(event)" aria-label="Tangled with Love home">Tangled with Love</a>
   </div>
