@@ -1,11 +1,16 @@
 {
   "name": "tangled-with-love-storefront",
   "private": true,
+  "engines": {
+    "node": ">=20.9"
+  },
   "scripts": {
     "optimize-images": "node scripts/generate-thumbnails.mjs",
-    "generate-routes": "node scripts/generate-route-pages.mjs"
+    "generate-routes": "node scripts/generate-route-pages.mjs",
+    "validate": "node scripts/validate-storefront.mjs",
+    "build": "npm run generate-routes && npm run optimize-images && npm run validate"
   },
   "devDependencies": {
-    "sharp": "0.34.5"
+    "sharp": "^0.35.3"
   }
 }
