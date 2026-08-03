@@ -122,6 +122,7 @@ for (const marker of ["validateContactEmail", "validateContactPhone", "clearCont
 }
 if (!html.includes("Made by Mum, stitched for you")) fail("The updated homepage introduction is missing");
 if (html.includes("hero-stitchies") || css.includes("stitchie-float") || css.includes("trust-wiggle") || app.includes("setupRevealAnimations")) fail("Scattered homepage animation was reintroduced");
+if (!css.includes(".fringe{height:3px;background:linear-gradient") || css.includes("repeating-linear-gradient(115deg")) fail("The refined hero divider is missing");
 if (!css.includes(".testimonials-grid{display:grid") || !css.includes("grid-auto-flow:column") || !css.includes("scroll-snap-type:x mandatory")) fail("Reviews must use the single-row, full-card carousel");
 for (const marker of ["reviewPrev", "reviewNext", "reviewPosition"]) {
   if (!html.includes(`id="${marker}"`)) fail(`Review carousel control missing: ${marker}`);

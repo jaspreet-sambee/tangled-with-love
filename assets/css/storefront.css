@@ -104,7 +104,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .back-to-top:hover{background:var(--pale-blush)}
 
 /* ======= HERO ======= */
-.fringe{height:9px;background:repeating-linear-gradient(115deg,var(--rust) 0 14px,var(--soft-terracotta) 14px 18px,var(--mustard) 18px 22px,var(--rust) 22px 36px)}
+.fringe{height:3px;background:linear-gradient(90deg,transparent 0%,rgba(201,123,90,.28) 12%,var(--soft-terracotta) 38%,rgba(201,149,42,.72) 50%,var(--muted-sage) 62%,rgba(138,158,126,.26) 88%,transparent 100%)}
 .hero{min-height:88vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,500px);align-items:center;padding:clamp(3rem,6vw,5.5rem) max(2rem,calc((100vw - 1180px)/2)) clamp(3rem,5vw,4.5rem);column-gap:clamp(2.5rem,6vw,5rem);position:relative;overflow:hidden;isolation:isolate}
 .hero::before{content:'';position:absolute;width:520px;height:520px;right:-180px;top:-210px;border-radius:50%;background:radial-gradient(circle,rgba(232,180,154,0.2),rgba(232,180,154,0));z-index:-1}
 .hero-content{position:relative;z-index:1}
