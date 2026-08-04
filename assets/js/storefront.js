@@ -268,15 +268,24 @@ function setSearchCategory(catId) {
   renderSearchResults();
 }
 
+const SEARCH_COLOUR_WORDS = ["white", "black", "grey", "brown", "red", "pink", "orange", "yellow", "green", "blue", "purple"];
+
 function renderSearchResults() {
   const query = $("productSearch").value.trim().toLowerCase();
+  const colour = $("searchColour").value;
   const budget = $("searchBudget").value;
   const sort = $("searchSort").value;
   let products = allProducts().filter(({ cat, variant, key }) => {
     if (STATE.searchSavedOnly && !STATE.wishlist.includes(key)) return false;
     if (STATE.searchCategory !== "all" && cat.id !== STATE.searchCategory) return false;
+    if (colour !== "all" && !(variant.colours || []).includes(colour)) return false;
     if (!priceMatchesBudget(variant.price, budget)) return false;
     if (!query) return true;
+    // A bare colour word (e.g. "red") must match the product's actual colour tags,
+    // not just appear as a substring inside an unrelated word like "structured" or "centred".
+    if (SEARCH_COLOUR_WORDS.includes(query)) {
+      return (variant.colours || []).some(c => c.toLowerCase() === query);
+    }
     return `${variant.name} ${variant.desc} ${cat.name} ${cat.tagline}`.toLowerCase().includes(query);
   });
   if (sort === "price-low") products.sort((a, b) => a.variant.price - b.variant.price);
@@ -302,6 +311,7 @@ function clearSearchFilters() {
   STATE.searchCategory = "all";
   STATE.searchSavedOnly = false;
   $("productSearch").value = "";
+  $("searchColour").value = "all";
   $("searchBudget").value = "all";
   $("searchSort").value = "featured";
   renderSearchFilters();
@@ -317,6 +327,7 @@ function openSearch(savedOnly=false) {
   STATE.searchSavedOnly = Boolean(savedOnly);
   STATE.searchCategory = "all";
   $("productSearch").value = "";
+  $("searchColour").value = "all";
   $("searchBudget").value = "all";
   $("searchSort").value = "featured";
   $("productSearch").placeholder = savedOnly ? "Search your saved pieces…" : "Search by style, colour, or product…";
