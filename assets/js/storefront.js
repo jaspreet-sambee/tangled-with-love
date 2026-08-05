@@ -102,92 +102,6 @@ function variantCardImage(cat, v) {
   return `assets/thumbs/${cat.id}/${v.id}.webp?v=${THUMB_VERSION}`;
 }
 
-// Every photo other than the hero shot, as a lightweight thumbnail, slowly cross-faded
-// through while a shopper hovers (or keyboard-focuses) a product card.
-function altCardThumbs(cat, v) {
-  const files = IMAGE_MAP[`${cat.id}/${v.id}`] || [];
-  if (files.length <= 1) return [];
-  const heroIndex = Math.min(Math.max(v.heroIdx || 0, 0), files.length - 1);
-  return files
-    .map((_, i) => i)
-    .filter(i => i !== heroIndex)
-    .map((_, n) => `assets/thumbs/${cat.id}/${v.id}-alt${n}.webp?v=${THUMB_VERSION}`);
-}
-function cardHoverImage(cat, v) {
-  return altCardThumbs(cat, v).length
-    ? `<img class="card-hover-img" alt="" aria-hidden="true" decoding="async">`
-    : "";
-}
-
-/* =====================================================================
-   PRODUCT CARD HOVER PREVIEW — slowly cross-fades through every photo
-   ===================================================================== */
-const CARD_HOVER_WRAP_SELECTOR = ".product-img-wrap[data-hover-variant],.variant-img-wrap[data-hover-variant],.recent-card-img[data-hover-variant],.search-result-img[data-hover-variant]";
-const CARD_HOVER_START_DELAY_MS = 600; // brief pause so a quick mouse pass doesn't trigger it
-const CARD_HOVER_HOLD_MS = 1500;       // how long each photo stays visible
-const CARD_HOVER_FADE_MS = 650;        // cross-fade duration (kept in sync with the CSS transition)
-const cardHoverCycles = new WeakMap();
-
-function beginCardHoverCycle(wrap) {
-  if (cardHoverCycles.has(wrap)) return;
-  const img = wrap.querySelector(".card-hover-img");
-  const cat = findCategory(wrap.dataset.hoverCat);
-  const v = cat && findVariant(wrap.dataset.hoverCat, wrap.dataset.hoverVariant);
-  if (!img || !cat || !v) return;
-  const urls = altCardThumbs(cat, v);
-  if (!urls.length) return;
-
-  const state = { timer: null };
-  cardHoverCycles.set(wrap, state);
-  let index = 0;
-
-  const showCurrent = () => {
-    img.src = urls[index];
-    img.classList.add("is-visible");
-    state.timer = setTimeout(fadeOutThenAdvance, CARD_HOVER_HOLD_MS);
-  };
-  function fadeOutThenAdvance() {
-    img.classList.remove("is-visible");
-    state.timer = setTimeout(() => {
-      index = (index + 1) % urls.length;
-      showCurrent();
-    }, CARD_HOVER_FADE_MS);
-  }
-
-  state.timer = setTimeout(showCurrent, CARD_HOVER_START_DELAY_MS);
-}
-
-function endCardHoverCycle(wrap) {
-  const state = cardHoverCycles.get(wrap);
-  if (!state) return;
-  clearTimeout(state.timer);
-  cardHoverCycles.delete(wrap);
-  const img = wrap.querySelector(".card-hover-img");
-  if (img) img.classList.remove("is-visible");
-}
-
-// Delegated so it keeps working across every re-render (grids are rebuilt via innerHTML).
-function setupCardHoverPreview() {
-  document.addEventListener("mouseover", e => {
-    const wrap = e.target.closest(CARD_HOVER_WRAP_SELECTOR);
-    if (!wrap || wrap.contains(e.relatedTarget)) return;
-    beginCardHoverCycle(wrap);
-  });
-  document.addEventListener("mouseout", e => {
-    const wrap = e.target.closest(CARD_HOVER_WRAP_SELECTOR);
-    if (!wrap || wrap.contains(e.relatedTarget)) return;
-    endCardHoverCycle(wrap);
-  });
-  document.addEventListener("focusin", e => {
-    const wrap = e.target.closest(CARD_HOVER_WRAP_SELECTOR);
-    if (wrap) beginCardHoverCycle(wrap);
-  });
-  document.addEventListener("focusout", e => {
-    const wrap = e.target.closest(CARD_HOVER_WRAP_SELECTOR);
-    if (wrap) endCardHoverCycle(wrap);
-  });
-}
-
 // Returns the full list of images for a variant, with the hero image moved to position 0.
 // Only returns images that actually exist in IMAGE_MAP.
 function allVariantImages(catId, vId, heroIdx=0) {
@@ -343,7 +257,7 @@ function renderRecentlyViewed() {
   $("recentSection").hidden = items.length === 0;
   $("recentGrid").innerHTML = items.map(({ cat, variant }) => `
     <article class="recent-card">
-      <div class="recent-card-img" data-hover-cat="${cat.id}" data-hover-variant="${variant.id}"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${cardHoverImage(cat, variant)}${wishlistButton(cat.id, variant.id)}</div>
+      <div class="recent-card-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
       <a class="recent-card-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><div class="recent-card-category">${cat.name}</div><div class="recent-card-name">${variant.name}</div><div class="recent-card-price">${fmt(variant.price)}</div></a>
     </article>`).join("");
 }
@@ -398,7 +312,7 @@ function renderSearchResults() {
   $("searchCount").textContent = `${products.length} ${products.length === 1 ? "piece" : "pieces"}`;
   $("searchResults").innerHTML = products.length ? products.map(({ cat, variant }) => `
     <article class="search-result">
-      <div class="search-result-img" data-hover-cat="${cat.id}" data-hover-variant="${variant.id}"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${cardHoverImage(cat, variant)}${wishlistButton(cat.id, variant.id)}</div>
+      <div class="search-result-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
       <a class="search-result-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','search')"><div class="search-result-cat">${cat.name}</div><div class="search-result-name">${variant.name}</div><div class="search-result-price">${fmt(variant.price)}</div></a>
     </article>`).join("") : `<div class="search-empty"><div class="search-empty-icon">🧶</div><strong>${STATE.searchSavedOnly ? "No saved pieces yet" : "No pieces found"}</strong><span>${STATE.searchSavedOnly ? "Tap the heart on any product to keep it here." : "Try another colour, style, or category."}</span></div>`;
 }
@@ -842,9 +756,8 @@ function renderHeroCards() {
     if (!v || !cat) return "";
     return `
       <article class="product-card">
-        <div class="product-img-wrap" data-hover-cat="${cat.id}" data-hover-variant="${v.id}">
+        <div class="product-img-wrap">
           <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="eager" decoding="async" ${p === picks[0] ? 'fetchpriority="high"' : ''}>
-          ${cardHoverImage(cat, v)}
           ${wishlistButton(p.cat, p.var)}
           ${photoCountBadge(p.cat, p.var)}
         </div>
@@ -1028,9 +941,8 @@ function openCategory(catId, push=true) {
   $("variantsGrid").innerHTML = cat.variants.length
     ? cat.variants.map(v => `
       <article class="variant-card">
-        <div class="variant-img-wrap" data-hover-cat="${cat.id}" data-hover-variant="${v.id}">
+        <div class="variant-img-wrap">
           <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="lazy" decoding="async">
-          ${cardHoverImage(cat, v)}
           ${wishlistButton(cat.id, v.id)}
           ${photoCountBadge(cat.id, v.id)}
         </div>
@@ -2155,7 +2067,6 @@ function init() {
   wireContactForm();
   setupFaqAccordion();
   setupLightboxGestures();
-  setupCardHoverPreview();
   const checkoutState = handleCheckoutReturn();
   if (!testSeeded && !customSeeded && !checkoutState) migrateLegacyProductUrl();
   setupNavigation();
