@@ -125,9 +125,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .product-card:hover .product-img-wrap img{transform:scale(1.035)}
 .photo-count-badge{position:absolute;right:0.6rem;bottom:0.6rem;z-index:2;display:inline-flex;align-items:center;gap:0.3rem;background:rgba(44,26,14,0.78);color:white;padding:0.3rem 0.55rem;border-radius:2rem;font-size:0.68rem;font-weight:700;line-height:1;box-shadow:0 2px 8px rgba(44,26,14,0.18);backdrop-filter:blur(5px);pointer-events:none}
 .photo-count-badge svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8}
-.card-peek{position:absolute;left:0.65rem;bottom:0.65rem;z-index:2;display:inline-flex;align-items:center;gap:0.3rem;padding:0.38rem 0.64rem;border:1px solid rgba(255,255,255,0.45);border-radius:2rem;background:rgba(251,246,236,0.9);color:var(--warm-brown);font:800 0.62rem 'Lato',sans-serif;letter-spacing:0.04em;box-shadow:0 5px 16px rgba(44,26,14,0.13);backdrop-filter:blur(8px);opacity:0;transform:translateY(7px);transition:opacity 0.22s,transform 0.22s;pointer-events:none}
-.card-peek span{color:var(--soft-terracotta);font-size:0.8rem}
-.product-card:hover .card-peek,.variant-card:hover .card-peek,.recent-card:hover .card-peek,.search-result:hover .card-peek{opacity:1;transform:translateY(0)}
 .product-info{display:block;padding:0.65rem 0.85rem 0.85rem}
 .product-name{font-family:'Playfair Display',serif;font-size:0.85rem;color:var(--dark);margin-bottom:0.2rem}
 .product-price{font-size:0.78rem;color:var(--soft-terracotta);font-weight:700}
@@ -171,7 +168,6 @@ section{padding:5rem 4rem;position:relative;overflow:hidden}
 .cat-swatches{position:absolute;top:10px;right:10px;z-index:3;display:flex;padding:4px 6px;border-radius:2rem;background:rgba(255,253,248,0.88);box-shadow:0 3px 12px rgba(44,26,14,0.11);backdrop-filter:blur(7px)}
 .cat-swatches i{width:10px;height:10px;border:2px solid rgba(255,255,255,0.9);border-radius:50%;background:var(--cat-a);box-shadow:0 0 0 1px rgba(44,26,14,0.08)}
 .cat-swatches i+i{margin-left:-2px;background:var(--cat-b)}.cat-swatches i:nth-child(3){background:var(--cat-c)}
-.cat-tone-0{--cat-a:#c97b5a;--cat-b:#e8b49a;--cat-c:#8a9e7e}.cat-tone-1{--cat-a:#d4a72c;--cat-b:#7c5035;--cat-c:#f2d6c9}.cat-tone-2{--cat-a:#7f9275;--cat-b:#d98f72;--cat-c:#f3c969}.cat-tone-3{--cat-a:#b86c54;--cat-b:#d6b89a;--cat-c:#687c64}
 .cat-card-body{padding:1.2rem 1.4rem 1.4rem;display:flex;flex-direction:column;flex:1}
 .cat-card-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--dark);margin-bottom:0.35rem}
 .cat-card-desc{font-size:0.82rem;color:var(--light);line-height:1.6;margin-bottom:1rem;flex:1}
@@ -270,6 +266,7 @@ section{padding:5rem 4rem;position:relative;overflow:hidden}
 .faq-item summary::-webkit-details-marker{display:none}
 .faq-summary-copy{display:flex;align-items:center;gap:0.8rem;min-width:0}
 .faq-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,var(--pale-blush),#fff);color:var(--soft-terracotta);font:800 1rem 'Lato',sans-serif;box-shadow:inset 0 0 0 1px rgba(124,80,53,0.08);transition:transform 0.25s,background 0.25s,color 0.25s}
+.faq-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .faq-item[open] .faq-icon{transform:rotate(-6deg) scale(1.06);background:var(--muted-sage);color:white}
 .faq-item summary::after{content:'+';width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--pale-blush);color:var(--warm-brown);font:400 1.2rem 'Lato',sans-serif;transition:transform 0.2s,background 0.2s}
 .faq-item[open] summary::after{transform:rotate(45deg);background:var(--soft-terracotta);color:white}
@@ -882,7 +879,6 @@ body.cart-open{overflow:hidden}
   .cat-card-footer{align-items:flex-end;gap:0.35rem;margin-top:0.55rem}
   .cat-card-price{font-size:0.76rem;line-height:1.2}
   .cat-card-cta{padding:0.28rem 0.52rem;font-size:0.68rem}
-  .card-peek{opacity:1;transform:none;padding:0.3rem 0.5rem;font-size:0.55rem}
   .faq-icon{width:30px;height:30px;flex-basis:30px}
   .faq-item summary{padding:1rem;font-size:0.92rem}
   .lightbox-hint{bottom:4.5rem}
@@ -953,6 +949,6 @@ body.cart-open{overflow:hidden}
   .site-nav,.nav-links,.nav-backdrop,.back-to-top,.nav-links a::after,.nav-progress span{transition:none}
   .wishlist-btn.celebrate .wishlist-sparkles i,.cart-btn.cart-bump,.toast.pop{animation:none!important}
   .testimonials-grid{scroll-behavior:auto}
-  .testi-expand,.card-peek,.cform-progress-track span{transition:none}
+  .testi-expand,.cform-progress-track span{transition:none}
   ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
 }

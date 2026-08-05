@@ -60,6 +60,27 @@ const categoryPriceText = (cat) => {
   return prices.every(price => price === lowestPrice) ? fmt(lowestPrice) : `From ${fmt(lowestPrice)}`;
 };
 
+// Real, brand-matched hex per simple colour tag — used to make the 3 category swatch
+// dots reflect the actual colours found in that category's products.
+const COLOUR_SWATCH_HEX = {
+  White: "#FBF6EC", Black: "#2C1A0E", Grey: "#9C9184", Brown: "#7C5035",
+  Red: "#B23B3B", Pink: "#E3A6AC", Orange: "#D4845A", Yellow: "#C9952A",
+  Green: "#6B8F6E", Blue: "#6E8CA6", Purple: "#7B4F6E",
+};
+const CATEGORY_SWATCH_FALLBACK = ["#C97B5A", "#8A9E7E", "#7C5035"];
+
+function categorySwatchHex(cat) {
+  const counts = {};
+  for (const v of cat.variants || []) {
+    for (const c of v.colours || []) counts[c] = (counts[c] || 0) + 1;
+  }
+  const ranked = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).map(c => COLOUR_SWATCH_HEX[c]).filter(Boolean);
+  if (!ranked.length) return CATEGORY_SWATCH_FALLBACK;
+  const hexes = [...ranked];
+  while (hexes.length < 3) hexes.push(ranked[hexes.length % ranked.length]);
+  return hexes.slice(0, 3);
+}
+
 function variantImage(catId, vId, index=0) {
   const key = `${catId}/${vId}`;
   const files = IMAGE_MAP[key] || [];
@@ -100,10 +121,6 @@ function photoCountBadge(catId, vId) {
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h3l1.4-2h7.2l1.4 2h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>
     ${count}
   </span>`;
-}
-
-function cardPeekLabel() {
-  return `<span class="card-peek" aria-hidden="true">Peek inside <span>↗</span></span>`;
 }
 
 const HEART_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>`;
@@ -240,7 +257,7 @@ function renderRecentlyViewed() {
   $("recentSection").hidden = items.length === 0;
   $("recentGrid").innerHTML = items.map(({ cat, variant }) => `
     <article class="recent-card">
-      <div class="recent-card-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}${cardPeekLabel()}</div>
+      <div class="recent-card-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
       <a class="recent-card-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><div class="recent-card-category">${cat.name}</div><div class="recent-card-name">${variant.name}</div><div class="recent-card-price">${fmt(variant.price)}</div></a>
     </article>`).join("");
 }
@@ -295,7 +312,7 @@ function renderSearchResults() {
   $("searchCount").textContent = `${products.length} ${products.length === 1 ? "piece" : "pieces"}`;
   $("searchResults").innerHTML = products.length ? products.map(({ cat, variant }) => `
     <article class="search-result">
-      <div class="search-result-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}${cardPeekLabel()}</div>
+      <div class="search-result-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
       <a class="search-result-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','search')"><div class="search-result-cat">${cat.name}</div><div class="search-result-name">${variant.name}</div><div class="search-result-price">${fmt(variant.price)}</div></a>
     </article>`).join("") : `<div class="search-empty"><div class="search-empty-icon">🧶</div><strong>${STATE.searchSavedOnly ? "No saved pieces yet" : "No pieces found"}</strong><span>${STATE.searchSavedOnly ? "Tap the heart on any product to keep it here." : "Try another colour, style, or category."}</span></div>`;
 }
@@ -743,7 +760,6 @@ function renderHeroCards() {
           <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="eager" decoding="async" ${p === picks[0] ? 'fetchpriority="high"' : ''}>
           ${wishlistButton(p.cat, p.var)}
           ${photoCountBadge(p.cat, p.var)}
-          ${cardPeekLabel()}
         </div>
         <a class="product-info card-route-link" href="${routeHref(productRoutePath(p.var))}" onclick="return navigateProductLink(event,'${p.cat}','${p.var}')">
           <div class="product-name">${v.name}</div>
@@ -869,8 +885,9 @@ function renderCategoryRow() {
     const heroMarkup = heroVar
       ? `<img src="${variantCardImage(cat, heroVar)}" data-fallback="${variantHeroImage(cat, heroVar)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${cat.name}" loading="lazy" decoding="async">`
       : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
+    const [swatchA, swatchB, swatchC] = categorySwatchHex(cat);
     return `
-      <a class="cat-card cat-tone-${index % 4}" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
+      <a class="cat-card" style="--cat-a:${swatchA};--cat-b:${swatchB};--cat-c:${swatchC}" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
         <div class="cat-card-top">
           ${variantCount ? '<span class="cat-tag">' + variantCount + (variantCount === 1 ? ' style' : ' styles') + '</span>' : '<span class="cat-tag">Seasonal</span>'}
           <span class="cat-swatches" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -898,8 +915,9 @@ function renderCategoriesPage() {
     const heroMarkup = heroVar
       ? `<img src="${variantCardImage(cat, heroVar)}" data-fallback="${variantHeroImage(cat, heroVar)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${cat.name}" loading="lazy" decoding="async">`
       : `<div class="category-empty-art" role="img" aria-label="${cat.name}, ${categoryPriceText(cat)}">${categoryPriceText(cat)}</div>`;
+    const [swatchA, swatchB, swatchC] = categorySwatchHex(cat);
     return `
-      <a class="category-tile cat-tone-${index % 4}" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
+      <a class="category-tile" style="--cat-a:${swatchA};--cat-b:${swatchB};--cat-c:${swatchC}" href="${routeHref(categoryRoutePath(cat.id))}" onclick="return navigateCategoryLink(event,'${cat.id}')">
         <span class="cat-swatches" aria-hidden="true"><i></i><i></i><i></i></span>
         ${heroMarkup}
         <div class="category-label">
@@ -927,7 +945,6 @@ function openCategory(catId, push=true) {
           <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="lazy" decoding="async">
           ${wishlistButton(cat.id, v.id)}
           ${photoCountBadge(cat.id, v.id)}
-          ${cardPeekLabel()}
         </div>
         <a class="variant-body card-route-link" href="${routeHref(productRoutePath(v.id))}" onclick="return navigateProductLink(event,'${cat.id}','${v.id}')">
           <div class="variant-name">${v.name}</div>

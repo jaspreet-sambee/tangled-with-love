@@ -156,7 +156,7 @@ for (const marker of ["scrollReviews", "setupReviewRail", "updateReviewRailContr
 for (const marker of ["lightbox-hint", "toast-thread", "faq-icon", "cformProgressTrack", "cformProgressFill", "contactMessageCount"]) {
   if (!html.includes(marker)) fail(`Cute UX marker missing: ${marker}`);
 }
-for (const marker of ["cardPeekLabel", "wishlist-sparkles", "celebrateCartButton", "setupLightboxGestures", "setupFaqAccordion", "updateContactFormProgress"]) {
+for (const marker of ["wishlist-sparkles", "celebrateCartButton", "setupLightboxGestures", "setupFaqAccordion", "updateContactFormProgress"]) {
   if (!app.includes(marker)) fail(`Cute UX behavior missing: ${marker}`);
 }
 for (const marker of ["@keyframes wishlist-spark", ".cat-swatches", ".cform-progress-card", ".cart-empty-yarn", "footer::before"]) {
