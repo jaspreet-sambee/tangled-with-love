@@ -64,6 +64,22 @@ for (const category of categories) {
     originalBytes += (await stat(input)).size;
     thumbnailBytes += (await stat(output)).size;
     generated += 1;
+
+    // Every other photo gets its own thumbnail too, so the storefront grid can slowly
+    // cross-fade through the full set on hover instead of swapping to just one extra shot.
+    const altFiles = files.filter((_, i) => i !== heroIndex);
+    for (let n = 0; n < altFiles.length; n++) {
+      const altInput = join(root, "assets", "products", key, altFiles[n]);
+      const altOutput = join(root, "assets", "thumbs", category.id, `${variant.id}-alt${n}.webp`);
+      await sharp(altInput)
+        .rotate()
+        .resize({ width: 720, height: 900, fit: "inside", withoutEnlargement: true })
+        .webp({ quality: 76, alphaQuality: 82, effort: 5, smartSubsample: true })
+        .toFile(altOutput);
+      originalBytes += (await stat(altInput)).size;
+      thumbnailBytes += (await stat(altOutput)).size;
+      generated += 1;
+    }
   }
 }
 

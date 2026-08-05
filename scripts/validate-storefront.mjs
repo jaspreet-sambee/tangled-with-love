@@ -85,6 +85,11 @@ for (const category of categories) {
     const thumbnailPath = join(root, "assets", "thumbs", category.id, `${variant.id}.webp`);
     await access(thumbnailPath);
     thumbnailBytes += (await stat(thumbnailPath)).size;
+    for (let n = 0; n < files.length - 1; n++) {
+      const altThumbnailPath = join(root, "assets", "thumbs", category.id, `${variant.id}-alt${n}.webp`);
+      await access(altThumbnailPath);
+      thumbnailBytes += (await stat(altThumbnailPath)).size;
+    }
     await access(join(root, "products", variant.id, "index.html"));
   }
 }

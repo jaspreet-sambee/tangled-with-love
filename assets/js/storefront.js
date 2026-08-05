@@ -102,6 +102,92 @@ function variantCardImage(cat, v) {
   return `assets/thumbs/${cat.id}/${v.id}.webp?v=${THUMB_VERSION}`;
 }
 
+// Every photo other than the hero shot, as a lightweight thumbnail, slowly cross-faded
+// through while a shopper hovers (or keyboard-focuses) a product card.
+function altCardThumbs(cat, v) {
+  const files = IMAGE_MAP[`${cat.id}/${v.id}`] || [];
+  if (files.length <= 1) return [];
+  const heroIndex = Math.min(Math.max(v.heroIdx || 0, 0), files.length - 1);
+  return files
+    .map((_, i) => i)
+    .filter(i => i !== heroIndex)
+    .map((_, n) => `assets/thumbs/${cat.id}/${v.id}-alt${n}.webp?v=${THUMB_VERSION}`);
+}
+function cardHoverImage(cat, v) {
+  return altCardThumbs(cat, v).length
+    ? `<img class="card-hover-img" alt="" aria-hidden="true" decoding="async">`
+    : "";
+}
+
+/* =====================================================================
+   PRODUCT CARD HOVER PREVIEW — slowly cross-fades through every photo
+   ===================================================================== */
+const CARD_HOVER_WRAP_SELECTOR = ".product-img-wrap[data-hover-variant],.variant-img-wrap[data-hover-variant],.recent-card-img[data-hover-variant],.search-result-img[data-hover-variant]";
+const CARD_HOVER_START_DELAY_MS = 600; // brief pause so a quick mouse pass doesn't trigger it
+const CARD_HOVER_HOLD_MS = 1500;       // how long each photo stays visible
+const CARD_HOVER_FADE_MS = 650;        // cross-fade duration (kept in sync with the CSS transition)
+const cardHoverCycles = new WeakMap();
+
+function beginCardHoverCycle(wrap) {
+  if (cardHoverCycles.has(wrap)) return;
+  const img = wrap.querySelector(".card-hover-img");
+  const cat = findCategory(wrap.dataset.hoverCat);
+  const v = cat && findVariant(wrap.dataset.hoverCat, wrap.dataset.hoverVariant);
+  if (!img || !cat || !v) return;
+  const urls = altCardThumbs(cat, v);
+  if (!urls.length) return;
+
+  const state = { timer: null };
+  cardHoverCycles.set(wrap, state);
+  let index = 0;
+
+  const showCurrent = () => {
+    img.src = urls[index];
+    img.classList.add("is-visible");
+    state.timer = setTimeout(fadeOutThenAdvance, CARD_HOVER_HOLD_MS);
+  };
+  function fadeOutThenAdvance() {
+    img.classList.remove("is-visible");
+    state.timer = setTimeout(() => {
+      index = (index + 1) % urls.length;
+      showCurrent();
+    }, CARD_HOVER_FADE_MS);
+  }
+
+  state.timer = setTimeout(showCurrent, CARD_HOVER_START_DELAY_MS);
+}
+
+function endCardHoverCycle(wrap) {
+  const state = cardHoverCycles.get(wrap);
+  if (!state) return;
+  clearTimeout(state.timer);
+  cardHoverCycles.delete(wrap);
+  const img = wrap.querySelector(".card-hover-img");
+  if (img) img.classList.remove("is-visible");
+}
+
+// Delegated so it keeps working across every re-render (grids are rebuilt via innerHTML).
+function setupCardHoverPreview() {
+  document.addEventListener("mouseover", e => {
+    const wrap = e.target.closest(CARD_HOVER_WRAP_SELECTOR);
+    if (!wrap || wrap.contains(e.relatedTarget)) return;
+    beginCardHoverCycle(wrap);
+  });
+  document.addEventListener("mouseout", e => {
+    const wrap = e.target.closest(CARD_HOVER_WRAP_SELECTOR);
+    if (!wrap || wrap.contains(e.relatedTarget)) return;
+    endCardHoverCycle(wrap);
+  });
+  document.addEventListener("focusin", e => {
+    const wrap = e.target.closest(CARD_HOVER_WRAP_SELECTOR);
+    if (wrap) beginCardHoverCycle(wrap);
+  });
+  document.addEventListener("focusout", e => {
+    const wrap = e.target.closest(CARD_HOVER_WRAP_SELECTOR);
+    if (wrap) endCardHoverCycle(wrap);
+  });
+}
+
 // Returns the full list of images for a variant, with the hero image moved to position 0.
 // Only returns images that actually exist in IMAGE_MAP.
 function allVariantImages(catId, vId, heroIdx=0) {
@@ -257,7 +343,7 @@ function renderRecentlyViewed() {
   $("recentSection").hidden = items.length === 0;
   $("recentGrid").innerHTML = items.map(({ cat, variant }) => `
     <article class="recent-card">
-      <div class="recent-card-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
+      <div class="recent-card-img" data-hover-cat="${cat.id}" data-hover-variant="${variant.id}"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${cardHoverImage(cat, variant)}${wishlistButton(cat.id, variant.id)}</div>
       <a class="recent-card-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}')"><div class="recent-card-category">${cat.name}</div><div class="recent-card-name">${variant.name}</div><div class="recent-card-price">${fmt(variant.price)}</div></a>
     </article>`).join("");
 }
@@ -312,7 +398,7 @@ function renderSearchResults() {
   $("searchCount").textContent = `${products.length} ${products.length === 1 ? "piece" : "pieces"}`;
   $("searchResults").innerHTML = products.length ? products.map(({ cat, variant }) => `
     <article class="search-result">
-      <div class="search-result-img"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${wishlistButton(cat.id, variant.id)}</div>
+      <div class="search-result-img" data-hover-cat="${cat.id}" data-hover-variant="${variant.id}"><img src="${variantCardImage(cat, variant)}" data-fallback="${variantHeroImage(cat, variant)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${variant.name}" loading="lazy" decoding="async">${cardHoverImage(cat, variant)}${wishlistButton(cat.id, variant.id)}</div>
       <a class="search-result-body card-route-link" href="${routeHref(productRoutePath(variant.id))}" onclick="return navigateProductLink(event,'${cat.id}','${variant.id}','search')"><div class="search-result-cat">${cat.name}</div><div class="search-result-name">${variant.name}</div><div class="search-result-price">${fmt(variant.price)}</div></a>
     </article>`).join("") : `<div class="search-empty"><div class="search-empty-icon">🧶</div><strong>${STATE.searchSavedOnly ? "No saved pieces yet" : "No pieces found"}</strong><span>${STATE.searchSavedOnly ? "Tap the heart on any product to keep it here." : "Try another colour, style, or category."}</span></div>`;
 }
@@ -756,8 +842,9 @@ function renderHeroCards() {
     if (!v || !cat) return "";
     return `
       <article class="product-card">
-        <div class="product-img-wrap">
+        <div class="product-img-wrap" data-hover-cat="${cat.id}" data-hover-variant="${v.id}">
           <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="eager" decoding="async" ${p === picks[0] ? 'fetchpriority="high"' : ''}>
+          ${cardHoverImage(cat, v)}
           ${wishlistButton(p.cat, p.var)}
           ${photoCountBadge(p.cat, p.var)}
         </div>
@@ -941,8 +1028,9 @@ function openCategory(catId, push=true) {
   $("variantsGrid").innerHTML = cat.variants.length
     ? cat.variants.map(v => `
       <article class="variant-card">
-        <div class="variant-img-wrap">
+        <div class="variant-img-wrap" data-hover-cat="${cat.id}" data-hover-variant="${v.id}">
           <img src="${variantCardImage(cat, v)}" data-fallback="${variantHeroImage(cat, v)}" onerror="this.onerror=null;this.src=this.dataset.fallback" alt="${v.name}" loading="lazy" decoding="async">
+          ${cardHoverImage(cat, v)}
           ${wishlistButton(cat.id, v.id)}
           ${photoCountBadge(cat.id, v.id)}
         </div>
@@ -1243,6 +1331,45 @@ function restoreCheckoutEmail() {
   } catch (e) {}
 }
 
+function restoreCheckoutName() {
+  try {
+    const savedName = localStorage.getItem("twl_checkout_name") || "";
+    if ($("checkoutName")) $("checkoutName").value = savedName;
+  } catch (e) {}
+}
+
+function clearCheckoutNameError() {
+  const input = $("checkoutName");
+  const error = $("checkoutNameError");
+  if (input) {
+    input.classList.remove("invalid");
+    input.removeAttribute("aria-invalid");
+  }
+  if (error) { error.textContent = ""; error.classList.remove("show"); }
+  showCheckoutStatus("");
+}
+
+function validatedCheckoutName() {
+  const input = $("checkoutName");
+  const error = $("checkoutNameError");
+  const name = input?.value.trim() || "";
+  if (name) {
+    clearCheckoutNameError();
+    try { localStorage.setItem("twl_checkout_name", name); } catch (e) {}
+    return name;
+  }
+  if (input) {
+    input.classList.add("invalid");
+    input.setAttribute("aria-invalid", "true");
+    input.focus();
+  }
+  if (error) {
+    error.textContent = "Let us know your name so we can greet you properly.";
+    error.classList.add("show");
+  }
+  return "";
+}
+
 function clearCheckoutEmailError() {
   const input = $("checkoutEmail");
   const error = $("checkoutEmailError");
@@ -1294,8 +1421,17 @@ function resetCheckoutButton() {
 /* =====================================================================
    CHECKOUT — Stripe Checkout (via Worker) OR Formspree fallback
    ===================================================================== */
+// Snapshot of the cart's essentials, kept alongside the order so the success page can
+// show real product details even after the cart itself is cleared (or after a Stripe
+// redirect wipes STATE.cart from memory).
+function snapshotCartItems() {
+  return STATE.cart.map(it => ({ name: it.name, price: it.price, qty: it.qty, img: it.img, colour: it.colour }));
+}
+
 async function goCheckout() {
   if (STATE.cart.length === 0) return;
+  const name = validatedCheckoutName();
+  if (!name) return;
   const email = validatedCheckoutEmail();
   if (!email) return;
   const btn = $("checkoutBtn");
@@ -1316,10 +1452,14 @@ async function goCheckout() {
     sendReferencePhotosEmail(email); // fire-and-forget; doesn't block or affect checkout
   }
 
+  // True only for hand-delivered custom pieces whose agreed price already covers
+  // delivery; every regular order's shipping is set by destination at checkout.
+  const skipShipping = STATE.cart.some(it => it.__skipShipping);
+
   if (CONFIG.STRIPE_CHECKOUT_ENDPOINT) {
     const orderNumber = generateOrderNumber();
     try {
-      localStorage.setItem("twl_pending_order", JSON.stringify({ orderNumber, email }));
+      localStorage.setItem("twl_pending_order", JSON.stringify({ orderNumber, email, name, items: snapshotCartItems(), skipShipping }));
     } catch (e) {}
     try {
       // Build line items for Stripe (cents)
@@ -1329,7 +1469,6 @@ async function goCheckout() {
         quantity: it.qty,
         image: location.origin + "/" + it.img,
       }));
-      const skipShipping = STATE.cart.some(it => it.__skipShipping);
       const r = await fetch(CONFIG.STRIPE_CHECKOUT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1360,24 +1499,26 @@ async function goCheckout() {
       const orderSummary = orderSummaryText();
       const total = fmt(cartSubtotal());
       const orderNumber = generateOrderNumber();
+      const cartSnapshot = snapshotCartItems();
       await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, {
         method: "POST",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
         body: JSON.stringify({
           _subject: `New order ${orderNumber} — tangledwithlove.com`,
           orderNumber,
+          name,
           email,
           total,
           order: orderSummary,
         }),
       });
       sendOrderEmails(orderNumber, email); // fire-and-forget branded copy alongside the Formspree one
+      renderCwWelcome({ names: name, items: cartSnapshot });
       STATE.cart = [];
       clearItemFiles();
       saveCart(); renderCart(); closeCart();
-      showPage("success");
-      $("successOrderId").textContent = `Order ${orderNumber} received — we'll email you at ${email}`;
-      $("successOrderId").style.display = "inline-block";
+      showPage("custom-welcome");
+      activateCustomWelcome();
     } catch (err) {
       console.error(err);
       showCheckoutStatus("Something went wrong. Please try again, or email hello@tangledwithlove.com.", "error");
@@ -1756,21 +1897,16 @@ function handleCheckoutReturn() {
     STATE.cart = [];
     clearItemFiles();
     saveCart(); renderCart();
-    const sid = u.searchParams.get("session_id");
     let pending = null;
     try { pending = JSON.parse(localStorage.getItem("twl_pending_order") || "null"); } catch (e) {}
-    const lines = [];
-    if (pending && pending.orderNumber) lines.push(`Order ${pending.orderNumber}`);
-    if (sid) lines.push(`Stripe confirmation ${sid.slice(-8).toUpperCase()}`);
-    if (lines.length) {
-      $("successOrderId").textContent = lines.join(" · ");
-      $("successOrderId").style.display = "inline-block";
-    }
+    // Every order gets the same cosy welcome page (see renderCwWelcome) — made to
+    // order is made to order, whether it arrived as a custom link or a shop checkout.
+    renderCwWelcome({ names: pending?.name, items: pending?.items });
     if (pending && pending.orderNumber) {
       sendOrderEmails(pending.orderNumber, pending.email); // fire-and-forget; our own branded copy, separate from Stripe's own receipt
       try { localStorage.removeItem("twl_pending_order"); } catch (e) {}
     }
-    history.replaceState({}, "", routeHref("/checkout/success"));
+    history.replaceState({}, "", routeHref("/custom-order"));
   } else if (r === "cancel") {
     history.replaceState({}, "", routeHref("/checkout/cancel"));
   }
@@ -1814,6 +1950,79 @@ function handleTestSeed() {
 //   note=Thanks%20for%20being...          optional: handwritten-style personal note
 //
 // Returns true if seeded (init will then showPage("custom-welcome")).
+// Populates the cosy "welcome" page DOM for ANY completed order — custom-negotiated
+// pieces (via the ?custom=1 link below) and regular shop checkouts alike, since every
+// piece is made to order the same way. `items` is [{name, price, qty}, ...];
+// `names` is the greeting name(s); `note` overrides the generic thank-you message.
+// Delivery is deliberately never shown here — its cost and method depend on where
+// the order is actually going, so that's mentioned at checkout, not on this page.
+function renderCwWelcome({ names, items, note } = {}) {
+  items = Array.isArray(items) && items.length ? items : [{ name: "Custom Order", price: 0, qty: 1 }];
+  const totalQty = items.reduce((s, it) => s + it.qty, 0);
+  const totalAmount = items.reduce((s, it) => s + it.price * it.qty, 0);
+
+  // Hero greeting — try to split "Sam and Tushar" into two display names.
+  const heroNamesEl = $("cwHeroNames");
+  if (heroNamesEl) {
+    const formattedNames = names
+      ? String(names).replace(/\s+and\s+/i, " & ").replace(/\s*&\s*/g, " & ")
+      : "you";
+    heroNamesEl.textContent = formattedNames;
+  }
+
+  // Product card — a single item shows its own name/price; several items show a
+  // combined headline instead, since they won't share one "each" price.
+  if ($("cwProductName")) $("cwProductName").textContent = items.length === 1 ? items[0].name : `${items.length} handmade pieces`;
+  if ($("cwProductPrice")) {
+    $("cwProductPrice").innerHTML = items.length === 1
+      ? `$${items[0].price.toFixed(0)}<span class="cw-each"> ea</span>`
+      : fmt(totalAmount);
+  }
+  const qtyRowEl = $("cwQtyRow");
+  if (qtyRowEl) qtyRowEl.style.display = items.length === 1 ? "" : "none";
+  if ($("cwQtyDisplay")) $("cwQtyDisplay").textContent = items.length === 1 ? items[0].qty : totalQty;
+  if ($("cwCartDot")) $("cwCartDot").textContent = totalQty;
+
+  // Summary — one row per item, so a full basket lists everything, not just the first piece.
+  const sumItemsEl = $("cwSumItems");
+  if (sumItemsEl) {
+    sumItemsEl.innerHTML = items.map(it =>
+      `<div class="cw-sum-row"><span>${it.name} × ${it.qty}</span><span>${fmt(it.price * it.qty)}</span></div>`
+    ).join("");
+  }
+  // Note from mum — render as paragraphs in the handwritten card. Falls back
+  // to a generic warm message if no personal note was supplied.
+  const noteBodyEl = $("cwNoteBody");
+  if (noteBodyEl) {
+    noteBodyEl.textContent = note || `To ${names || "you"} — thank you for trusting mum with these. Made with love.`;
+  }
+
+  // Count-up animation on the summary total.
+  const totalEl = $("cwSumTotal");
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (totalEl) {
+    if (reduceMotion) {
+      totalEl.textContent = fmt(totalAmount);
+    } else {
+      totalEl.textContent = fmt(0);
+      setTimeout(() => {
+        let start = null;
+        const dur = 1100;
+        const step = (ts) => {
+          if (!start) start = ts;
+          const t = Math.min((ts - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          totalEl.textContent = fmt(totalAmount * eased);
+          if (t < 1) requestAnimationFrame(step);
+          else totalEl.textContent = fmt(totalAmount);
+        };
+        requestAnimationFrame(step);
+      }, 700);
+    }
+  }
+}
+
 function handleCustomSeed() {
   const p = new URLSearchParams(location.search);
   if (p.get("custom") !== "1") return false;
@@ -1842,65 +2051,7 @@ function handleCustomSeed() {
   }];
   saveCart();
 
-  // Populate the welcome page DOM (cosy design).
-  // Hero greeting — try to split "Sam and Tushar" into two display names.
-  const heroNamesEl = $("cwHeroNames");
-  if (heroNamesEl) {
-    const formattedNames = forName
-      ? forName.replace(/\s+and\s+/i, " & ").replace(/\s*&\s*/g, " & ")
-      : "you";
-    heroNamesEl.textContent = formattedNames;
-  }
-  // Product card
-  if ($("cwProductName")) $("cwProductName").textContent = name;
-  if ($("cwProductPrice")) {
-    $("cwProductPrice").innerHTML = `$${price.toFixed(0)}<span class="cw-each"> ea</span>`;
-  }
-  if ($("cwQtyDisplay")) $("cwQtyDisplay").textContent = qty;
-  if ($("cwCartDot")) $("cwCartDot").textContent = qty;
-  // Summary
-  if ($("cwSumItemLabel")) $("cwSumItemLabel").textContent = `${name} × ${qty}`;
-  if ($("cwSumItemAmount")) $("cwSumItemAmount").textContent = fmt(price * qty);
-  // Note from mum — render as paragraphs in the handwritten card. Falls back
-  // to a generic warm message if no &note= was provided in the URL.
-  const noteBodyEl = $("cwNoteBody");
-  if (noteBodyEl) {
-    const noteText = note || `To ${forName || "you"} — thank you for trusting mum with these. Made with love.`;
-    // Replace standalone "&" or "and" between names if present, and add a tiny
-    // heart after the salutation line for a soft, hand-written touch.
-    noteBodyEl.textContent = noteText;
-  }
-  const noteMetaEl = $("cwNoteMeta");
-  if (noteMetaEl) {
-    const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
-    noteMetaEl.textContent = `stitched · ${today}`;
-  }
-
-  // Count-up animation on the summary total.
-  const totalEl = $("cwSumTotal");
-  const totalAmount = price * qty;
-  const reduceMotion = window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (totalEl) {
-    if (reduceMotion) {
-      totalEl.textContent = fmt(totalAmount);
-    } else {
-      totalEl.textContent = fmt(0);
-      setTimeout(() => {
-        let start = null;
-        const dur = 1100;
-        const step = (ts) => {
-          if (!start) start = ts;
-          const t = Math.min((ts - start) / dur, 1);
-          const eased = 1 - Math.pow(1 - t, 3);
-          totalEl.textContent = fmt(totalAmount * eased);
-          if (t < 1) requestAnimationFrame(step);
-          else totalEl.textContent = fmt(totalAmount);
-        };
-        requestAnimationFrame(step);
-      }, 700);
-    }
-  }
+  renderCwWelcome({ names: forName, items: [{ name, price, qty }], note });
 
   history.replaceState({}, "", routeHref("/custom-order"));
   return true;
@@ -1989,6 +2140,7 @@ function migrateLegacyProductUrl() {
 function init() {
   loadCart();
   restoreCheckoutEmail();
+  restoreCheckoutName();
   loadPersonalization();
   const testSeeded = handleTestSeed();
   const customSeeded = handleCustomSeed();
@@ -2003,6 +2155,7 @@ function init() {
   wireContactForm();
   setupFaqAccordion();
   setupLightboxGestures();
+  setupCardHoverPreview();
   const checkoutState = handleCheckoutReturn();
   if (!testSeeded && !customSeeded && !checkoutState) migrateLegacyProductUrl();
   setupNavigation();

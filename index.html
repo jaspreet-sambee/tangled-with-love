@@ -58,6 +58,14 @@
     <div class="cart-subtotal"><span>Subtotal</span><span id="cartTotal">CA$0.00</span></div>
     <p class="cart-note">Shipping &amp; taxes calculated at checkout. Each piece is made to order — please allow 2–3 weeks.</p>
     <div class="checkout-contact">
+      <label class="checkout-contact-label" for="checkoutName"><span>Your name</span><small>So your order can greet you by name</small></label>
+      <div class="checkout-email-field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.2-3.8 4.2-6 7-6s5.8 2.2 7 6"/></svg>
+        <input id="checkoutName" type="text" autocomplete="name" maxlength="80" placeholder="Your name" required aria-required="true" aria-describedby="checkoutNameError" oninput="clearCheckoutNameError()">
+      </div>
+      <p class="checkout-email-error" id="checkoutNameError" role="alert"></p>
+    </div>
+    <div class="checkout-contact">
       <label class="checkout-contact-label" for="checkoutEmail"><span>Confirmation email</span><small>Required for your receipt</small></label>
       <div class="checkout-email-field">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
@@ -587,6 +595,8 @@
 <!-- ===================================================================== -->
 <!-- PAGE: SUCCESS / CANCEL -->
 <!-- ===================================================================== -->
+<!-- Kept as a defensive fallback only — real order completions now render the
+     cosy #page-custom-welcome experience instead (see renderCwWelcome / handleCheckoutReturn). -->
 <div class="page" id="page-success">
   <div class="result-page">
     <div class="result-icon">🎉</div>
@@ -644,7 +654,7 @@
     <section class="cw-hero">
       <div class="cw-eyebrow"><span class="cw-eyebrow-dot"></span>Custom order &nbsp;·&nbsp; reserved with love</div>
       <h1 class="cw-h1">A little something<br>for <span class="cw-names" id="cwHeroNames">Sam &amp; Tushar</span> <svg class="cw-heart-inline" width="48" height="48" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent)"/></svg></h1>
-      <p class="cw-hero-sub">Hand-crocheted, stitch by stitch — your gift for Yayati's little ones.<br>Made by mum, with hands and heart.</p>
+      <p class="cw-hero-sub">Hand-crocheted, stitch by stitch — made just for you.<br>Made by mum, with hands and heart.</p>
       <div class="cw-stamp" aria-hidden="true">one of<br><span class="cw-stamp-big">a</span>kind</div>
     </section>
 
@@ -655,20 +665,20 @@
         <div class="cw-product-header">
           <div>
             <h2 class="cw-product-name" id="cwProductName">Custom Sweater</h2>
-            <div class="cw-product-meta">Hand-knit pullover &nbsp;·&nbsp; size to fit &nbsp;·&nbsp; lovingly slow-made</div>
+            <div class="cw-product-meta">Handmade to order &nbsp;·&nbsp; lovingly slow-made</div>
           </div>
           <div class="cw-product-price" id="cwProductPrice"></div>
         </div>
 
         <div class="cw-specs">
           <div class="cw-spec"><div class="cw-spec-label">Made in</div><div class="cw-spec-value">Mum's living room ✿</div></div>
-          <div class="cw-spec"><div class="cw-spec-label">Ready in</div><div class="cw-spec-value">3 weeks, ish</div></div>
+          <div class="cw-spec"><div class="cw-spec-label">Ready in</div><div class="cw-spec-value">2–3 weeks, ish</div></div>
         </div>
 
-        <div class="cw-qty-row">
+        <div class="cw-qty-row" id="cwQtyRow">
           <div>
             <div class="cw-spec-label">Quantity</div>
-            <div class="cw-qty-sub">one for each of the twins</div>
+            <div class="cw-qty-sub">made especially for you</div>
           </div>
           <div class="cw-qty-num" id="cwQtyDisplay">2</div>
         </div>
@@ -680,10 +690,9 @@
           <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="var(--cw-accent)"/></svg>
           Your cosy basket
         </h3>
-        <div class="cw-sum-row"><span id="cwSumItemLabel">Custom Sweater × 2</span><span id="cwSumItemAmount"></span></div>
-        <div class="cw-sum-row"><span>Hand delivery</span><span class="cw-sum-gift">on us ✿</span></div>
-        <div class="cw-sum-row"><span>Gift wrap</span><span class="cw-sum-gift">included</span></div>
+        <div id="cwSumItems"></div>
         <div class="cw-sum-row cw-sum-total"><span>Total</span><span id="cwSumTotal"></span></div>
+        <p class="cw-sum-shipping-note">Delivery is calculated at checkout, based on where it's going.</p>
         <button class="cw-checkout" onclick="goCheckout()">Place this order
           <svg width="16" height="16" viewBox="0 0 24 24" style="vertical-align:middle;margin-left:6px" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5 6.5 5c2 0 3.5 1.2 4.5 2.8C12 6.2 13.5 5 15.5 5c4 0 5.5 4 4 7-2.5 4.5-7.5 9-7.5 9z" fill="white"/></svg>
         </button>
@@ -707,7 +716,6 @@
         <span class="cw-note-tape cw-note-tape-r" aria-hidden="true"></span>
         <div class="cw-note-body" id="cwNoteBody"></div>
         <div class="cw-note-sig">— mum xx</div>
-        <div class="cw-note-meta" id="cwNoteMeta"></div>
       </div>
     </section>
 
@@ -715,7 +723,7 @@
     <section class="cw-timeline-section">
       <div class="cw-section-title cw-center">
         <h2>The slow, lovely making</h2>
-        <p>your sweater's journey, mostly on the sofa</p>
+        <p>your piece's journey, one stitch at a time</p>
       </div>
       <div class="cw-timeline">
         <div class="cw-step cw-step-active">
@@ -730,17 +738,17 @@
           <div class="cw-step-title">Casting on</div>
           <div class="cw-step-desc">First loop. The slow, happy part begins.</div>
         </div>
-        <div class="cw-step">
+        <div class="cw-step cw-step-active">
           <div class="cw-step-icon">◌</div>
           <div class="cw-step-num">step three</div>
           <div class="cw-step-title">Stitch by stitch</div>
           <div class="cw-step-desc">Stitch by stitch, one cup of chai at a time.</div>
         </div>
-        <div class="cw-step">
+        <div class="cw-step cw-step-active">
           <div class="cw-step-icon">♡</div>
           <div class="cw-step-num">step four</div>
           <div class="cw-step-title">In your hands</div>
-          <div class="cw-step-desc">Hand-delivered, gift-wrapped, ready to be loved.</div>
+          <div class="cw-step-desc">Finished with love, ready to be loved.</div>
         </div>
       </div>
     </section>
