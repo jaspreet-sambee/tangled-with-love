@@ -24,7 +24,7 @@ export default {
 
     const cors = {
       "Access-Control-Allow-Origin": corsOrigin || "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Max-Age": "86400",
     };
@@ -32,11 +32,32 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
     }
-    if (request.method !== "POST") {
-      return json({ error: "Method not allowed" }, 405, cors);
-    }
     if (!env.STRIPE_SECRET_KEY) {
       return json({ error: "Server is not configured (missing STRIPE_SECRET_KEY)." }, 500, cors);
+    }
+
+    // GET ?session_id=... — used by the success page to show the real amount
+    // charged (including whatever shipping option the customer picked in
+    // Stripe Checkout), instead of guessing or hardcoding it.
+    if (request.method === "GET") {
+      const sessionId = new URL(request.url).searchParams.get("session_id");
+      if (!sessionId) return json({ error: "Missing session_id" }, 400, cors);
+      const stripeRes = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionId)}`, {
+        headers: { "Authorization": `Bearer ${env.STRIPE_SECRET_KEY}` },
+      });
+      const data = await stripeRes.json();
+      if (!stripeRes.ok) {
+        return json({ error: (data.error && data.error.message) || "Stripe error" }, 502, cors);
+      }
+      return json({
+        amount_total: data.amount_total,
+        shipping_amount: (data.shipping_cost && data.shipping_cost.amount_total) || 0,
+        currency: data.currency,
+      }, 200, cors);
+    }
+
+    if (request.method !== "POST") {
+      return json({ error: "Method not allowed" }, 405, cors);
     }
 
     let body;

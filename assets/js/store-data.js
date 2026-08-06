@@ -211,7 +211,7 @@ const REVIEWS = [
   },
   {
     name: "Babli",
-    text: "She's so passionate about her work that as soon as you talk to her about anything — a bag, a sweater, anything that can be made with crochet — she will immediately say, \"I can make this,\" and the next thing you know, she delivers the exact same product within days. She actively works on it to show that yes, she can make anything. She's a peaceful force you hardly understand fully, but when she delivers, she delivers soft and cozy crochet products, and you absolutely fall in love with their colours and designs, and ultimately with her.\n\nI heard a line that suits what she does: \"Tradition is not the worship of ashes. It is the preservation of fire.\" And she has preserved this fire well.",
+    text: "She's so passionate about her work that as soon as you talk to her about anything — a bag, a sweater, anything that can be made with crochet — she immediately says, \"I can make this,\" and before you know it, she delivers exactly what you imagined, within days. She's like a dove — a symbol of peace and persistence — flying continuously to chase what she loves, and when she lands, it's a field full of soft, cozy crochet products — and you immediately fall in love with the journey, the colours, the designs, and ultimately, with her.\n\nThere's a line that suits her: \"Tradition is not the worship of ashes. It is the preservation of fire.\" And she has preserved this fire well.",
     images: [],
   },
   {

@@ -159,7 +159,7 @@ for (const marker of ["lightbox-hint", "toast-thread", "faq-icon", "cformProgres
 for (const marker of ["wishlist-sparkles", "celebrateCartButton", "setupLightboxGestures", "setupFaqAccordion", "updateContactFormProgress"]) {
   if (!app.includes(marker)) fail(`Cute UX behavior missing: ${marker}`);
 }
-for (const marker of ["@keyframes wishlist-spark", ".cat-swatches", ".cform-progress-card", ".cart-empty-yarn", "footer::before"]) {
+for (const marker of ["@keyframes wishlist-spark", ".cat-swatches", ".cform-progress-card", ".cart-empty-basket", "footer::before"]) {
   if (!css.includes(marker)) fail(`Cute UX styling missing: ${marker}`);
 }
 for (const controlId of ["contactName", "contactEmail", "contactPhone", "contactInterest", "contactMessage", "cformFiles"]) {

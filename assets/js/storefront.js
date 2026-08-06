@@ -1192,7 +1192,7 @@ function renderCart() {
   $("cartCount").textContent = cartCount();
   if (STATE.cart.length === 0) {
     $("cartItems").innerHTML = `<div class="cart-empty">
-      <div class="cart-empty-yarn" aria-hidden="true"><span></span></div>
+      <div class="cart-empty-basket" aria-hidden="true">🧺</div>
       <h4>Your basket is waiting</h4>
       <p>Save a little handmade joy for later, or let us help you find the right piece.</p>
       <div class="cart-empty-actions">
@@ -1425,7 +1425,7 @@ async function goCheckout() {
         }),
       });
       sendOrderEmails(orderNumber, email); // fire-and-forget branded copy alongside the Formspree one
-      renderCwWelcome({ names: name, items: cartSnapshot });
+      renderCwWelcome({ names: name, items: cartSnapshot, orderNumber });
       STATE.cart = [];
       clearItemFiles();
       saveCart(); renderCart(); closeCart();
@@ -1813,10 +1813,24 @@ function handleCheckoutReturn() {
     try { pending = JSON.parse(localStorage.getItem("twl_pending_order") || "null"); } catch (e) {}
     // Every order gets the same cosy welcome page (see renderCwWelcome) — made to
     // order is made to order, whether it arrived as a custom link or a shop checkout.
-    renderCwWelcome({ names: pending?.name, items: pending?.items });
+    // Passing orderNumber here is what switches it into the paid/confirmed state.
+    renderCwWelcome({ names: pending?.name, items: pending?.items, orderNumber: pending?.orderNumber });
     if (pending && pending.orderNumber) {
       sendOrderEmails(pending.orderNumber, pending.email); // fire-and-forget; our own branded copy, separate from Stripe's own receipt
       try { localStorage.removeItem("twl_pending_order"); } catch (e) {}
+    }
+    // Ask Stripe what was actually charged (including whatever delivery option the
+    // customer picked) and re-render with the real figure once it's back — never guessed.
+    const sessionId = u.searchParams.get("session_id");
+    if (sessionId && CONFIG.STRIPE_CHECKOUT_ENDPOINT) {
+      fetch(`${CONFIG.STRIPE_CHECKOUT_ENDPOINT}?session_id=${encodeURIComponent(sessionId)}`)
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data && typeof data.shipping_amount === "number") {
+            renderCwWelcome({ names: pending?.name, items: pending?.items, orderNumber: pending?.orderNumber, shippingAmount: data.shipping_amount / 100 });
+          }
+        })
+        .catch(() => {}); // page already shows the correct item total either way
     }
     history.replaceState({}, "", routeHref("/custom-order"));
   } else if (r === "cancel") {
@@ -1868,10 +1882,42 @@ function handleTestSeed() {
 // `names` is the greeting name(s); `note` overrides the generic thank-you message.
 // Delivery is deliberately never shown here — its cost and method depend on where
 // the order is actually going, so that's mentioned at checkout, not on this page.
-function renderCwWelcome({ names, items, note } = {}) {
+function renderCwWelcome({ names, items, note, orderNumber, shippingAmount } = {}) {
   items = Array.isArray(items) && items.length ? items : [{ name: "Custom Order", price: 0, qty: 1 }];
   const totalQty = items.reduce((s, it) => s + it.qty, 0);
   const totalAmount = items.reduce((s, it) => s + it.price * it.qty, 0);
+
+  // A paid, confirmed order looks different from a not-yet-paid custom-order
+  // reservation link: no cart badge, no "place this order" button, and the
+  // actual order number instead — since the customer already paid.
+  const isConfirmed = Boolean(orderNumber);
+  // Real delivery cost, only known once Stripe tells us (fetched separately,
+  // see handleCheckoutReturn). Never guessed or hardcoded.
+  const hasShipping = isConfirmed && typeof shippingAmount === "number" && shippingAmount > 0;
+  const grandTotal = totalAmount + (hasShipping ? shippingAmount : 0);
+  const shippingRowEl = $("cwShippingRow");
+  if (shippingRowEl) shippingRowEl.hidden = !hasShipping;
+  if ($("cwShippingAmount")) $("cwShippingAmount").textContent = hasShipping ? fmt(shippingAmount) : "";
+  // "Calculated at checkout" only makes sense before checkout has happened.
+  const shippingNoteEl = $("cwShippingNote");
+  if (shippingNoteEl) shippingNoteEl.hidden = isConfirmed;
+  const eyebrowEl = $("cwEyebrow");
+  if (eyebrowEl) {
+    eyebrowEl.innerHTML = isConfirmed
+      ? `<span class="cw-eyebrow-dot"></span>Order confirmed &nbsp;·&nbsp; #${orderNumber}`
+      : `<span class="cw-eyebrow-dot"></span>Custom order &nbsp;·&nbsp; reserved with love`;
+  }
+  const cartPillEl = $("cwCartPill");
+  if (cartPillEl) cartPillEl.style.display = isConfirmed ? "none" : "";
+  // With the cart pill gone, centre the brand mark instead of leaving it stranded on the left.
+  const navEl = $("cwNav");
+  if (navEl) navEl.classList.toggle("cw-nav-centered", isConfirmed);
+  const checkoutActionsEl = $("cwCheckoutActions");
+  if (checkoutActionsEl) checkoutActionsEl.hidden = isConfirmed;
+  const orderConfirmedEl = $("cwOrderConfirmed");
+  if (orderConfirmedEl) orderConfirmedEl.hidden = !isConfirmed;
+  if ($("cwOrderNumberValue")) $("cwOrderNumberValue").textContent = orderNumber || "";
+  if ($("cwSumTotalLabel")) $("cwSumTotalLabel").textContent = isConfirmed ? "Total paid" : "Total";
 
   // Hero greeting — try to split "Sam and Tushar" into two display names.
   const heroNamesEl = $("cwHeroNames");
@@ -1915,7 +1961,7 @@ function renderCwWelcome({ names, items, note } = {}) {
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (totalEl) {
     if (reduceMotion) {
-      totalEl.textContent = fmt(totalAmount);
+      totalEl.textContent = fmt(grandTotal);
     } else {
       totalEl.textContent = fmt(0);
       setTimeout(() => {
@@ -1925,9 +1971,9 @@ function renderCwWelcome({ names, items, note } = {}) {
           if (!start) start = ts;
           const t = Math.min((ts - start) / dur, 1);
           const eased = 1 - Math.pow(1 - t, 3);
-          totalEl.textContent = fmt(totalAmount * eased);
+          totalEl.textContent = fmt(grandTotal * eased);
           if (t < 1) requestAnimationFrame(step);
-          else totalEl.textContent = fmt(totalAmount);
+          else totalEl.textContent = fmt(grandTotal);
         };
         requestAnimationFrame(step);
       }, 700);
